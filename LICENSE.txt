@@ -1,0 +1,40 @@
+EDUCATIONAL & NON-COMMERCIAL DUAL LICENSE
+
+Copyright (c) 2026 cmp120023
+
+This repository is licensed under a dual non-commercial structure to support
+students, educators, and self-learners while prohibiting commercial use:
+
+================================================================================
+1. SOFTWARE SOURCE CODE (*.py, *.bat, and automation scripts)
+   Licensed under the PolyForm Noncommercial License 1.0.0
+================================================================================
+
+Full license text: https://polyformproject.org/licenses/noncommercial/1.0.0/
+
+Permitted Purpose:
+You may use, copy, modify, and distribute the software source code solely for
+non-commercial, personal, academic, or educational purposes. You may not use
+the software for any commercial, for-profit, or paid service purpose without
+prior written permission from the copyright holder.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+================================================================================
+2. EDUCATIONAL CONTENT & FLASHCARD DECKS (decks/*.json, documentation)
+   Licensed under Creative Commons Attribution-NonCommercial 4.0 International
+   (CC BY-NC 4.0)
+================================================================================
+
+Full license text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+You are free to:
+- Share: Copy and redistribute the material in any medium or format.
+- Adapt: Remix, transform, and build upon the material.
+
+Under the following terms:
+- Attribution: You must give appropriate credit, provide a link to the license,
+  and indicate if changes were made.
+- NonCommercial: You may not use the material for commercial purposes.
