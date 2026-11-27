@@ -1,0 +1,182 @@
+{
+  "deck_name": "18 - RTOS, Embedded Linux, Rust, Control & Security",
+  "cards": [
+    {
+      "id": "adv_01",
+      "category": "FreeRTOS / RTOS",
+      "type": "flashcard",
+      "prompt": "What RTOS scheduling hazard occurs when a high-priority task is blocked waiting on a mutex held by a low-priority task, while a medium-priority task preempts the low-priority task?",
+      "answer": "Priority Inversion",
+      "accepted_answers": [
+        "Unbounded priority inversion"
+      ],
+      "explanation": "FreeRTOS mutexes mitigate this via Priority Inheritance, temporarily raising the low-priority holder's priority to match the waiting high-priority task."
+    },
+    {
+      "id": "adv_02",
+      "category": "FreeRTOS / RTOS",
+      "type": "flashcard",
+      "prompt": "Why must an ARM Cortex-M ISR only call FreeRTOS API functions ending in `FromISR` (such as `xQueueSendFromISR`)?",
+      "answer": "ISRs cannot block/sleep and require deferred context switching via `portYIELD_FROM_ISR`",
+      "accepted_answers": [
+        "ISRs cannot block",
+        "Standard API functions may attempt to block the calling task"
+      ],
+      "explanation": "Calling a blocking FreeRTOS API inside an ISR crashes the scheduler; `FromISR` variants are non-blocking and flag `pxHigherPriorityTaskWoken`."
+    },
+    {
+      "id": "adv_03",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What is the role of the Device Tree Blob (`.dtb`) passed by U-Boot to the Linux kernel on ARM boards?",
+      "answer": "It describes the board's non-discoverable hardware topology (SoC peripherals, pins, clocks, interrupts, buses) to the kernel",
+      "accepted_answers": [
+        "Describes hardware layout to the kernel",
+        "Hardware description"
+      ],
+      "explanation": "Device Trees decouple board-specific hardware wiring from compiled ARM kernel binaries."
+    },
+    {
+      "id": "adv_04",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What Linux kernel patch/configuration converts spinlocks into preemptible sleeping mutexes and runs IRQ handlers as kernel threads to bound scheduling latency?",
+      "answer": "PREEMPT_RT",
+      "accepted_answers": [
+        "CONFIG_PREEMPT_RT",
+        "Real-Time Linux (PREEMPT_RT)"
+      ],
+      "explanation": "PREEMPT_RT makes the Linux kernel fully preemptible for deterministic bounded worst-case wakeup latency, measured with `cyclictest`."
+    },
+    {
+      "id": "adv_05",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "In Linux kernel space, which helper functions must be used to safely transfer buffers between user-space pointers and kernel memory in a character driver's `read`/`write` handlers?",
+      "answer": "copy_to_user() and copy_from_user()",
+      "accepted_answers": [
+        "copy_to_user and copy_from_user"
+      ],
+      "explanation": "Directly dereferencing user-space pointers in kernel mode is unsafe and can trigger page faults or security vulnerabilities."
+    },
+    {
+      "id": "adv_06",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "Which two attributes at the top of an embedded Rust binary crate disable the standard library (heap/OS abstractions) and the standard `main` runtime entry point?",
+      "answer": "#![no_std] and #![no_main]",
+      "accepted_answers": [
+        "no_std and no_main",
+        "#![no_std], #![no_main]"
+      ],
+      "explanation": "`#![no_std]` restricts code to `core`, while `#![no_main]` lets `cortex-m-rt`'s `#[entry]` macro define the reset entry point."
+    },
+    {
+      "id": "adv_07",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "How does the Rust Type-State pattern prevent invalid peripheral configurations (such as writing to an unconfigured GPIO pin) at compile time?",
+      "answer": "By encoding hardware states as zero-sized generic type parameters that consume `self` on state transitions",
+      "accepted_answers": [
+        "Zero-sized type parameters and ownership moves",
+        "Zero-cost phantom type states"
+      ],
+      "explanation": "Because transition methods take `self` by value and return `Pin<Output>`, the old `Pin<Input>` is moved and cannot be called again—with zero runtime overhead."
+    },
+    {
+      "id": "adv_08",
+      "category": "Control Systems",
+      "type": "flashcard",
+      "prompt": "In a discrete PID controller, what phenomenon occurs when the actuator saturates (e.g., 100% PWM) while the integral term keeps accumulating error, causing huge overshoot?",
+      "answer": "Integrator windup",
+      "accepted_answers": [
+        "Integral windup"
+      ],
+      "explanation": "Anti-windup techniques (such as clamping the integrator or back-calculation) prevent the integral accumulator from growing during saturation."
+    },
+    {
+      "id": "adv_09",
+      "category": "Sensor Fusion",
+      "type": "flashcard",
+      "prompt": "Why does an Extended Kalman Filter (EKF) linearize nonlinear system and measurement models around the current state estimate at every time step?",
+      "answer": "Using Jacobian matrices (first-order partial derivatives)",
+      "accepted_answers": [
+        "Jacobians",
+        "Jacobian matrices"
+      ],
+      "explanation": "Because nonlinear transformations do not preserve Gaussian distributions, the EKF computes Jacobians F and H to propagate covariance."
+    },
+    {
+      "id": "adv_10",
+      "category": "Industrial Protocols",
+      "type": "flashcard",
+      "prompt": "In a CAN 2.0B network, how are simultaneous bus collisions resolved without losing data or wasting bus cycles?",
+      "answer": "Non-destructive bitwise arbitration where lower numerical CAN IDs win priority",
+      "accepted_answers": [
+        "Bitwise arbitration by CAN ID",
+        "Lower CAN ID wins arbitration"
+      ],
+      "explanation": "Dominant bits (0) overwrite recessive bits (1); any node transmitting a 1 that reads back a 0 immediately backs off and retries."
+    },
+    {
+      "id": "adv_11",
+      "category": "Industrial Protocols",
+      "type": "flashcard",
+      "prompt": "What is the role of a `.dbc` file in CAN bus engineering?",
+      "answer": "It defines CAN message IDs, payload byte layouts, bit lengths, endianness, scaling factors, and physical engineering units",
+      "accepted_answers": [
+        "CAN database file defining signals and scaling",
+        "Describes CAN frames and signal decoding"
+      ],
+      "explanation": "A `.dbc` database allows tools, gateways, and C/Python decoders to translate raw 8-byte CAN payloads into physical signals."
+    },
+    {
+      "id": "adv_12",
+      "category": "Cyber-Physical Security",
+      "type": "flashcard",
+      "prompt": "How does a Hardware Secure Element like the Microchip ATECC608A protect ECDSA P-256 private keys from firmware extraction?",
+      "answer": "The private key is generated and stored inside tamper-resistant hardware and never leaves the chip; signing happens internally",
+      "accepted_answers": [
+        "Private key never leaves the hardware chip",
+        "Hardware-isolated private key storage"
+      ],
+      "explanation": "Even if an attacker dumps the MCU's entire Flash memory, the private signing key cannot be read over I2C."
+    },
+    {
+      "id": "adv_13",
+      "category": "Cyber-Physical Security",
+      "type": "flashcard",
+      "prompt": "In an embedded Secure Boot chain of trust, what must the immutable ROM/First-Stage Bootloader verify before jumping to the application firmware image?",
+      "answer": "A cryptographic hash (e.g., SHA-256) and digital signature (e.g., ECDSA P-256) using a pinned public key",
+      "accepted_answers": [
+        "Cryptographic signature and hash of the firmware image",
+        "ECDSA signature verification"
+      ],
+      "explanation": "Verifying the cryptographic signature guarantees both integrity (unmodified code) and authenticity (signed by the trusted vendor key)."
+    },
+    {
+      "id": "adv_14",
+      "category": "Safety-Critical C++",
+      "type": "flashcard",
+      "prompt": "Why do safety-critical coding standards like MISRA C++:2023 forbid dynamic heap allocation (`new`/`malloc`) after system initialization?",
+      "answer": "To eliminate non-deterministic allocation latency, heap fragmentation, and out-of-memory failures at runtime",
+      "accepted_answers": [
+        "Prevent heap fragmentation and non-deterministic timing",
+        "Deterministic memory usage"
+      ],
+      "explanation": "Embedded systems running continuously for years must prove worst-case memory bounds statically at compile/link time."
+    },
+    {
+      "id": "adv_15",
+      "category": "Hardware-in-the-Loop",
+      "type": "flashcard",
+      "prompt": "What is the primary purpose of an automated Hardware-in-the-Loop (HIL) test rig in CI/CD for embedded firmware?",
+      "answer": "To flash real target hardware and verify real-time electrical I/O, bus traffic, and fault injection automatically on every commit",
+      "accepted_answers": [
+        "Automated testing on physical target hardware with real I/O",
+        "Validate firmware on real MCU hardware in CI"
+      ],
+      "explanation": "HIL rigs catch timing, peripheral register, and electrical edge cases that host-only unit tests cannot simulate."
+    }
+  ]
+}

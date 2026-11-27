@@ -1,0 +1,150 @@
+{
+  "deck_name": "Predict the Exact Output \u2014 Gauntlet v4 (C, C++, C#, Python, Java, JS)",
+  "cards": [
+    {
+      "id": "out4_01",
+      "category": "C Struct Padding",
+      "type": "code_output",
+      "prompt": "Predict the exact output on a standard 64-bit platform (where `int` is 4 bytes and `char` is 1 byte).",
+      "code": "#include <stdio.h>\nstruct A { char c1; int x; char c2; };\nstruct B { int x; char c1; char c2; };\nint main() {\n    printf(\"%zu %zu\", sizeof(struct A), sizeof(struct B));\n    return 0;\n}",
+      "answer": "12 8",
+      "accepted_answers": [
+        "12 8"
+      ],
+      "explanation": "`struct A` adds 3 padding bytes after `c1` (for 4-byte `int` alignment) and 3 trailing padding bytes after `c2` = 12 bytes. `struct B` packs both `char`s together with 2 trailing padding bytes = 8 bytes."
+    },
+    {
+      "id": "out4_02",
+      "category": "C++ Virtual Dispatch in Constructor",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ program.",
+      "code": "#include <iostream>\nstruct Base {\n    Base() { identify(); }\n    virtual void identify() { std::cout << \"Base \"; }\n};\nstruct Derived : Base {\n    void identify() override { std::cout << \"Derived \"; }\n};\nint main() {\n    Derived d;\n}",
+      "answer": "Base",
+      "accepted_answers": [
+        "Base",
+        "Base "
+      ],
+      "explanation": "Inside a base class constructor, the derived object has not been constructed yet, so the vptr points to `Base`'s vtable and calls `Base::identify()`."
+    },
+    {
+      "id": "out4_03",
+      "category": "C++ std::move",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ snippet.",
+      "code": "#include <iostream>\n#include <string>\n#include <utility>\nint main() {\n    std::string a = \"Embedded\";\n    std::string b = std::move(a);\n    std::cout << a.size() << \":\" << b;\n}",
+      "answer": "0:Embedded",
+      "accepted_answers": [
+        "0:Embedded"
+      ],
+      "explanation": "`std::move` casts `a` to an rvalue reference, invoking `std::string`'s move constructor which steals `a`'s heap buffer and leaves `a` empty (`size() == 0`)."
+    },
+    {
+      "id": "out4_04",
+      "category": "C# Null-Coalescing Assignment",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# snippet.",
+      "code": "int? a = null;\nint? b = 5;\na ??= 10;\nb ??= 20;\nConsole.WriteLine($\"{a},{b}\");",
+      "answer": "10,5",
+      "accepted_answers": [
+        "10,5"
+      ],
+      "explanation": "The `??=` operator assigns the right-hand operand ONLY if the left-hand operand evaluates to `null`."
+    },
+    {
+      "id": "out4_05",
+      "category": "C# Pattern Matching",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# snippet.",
+      "code": "int[] nums = { 10, 20, 30, 40 };\nstring res = nums switch {\n    [10, .. var mid, 40] => $\"{mid.Length}:{mid[1]}\",\n    _ => \"no\"\n};\nConsole.WriteLine(res);",
+      "answer": "2:30",
+      "accepted_answers": [
+        "2:30"
+      ],
+      "explanation": "C# list patterns match first element `10`, last element `40`, and slice the middle `[20, 30]` into `mid` (`Length` = 2, `mid[1]` = 30)."
+    },
+    {
+      "id": "out4_06",
+      "category": "Python Generators",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python snippet.",
+      "code": "gen = (x * x for x in range(4))\nprint(sum(gen), sum(gen))",
+      "answer": "14 0",
+      "accepted_answers": [
+        "14 0"
+      ],
+      "explanation": "A generator expression is single-pass. The first `sum(gen)` consumes `0 + 1 + 4 + 9 = 14`; the second `sum(gen)` iterates over an exhausted generator and returns `0`."
+    },
+    {
+      "id": "out4_07",
+      "category": "Python Dict & Set",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python snippet.",
+      "code": "d = {1: 'int', True: 'bool', 1.0: 'float'}\nprint(len(d), d[1])",
+      "answer": "1 float",
+      "accepted_answers": [
+        "1 float"
+      ],
+      "explanation": "In Python, `1 == True == 1.0` and all three share the same hash (`hash(1) == hash(True) == hash(1.0) == 1`), so subsequent entries overwrite the value while keeping the original key `1`."
+    },
+    {
+      "id": "out4_08",
+      "category": "Java Strings",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java snippet.",
+      "code": "String s1 = \"CPTC\";\nString s2 = new String(\"CPTC\");\nString s3 = s2.intern();\nSystem.out.println((s1 == s2) + \" \" + (s1 == s3));",
+      "answer": "false true",
+      "accepted_answers": [
+        "false true"
+      ],
+      "explanation": "`new String(...)` allocates a distinct heap object (`s1 != s2`), whereas `.intern()` returns the canonical reference from the String Pool (`s1 == s3`)."
+    },
+    {
+      "id": "out4_09",
+      "category": "Java Streams",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java snippet.",
+      "code": "import java.util.List;\nvar list = List.of(1, 2, 3, 4, 5);\nint res = list.stream()\n    .filter(n -> n % 2 == 1)\n    .mapToInt(n -> n * 10)\n    .skip(1)\n    .sum();\nSystem.out.println(res);",
+      "answer": "80",
+      "accepted_answers": [
+        "80"
+      ],
+      "explanation": "Odd numbers `[1, 3, 5]` map to `[10, 30, 50]`; `.skip(1)` drops `10`, leaving `30 + 50 = 80`."
+    },
+    {
+      "id": "out4_10",
+      "category": "JavaScript Closures & var vs let",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript snippet.",
+      "code": "const fns = [];\nfor (var i = 0; i < 3; i++) {\n  fns.push(() => i);\n}\nconsole.log(fns.map(fn => fn()).join(','));",
+      "answer": "3,3,3",
+      "accepted_answers": [
+        "3,3,3"
+      ],
+      "explanation": "`var` is function-scoped rather than block-scoped, so all three closures capture the exact same `i` variable, which equals `3` after the loop finishes."
+    },
+    {
+      "id": "out4_11",
+      "category": "JavaScript Object Keys",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript snippet.",
+      "code": "const obj = {};\nconst a = { id: 1 };\nconst b = { id: 2 };\nobj[a] = 'first';\nobj[b] = 'second';\nconsole.log(obj[a]);",
+      "answer": "second",
+      "accepted_answers": [
+        "second"
+      ],
+      "explanation": "Plain JS object keys coerce non-Symbol objects via `.toString()` into `\"[object Object]\"`, so `obj[b]` overwrites `obj[a]`."
+    },
+    {
+      "id": "out4_12",
+      "category": "C Short-Circuit Evaluation",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C snippet.",
+      "code": "#include <stdio.h>\nint main() {\n    int a = 0, b = 5;\n    if (a++ && ++b) {\n        printf(\"T \");\n    }\n    printf(\"%d %d\", a, b);\n    return 0;\n}",
+      "answer": "1 5",
+      "accepted_answers": [
+        "1 5"
+      ],
+      "explanation": "`a++` evaluates to `0` (false) and increments `a` to `1`. Because the left side of `&&` is false, `++b` is short-circuited and never executes, leaving `b = 5`."
+    }
+  ]
+}

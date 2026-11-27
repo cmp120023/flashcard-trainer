@@ -1,0 +1,186 @@
+{
+  "deck_name": "23 - Pure Code-Output Gauntlet v3 (Multi-Language Edge Cases)",
+  "cards": [
+    {
+      "id": "g3_01",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ lambda capture snippet.",
+      "code": "#include <iostream>\nint main() {\n    int x = 10;\n    auto by_val = [x]() { return x + 5; };\n    auto by_ref = [&x]() { return x + 5; };\n    x = 20;\n    std::cout << by_val() << \" \" << by_ref();\n}",
+      "answer": "15 25",
+      "accepted_answers": [
+        "15 25"
+      ],
+      "explanation": "by_val captured x=10 at lambda creation time (10+5=15); by_ref reads the updated x=20 (20+5=25)."
+    },
+    {
+      "id": "g3_02",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ static local variable function.",
+      "code": "#include <iostream>\nint step() {\n    static int count = 1;\n    count *= 2;\n    return count;\n}\nint main() {\n    std::cout << step() << \" \" << step() << \" \" << step();\n}",
+      "answer": "2 4 8",
+      "accepted_answers": [
+        "2 4 8"
+      ],
+      "explanation": "A local static variable is initialized once and retains its state across function calls."
+    },
+    {
+      "id": "g3_03",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# record `with` expression.",
+      "code": "public record Sensor(string Id, int Value);\nvar s1 = new Sensor(\"A1\", 10);\nvar s2 = s1 with { Value = 42 };\nConsole.WriteLine($\"{s1.Value} {s2.Value} {s1 == s2}\");",
+      "answer": "10 42 False",
+      "accepted_answers": [
+        "10 42 False"
+      ],
+      "explanation": "Records support non-destructive mutation via `with`, leaving s1 unchanged and comparing by value equality."
+    },
+    {
+      "id": "g3_04",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# pattern matching switch expression.",
+      "code": "int score = 85;\nstring grade = score switch {\n    >= 90 => \"A\",\n    >= 80 => \"B\",\n    >= 70 => \"C\",\n    _ => \"F\"\n};\nConsole.WriteLine(grade);",
+      "answer": "B",
+      "accepted_answers": [
+        "B"
+      ],
+      "explanation": "Relational pattern arms evaluate top-to-bottom; 85 fails >= 90 and matches >= 80."
+    },
+    {
+      "id": "g3_05",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python `for...else` loop.",
+      "code": "for n in [2, 4, 6, 8]:\n    if n % 2 != 0:\n        print(\"Odd\")\n        break\nelse:\n    print(\"All Even\")",
+      "answer": "All Even",
+      "accepted_answers": [
+        "All Even"
+      ],
+      "explanation": "In Python, a loop's `else` clause executes only if the loop completes normally without hitting `break`."
+    },
+    {
+      "id": "g3_06",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python closure late-binding loop.",
+      "code": "funcs = [lambda: i for i in range(3)]\nprint([f() for f in funcs])",
+      "answer": "[2, 2, 2]",
+      "accepted_answers": [
+        "[2, 2, 2]"
+      ],
+      "explanation": "Closures look up `i` in the enclosing scope when called, after the loop has finished with `i = 2`."
+    },
+    {
+      "id": "g3_07",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python chained comparison.",
+      "code": "x = 5\nprint(1 < x < 10, 1 < x > 7)",
+      "answer": "True False",
+      "accepted_answers": [
+        "True False"
+      ],
+      "explanation": "Chained comparisons expand to (1 < x and x < 10) -> True, and (1 < x and x > 7) -> False."
+    },
+    {
+      "id": "g3_08",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java polymorphism vs. field hiding snippet.",
+      "code": "class Base {\n    int x = 10;\n    int getX() { return x; }\n}\nclass Sub extends Base {\n    int x = 20;\n    @Override int getX() { return x; }\n}\nBase obj = new Sub();\nSystem.out.println(obj.x + \" \" + obj.getX());",
+      "answer": "10 20",
+      "accepted_answers": [
+        "10 20"
+      ],
+      "explanation": "Fields in Java are statically bound to the reference type (Base -> 10), while instance methods are dynamically dispatched (Sub -> 20)."
+    },
+    {
+      "id": "g3_09",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java post-increment assignment.",
+      "code": "int a = 5;\na = a++;\nSystem.out.println(a);",
+      "answer": "5",
+      "accepted_answers": [
+        "5"
+      ],
+      "explanation": "a++ evaluates to 5, increments a to 6, and then the assignment writes the saved expression result (5) back into a."
+    },
+    {
+      "id": "g3_10",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript destructuring with default values.",
+      "code": "const { a = 1, b = 2, c = 3 } = { a: undefined, b: null };\nconsole.log(a, b, c);",
+      "answer": "1 null 3",
+      "accepted_answers": [
+        "1 null 3"
+      ],
+      "explanation": "Default destructuring values trigger only when a property is `undefined` (a and c), not when it is `null` (b)."
+    },
+    {
+      "id": "g3_11",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript Promise microtask vs. setTimeout macrotask order.",
+      "code": "console.log(\"1\");\nsetTimeout(() => console.log(\"2\"), 0);\nPromise.resolve().then(() => console.log(\"3\"));\nconsole.log(\"4\");",
+      "answer": "1 4 3 2",
+      "accepted_answers": [
+        "1 4 3 2",
+        "1\n4\n3\n2"
+      ],
+      "explanation": "Synchronous code runs first (1, 4), then the Promise microtask queue drains (3), and finally macrotasks like setTimeout run (2)."
+    },
+    {
+      "id": "g3_12",
+      "category": "C Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C `sizeof` array vs. pointer decay snippet on a 64-bit platform.",
+      "code": "#include <stdio.h>\nvoid inspect(int arr[]) {\n    printf(\"%zu \", sizeof(arr));\n}\nint main() {\n    int data[5] = {1, 2, 3, 4, 5};\n    inspect(data);\n    printf(\"%zu\", sizeof(data));\n}",
+      "answer": "8 20",
+      "accepted_answers": [
+        "8 20"
+      ],
+      "explanation": "Inside inspect(), arr decays to an int* (8 bytes on 64-bit); in main(), sizeof(data) is 5 * 4 = 20 bytes."
+    },
+    {
+      "id": "g3_13",
+      "category": "C Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C bitwise mask and shift.",
+      "code": "#include <stdio.h>\n#include <stdint.h>\nint main() {\n    uint16_t reg = 0xABCD;\n    uint8_t high_nibble = (reg >> 12) & 0x0F;\n    uint8_t mid_byte = (reg >> 4) & 0xFF;\n    printf(\"0x%X 0x%X\", high_nibble, mid_byte);\n}",
+      "answer": "0xA 0xBC",
+      "accepted_answers": [
+        "0xA 0xBC"
+      ],
+      "explanation": "Shifting 0xABCD right by 12 gives 0xA; shifting right by 4 gives 0xABC, masked with 0xFF to yield 0xBC."
+    },
+    {
+      "id": "g3_14",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ `std::vector` size vs. capacity behavior.",
+      "code": "#include <iostream>\n#include <vector>\nint main() {\n    std::vector<int> v;\n    v.reserve(10);\n    v.push_back(7);\n    std::cout << v.size() << \" \" << v.capacity();\n}",
+      "answer": "1 10",
+      "accepted_answers": [
+        "1 10"
+      ],
+      "explanation": "reserve(10) allocates capacity for 10 elements without constructing elements; push_back(7) sets size to 1."
+    },
+    {
+      "id": "g3_15",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# `Span<int>` slice mutation.",
+      "code": "int[] arr = { 10, 20, 30, 40 };\nSpan<int> slice = arr.AsSpan(1, 2);\nslice[0] = 99;\nConsole.WriteLine(string.Join(\",\", arr));",
+      "answer": "10,99,30,40",
+      "accepted_answers": [
+        "10,99,30,40"
+      ],
+      "explanation": "Span<T> is a zero-allocation view directly over the underlying array memory, so writing slice[0] updates arr[1]."
+    }
+  ]
+}

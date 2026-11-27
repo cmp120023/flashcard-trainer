@@ -1,0 +1,157 @@
+{
+  "deck_name": "Deck 30: Embedded Security, Cryptography & MISRA C++:2023",
+  "cards": [
+    {
+      "id": "sec30_01",
+      "category": "Secure Boot",
+      "type": "flashcard",
+      "prompt": "In a hardware Root of Trust (RoT) secure boot chain, where must the initial immutable bootloader code and public key hash reside?",
+      "answer": "Mask ROM / OTP (One-Time Programmable) fuses",
+      "accepted_answers": [
+        "BootROM and OTP",
+        "ROM and OTP fuses",
+        "Immutable ROM",
+        "Mask ROM"
+      ],
+      "explanation": "The first-stage BootROM must be physically immutable (mask ROM) and verify the next stage against a public key hash burned into One-Time Programmable (OTP) eFuses."
+    },
+    {
+      "id": "sec30_02",
+      "category": "Cryptography",
+      "type": "flashcard",
+      "prompt": "Why is ECDSA (e.g., P-256) preferred over RSA-2048 for firmware signature verification on resource-constrained microcontrollers?",
+      "answer": "Smaller key and signature sizes with faster verification and lower flash/RAM overhead",
+      "accepted_answers": [
+        "Smaller keys and faster execution",
+        "Much smaller key size for equivalent security",
+        "Lower memory and compute overhead"
+      ],
+      "explanation": "A 256-bit ECC key provides security comparable to a 3072-bit RSA key while using tiny 64-byte signatures and far less flash/RAM."
+    },
+    {
+      "id": "sec30_03",
+      "category": "Secure Boot",
+      "type": "flashcard",
+      "prompt": "What mechanism prevents an attacker from flashing an older, validly signed firmware image that contains a known vulnerability?",
+      "answer": "Anti-rollback monotonic counter in OTP fuses or secure storage",
+      "accepted_answers": [
+        "Anti-rollback counter",
+        "Monotonic counter",
+        "Rollback protection"
+      ],
+      "explanation": "The bootloader compares the firmware header's security version against a hardware monotonic counter (OTP fuses) that can only increment, rejecting older version numbers."
+    },
+    {
+      "id": "sec30_04",
+      "category": "Hardware Security",
+      "type": "flashcard",
+      "prompt": "What is the primary security advantage of storing device private keys inside a secure element like the Microchip ATECC608A rather than MCU internal flash?",
+      "answer": "Private keys never leave the tamper-resistant chip in plaintext; cryptographic operations execute internally",
+      "accepted_answers": [
+        "Keys cannot be read out",
+        "Hardware tamper resistance and non-exportable keys",
+        "Private keys stay inside the secure element"
+      ],
+      "explanation": "A secure element performs signing and ECDH internally over I2C/SPI while protecting keys against physical probing, side-channel attacks, and flash readout."
+    },
+    {
+      "id": "sec30_05",
+      "category": "Cryptography",
+      "type": "flashcard",
+      "prompt": "What does AEAD stand for (e.g., AES-128-GCM), and what two security properties does it provide simultaneously?",
+      "answer": "Authenticated Encryption with Associated Data; provides confidentiality and integrity/authenticity",
+      "accepted_answers": [
+        "Authenticated Encryption with Associated Data",
+        "Confidentiality and authenticity",
+        "Confidentiality and integrity"
+      ],
+      "explanation": "AEAD encrypts payload data (confidentiality) while computing an authentication tag over both ciphertext and unencrypted headers/associated data (integrity and authenticity)."
+    },
+    {
+      "id": "sec30_06",
+      "category": "Cryptography",
+      "type": "flashcard",
+      "prompt": "What catastrophic failure occurs if the same Nonce/IV is reused with the same key in AES-GCM or ChaCha20-Poly1305?",
+      "answer": "XORing two ciphertexts cancels the keystream, exposing plaintext and leaking the authentication key",
+      "accepted_answers": [
+        "Keystream reuse leaks plaintext",
+        "Nonce reuse breaks confidentiality and authenticity",
+        "Plaintext recovery via XOR"
+      ],
+      "explanation": "Stream-cipher modes generate a keystream from (Key, Nonce). Reusing a nonce lets an attacker XOR two ciphertexts to recover P1 XOR P2 and forge GCM tags."
+    },
+    {
+      "id": "sec30_07",
+      "category": "Threat Modeling",
+      "type": "flashcard",
+      "prompt": "What do the six letters in the STRIDE threat modeling framework stand for?",
+      "answer": "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege",
+      "accepted_answers": [
+        "Spoofing Tampering Repudiation Information Disclosure Denial of Service Elevation of Privilege"
+      ],
+      "explanation": "STRIDE systematically categorizes threats across trust boundaries: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege."
+    },
+    {
+      "id": "sec30_08",
+      "category": "MISRA C++:2023",
+      "type": "flashcard",
+      "prompt": "Why does MISRA C++:2023 prohibit dynamic heap allocation (new, delete, malloc) after system initialization in safety-critical firmware?",
+      "answer": "To prevent non-deterministic latency, heap fragmentation, and out-of-memory failures at runtime",
+      "accepted_answers": [
+        "Heap fragmentation and non-deterministic timing",
+        "Avoids heap fragmentation and OOM",
+        "Deterministic memory usage"
+      ],
+      "explanation": "Dynamic allocation introduces unbounded execution time and fragmentation over long uptimes; safety-critical systems use static or pool-based allocation."
+    },
+    {
+      "id": "sec30_09",
+      "category": "MISRA C++:2023",
+      "type": "flashcard",
+      "prompt": "Under MISRA C++:2023, why must every switch statement end with a default branch even when switching over an enum class?",
+      "answer": "Bit flips, memory corruption, or invalid casts can cause an enum variable to hold an out-of-range value",
+      "accepted_answers": [
+        "Defensive handling of out-of-range or corrupted enum values",
+        "Enum values can hold invalid bit patterns"
+      ],
+      "explanation": "In C++, an enum's underlying integer type can hold values outside the named enumerators due to memory corruption or unchecked casts; a default case ensures safe fail-handling."
+    },
+    {
+      "id": "sec30_10",
+      "category": "MISRA C++:2023",
+      "type": "flashcard",
+      "prompt": "Why does MISRA C++:2023 ban C-style casts like (uint32_t)ptr in favor of static_cast, const_cast, and reinterpret_cast?",
+      "answer": "C-style casts silently combine dangerous conversions (like stripping const or reinterpreting pointers) without compiler checks",
+      "accepted_answers": [
+        "C-style casts hide dangerous conversions",
+        "Named casts make intent explicit and enforce type safety"
+      ],
+      "explanation": "Named C++ casts restrict what conversions are allowed and make potentially hazardous operations like reinterpret_cast explicitly visible to reviewers and static analyzers."
+    },
+    {
+      "id": "sec30_11",
+      "category": "Applied Crypto",
+      "type": "flashcard",
+      "prompt": "Why must HMAC or password hash comparisons use a constant-time comparison function rather than standard memcmp()?",
+      "answer": "memcmp() exits early on the first mismatched byte, enabling timing side-channel attacks",
+      "accepted_answers": [
+        "Prevents timing side-channel attacks",
+        "memcmp short-circuits on mismatch"
+      ],
+      "explanation": "An attacker can measure microsecond response differences as they guess valid prefix bytes one by one if memcmp() returns early."
+    },
+    {
+      "id": "sec30_12",
+      "category": "Hardware Debug Security",
+      "type": "flashcard",
+      "prompt": "Before shipping production STM32 firmware, what hardware protection level must be set to prevent unauthorized firmware extraction via SWD/JTAG?",
+      "answer": "RDP (Readout Protection) Level 1 or Level 2",
+      "accepted_answers": [
+        "RDP Level 2",
+        "RDP Level 1",
+        "Readout Protection"
+      ],
+      "explanation": "STM32 Option Bytes Readout Protection (RDP Level 1 blocks flash reads when a debugger connects; RDP Level 2 permanently disables JTAG/SWD debug access)."
+    }
+  ]
+}

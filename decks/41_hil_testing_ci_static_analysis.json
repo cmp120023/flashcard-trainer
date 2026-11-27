@@ -1,0 +1,147 @@
+{
+  "deck_name": "Deck 41: HIL Testing, CI/CD & Static Analysis",
+  "cards": [
+    {
+      "id": "hil_01",
+      "category": "HIL Testing",
+      "type": "flashcard",
+      "prompt": "In a Hardware-in-the-Loop (HIL) test rig, why do we place a physical relay or fault-injection board between sensors and the Device Under Test (DUT)?",
+      "answer": "To programmatically simulate physical hardware faults (open circuits, shorts to GND/VCC, brownouts, corrupted CAN frames) during automated CI runs.",
+      "accepted_answers": [
+        "simulate hardware faults",
+        "fault injection",
+        "simulate open circuits and shorts"
+      ],
+      "explanation": "HIL fault injection proves your embedded firmware handles real electrical failures safely without needing an engineer to manually unplug wires."
+    },
+    {
+      "id": "hil_02",
+      "category": "CI/CD",
+      "type": "flashcard",
+      "prompt": "Why does an embedded Hardware-in-the-Loop GitHub Actions workflow require `runs-on: self-hosted` instead of `ubuntu-latest`?",
+      "answer": "Because GitHub's cloud runners cannot physically connect via USB/SWD/UART to the STM32 target hardware on your workbench.",
+      "accepted_answers": [
+        "physical hardware connection",
+        "cloud runners have no access to local hardware",
+        "usb swd connection to target"
+      ],
+      "explanation": "A self-hosted runner on your local workstation or Raspberry Pi bridges GitHub pull requests directly to your physical ST-Link and logic analyzer."
+    },
+    {
+      "id": "hil_03",
+      "category": "pytest",
+      "type": "flashcard",
+      "prompt": "In pytest, what is the primary benefit of `@pytest.fixture(scope='module')` when opening a serial UART port (`pyserial`) to an STM32 board?",
+      "answer": "It opens and configures the serial port once for the entire test file instead of repeatedly opening/closing it for every test function.",
+      "accepted_answers": [
+        "opens the serial port once per module",
+        "reuses setup across tests in the file"
+      ],
+      "explanation": "Opening a serial port often toggles DTR/RTS and resets the microcontroller; module scope avoids unnecessary board resets and speeds up HIL suites."
+    },
+    {
+      "id": "hil_04",
+      "category": "pytest",
+      "type": "flashcard",
+      "prompt": "Which pytest decorator lets you run one test function against 20 different input/expected-output tuples without writing a loop?",
+      "answer": "@pytest.mark.parametrize",
+      "accepted_answers": [
+        "pytest.mark.parametrize"
+      ],
+      "explanation": "`@pytest.mark.parametrize` reports each test case independently in CI logs so you know the exact input tuple that failed."
+    },
+    {
+      "id": "hil_05",
+      "category": "Static Analysis",
+      "type": "flashcard",
+      "prompt": "What is the architectural difference between `clang-tidy` and `cppcheck` when analyzing C++ firmware?",
+      "answer": "clang-tidy uses the Clang AST and compile_commands.json for deep compiler-accurate checks, while cppcheck uses a standalone parser focused on UB, memory leaks, and dataflow bugs.",
+      "accepted_answers": [
+        "clang-tidy uses clang ast and compile_commands",
+        "clang-tidy is compiler-based while cppcheck is standalone"
+      ],
+      "explanation": "Running both catches complementary classes of bugs: `clang-tidy` enforces style/modernization/MISRA rules, while `cppcheck` excels at cross-function UB."
+    },
+    {
+      "id": "hil_06",
+      "category": "Static Analysis",
+      "type": "flashcard",
+      "prompt": "Which `cppcheck` CLI flag forces the tool to return a non-zero exit code (failing the CI pipeline) whenever any issue is detected?",
+      "answer": "--error-exitcode=1",
+      "accepted_answers": [
+        "--error-exitcode"
+      ],
+      "explanation": "By default, `cppcheck` exits with `0` even when warnings are found; `--error-exitcode=1` makes static analysis a hard CI quality gate."
+    },
+    {
+      "id": "hil_07",
+      "category": "CMake",
+      "type": "flashcard",
+      "prompt": "Which CMake cache variable generates `compile_commands.json` so `clang-tidy` and IDE language servers know exact cross-compiler flags and `-I` include paths?",
+      "answer": "CMAKE_EXPORT_COMPILE_COMMANDS",
+      "accepted_answers": [
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "explanation": "Without `compile_commands.json`, `clang-tidy` won't know your target is `arm-none-eabi` or where your HAL/CMSIS headers live."
+    },
+    {
+      "id": "hil_08",
+      "category": "Documentation",
+      "type": "flashcard",
+      "prompt": "In a `Doxyfile`, what does enabling `JAVADOC_AUTOBRIEF = YES` allow you to omit in `/** ... */` doc comments?",
+      "answer": "The explicit `@brief` tag (the first sentence ending in a period automatically becomes the brief summary).",
+      "accepted_answers": [
+        "@brief",
+        "\\brief"
+      ],
+      "explanation": "`JAVADOC_AUTOBRIEF` keeps header files cleaner by treating the first period-terminated sentence as the summary."
+    },
+    {
+      "id": "hil_09",
+      "category": "Code Coverage",
+      "type": "flashcard",
+      "prompt": "Which GCC compiler flag instruments host-compiled C/C++ unit tests to emit `.gcno` and `.gcda` files for `gcov`/`lcov` coverage reports?",
+      "answer": "--coverage",
+      "accepted_answers": [
+        "-fprofile-arcs -ftest-coverage"
+      ],
+      "explanation": "`--coverage` enables both `-fprofile-arcs` and `-ftest-coverage` so `lcov` can generate line and branch coverage HTML reports."
+    },
+    {
+      "id": "hil_10",
+      "category": "Build Reproducibility",
+      "type": "flashcard",
+      "prompt": "How do embedded teams embed the exact Git commit SHA into firmware binaries at build time so a running device can report its version over UART/CAN?",
+      "answer": "Run `git rev-parse --short HEAD` in CMake and pass it into C/C++ via `target_compile_definitions`.",
+      "accepted_answers": [
+        "git rev-parse",
+        "pass git hash via compiler macro"
+      ],
+      "explanation": "Embedding `GIT_HASH` prevents mystery binaries on lab benches and lets HIL test logs record the exact commit flashed to the MCU."
+    },
+    {
+      "id": "hil_11",
+      "category": "Debugging",
+      "type": "flashcard",
+      "prompt": "Why should you always archive the `.elf` file alongside the `.bin` or `.hex` firmware image for every release?",
+      "answer": "Because `.bin`/`.hex` files strip DWARF debug symbols, whereas `.elf` lets `arm-none-eabi-addr2line` or GDB map crash program-counter addresses back to exact source lines.",
+      "accepted_answers": [
+        "elf contains debug symbols",
+        "addr2line needs elf symbols"
+      ],
+      "explanation": "If a device in the field logs a HardFault `PC = 0x08004A12`, only the matching `.elf` lets you resolve that address to a C/C++ line."
+    },
+    {
+      "id": "hil_12",
+      "category": "Safety Testing",
+      "type": "flashcard",
+      "prompt": "In safety-critical firmware testing, what is MC/DC (Modified Condition/Decision Coverage)?",
+      "answer": "A coverage criterion requiring every atomic boolean condition in a decision to be shown to independently affect the overall outcome.",
+      "accepted_answers": [
+        "each condition independently affects the decision outcome"
+      ],
+      "explanation": "Required by DO-178C (aerospace) and ISO 26262 ASIL-D (automotive), MC/DC is stricter than simple branch coverage."
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "deck_name": "10 - Mega-Drill: Multi-Language Code Output & Edge Cases",
+  "cards": [
+    {
+      "id": "mega_01",
+      "category": "C++ Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ unsigned underflow loop condition:",
+      "code": "#include <iostream>\n#include <cstdint>\nint main() {\n    uint8_t x = 2;\n    while (x-- > 0) {\n        std::cout << (int)x << \" \";\n    }\n    return 0;\n}",
+      "answer": "1 0",
+      "accepted_answers": [
+        "1 0"
+      ],
+      "explanation": "When x=2: 2>0 is true, prints 1. When x=1: 1>0 is true, prints 0. When x=0: 0>0 is false, loop terminates (x wraps to 255 after check)."
+    },
+    {
+      "id": "mega_02",
+      "category": "C++ Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ bitwise mask and shift:",
+      "code": "#include <iostream>\n#include <cstdint>\nint main() {\n    uint16_t reg = 0xABCD;\n    uint8_t field = (reg >> 4) & 0x0F;\n    std::cout << std::hex << std::uppercase << (int)field << \"\\n\";\n    return 0;\n}",
+      "answer": "C",
+      "accepted_answers": [
+        "C"
+      ],
+      "explanation": "0xABCD >> 4 = 0x0ABC; masking with 0x0F isolates the lowest nibble: 0xC."
+    },
+    {
+      "id": "mega_03",
+      "category": "C# Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# pattern matching & record 'with' expression:",
+      "code": "record Packet(int Id, int Retry);\nclass Program {\n    static void Main() {\n        var p1 = new Packet(10, 0);\n        var p2 = p1 with { Retry = 2 };\n        Console.WriteLine($\"{p1.Retry} {p2.Retry} {p1 == p2}\");\n    }\n}",
+      "answer": "0 2 False",
+      "accepted_answers": [
+        "0 2 False"
+      ],
+      "explanation": "C# records use non-destructive mutation ('with') and value-based equality."
+    },
+    {
+      "id": "mega_04",
+      "category": "C# Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# null-conditional and null-coalescing chain:",
+      "code": "string[] items = { \"CAN\", null, \"SPI\" };\nint len = items[1]?.Length ?? -1;\nConsole.WriteLine(len);",
+      "answer": "-1",
+      "accepted_answers": [
+        "-1"
+      ],
+      "explanation": "items[1] is null, so ?.Length short-circuits to null, and ?? evaluates to -1."
+    },
+    {
+      "id": "mega_05",
+      "category": "Python Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python generator & zip expression:",
+      "code": "a = [1, 2, 3]\nb = [10, 20]\nres = [x + y for x, y in zip(a, b)]\nprint(res)",
+      "answer": "[11, 22]",
+      "accepted_answers": [
+        "[11, 22]"
+      ],
+      "explanation": "zip() stops at the shortest iterable (length 2), yielding (1,10) and (2,20)."
+    },
+    {
+      "id": "mega_06",
+      "category": "Python Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python dictionary .get() and .setdefault() behavior:",
+      "code": "cfg = {\"baud\": 115200}\na = cfg.get(\"parity\", \"N\")\nb = cfg.setdefault(\"stop\", 1)\nprint(len(cfg), a, b)",
+      "answer": "2 N 1",
+      "accepted_answers": [
+        "2 N 1"
+      ],
+      "explanation": ".get() does not insert missing keys; .setdefault() inserts 'stop': 1 into cfg, increasing len(cfg) to 2."
+    },
+    {
+      "id": "mega_07",
+      "category": "Java Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java String pool vs. new String() comparison:",
+      "code": "String s1 = \"RTOS\";\nString s2 = \"RTOS\";\nString s3 = new String(\"RTOS\");\nSystem.out.println((s1 == s2) + \" \" + (s1 == s3) + \" \" + s1.equals(s3));",
+      "answer": "true false true",
+      "accepted_answers": [
+        "true false true"
+      ],
+      "explanation": "String literals share the intern pool (s1 == s2 is true), whereas new String() allocates a distinct heap object (s1 == s3 is false)."
+    },
+    {
+      "id": "mega_08",
+      "category": "Java Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java Stream map/reduce pipeline:",
+      "code": "import java.util.*;\nint total = List.of(2, 3, 4).stream().map(n -> n * n).reduce(0, Integer::sum);\nSystem.out.println(total);",
+      "answer": "29",
+      "accepted_answers": [
+        "29"
+      ],
+      "explanation": "Squares are 4, 9, and 16; 4 + 9 + 16 = 29."
+    },
+    {
+      "id": "mega_09",
+      "category": "JavaScript Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript destructuring with default values:",
+      "code": "const { port = 8080, host = \"localhost\" } = { port: undefined, host: null };\nconsole.log(port, host);",
+      "answer": "8080 null",
+      "accepted_answers": [
+        "8080 null"
+      ],
+      "explanation": "ES6 destructuring defaults only trigger when a property is strictly undefined, NOT when it is null."
+    },
+    {
+      "id": "mega_10",
+      "category": "JavaScript Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript Array.prototype.sort() gotcha:",
+      "code": "const nums = [10, 2, 30, 4];\nnums.sort();\nconsole.log(nums.join(\",\"));",
+      "answer": "10,2,30,4",
+      "accepted_answers": [
+        "10,2,30,4"
+      ],
+      "explanation": "Without a comparator (a, b) => a - b, JS Array.sort() converts elements to UTF-16 strings and sorts lexicographically."
+    },
+    {
+      "id": "mega_11",
+      "category": "C++ Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ static local variable inside a function:",
+      "code": "#include <iostream>\nint next_seq() {\n    static int seq = 100;\n    return seq++;\n}\nint main() {\n    std::cout << next_seq() << \" \" << next_seq() << \" \" << next_seq() << \"\\n\";\n    return 0;\n}",
+      "answer": "100 101 102",
+      "accepted_answers": [
+        "100 101 102"
+      ],
+      "explanation": "A static local variable is initialized once and retains its state across function calls in .data/.bss."
+    },
+    {
+      "id": "mega_12",
+      "category": "C# Edge Cases",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# Span<int> slice mutation:",
+      "code": "int[] data = { 5, 10, 15, 20 };\nSpan<int> window = data.AsSpan(1, 2);\nwindow[0] = 99;\nConsole.WriteLine(string.Join(\",\", data));",
+      "answer": "5,99,15,20",
+      "accepted_answers": [
+        "5,99,15,20"
+      ],
+      "explanation": "Span<T> is a zero-allocation ref-struct view directly over the underlying array memory."
+    }
+  ]
+}

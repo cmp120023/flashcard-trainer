@@ -1,0 +1,159 @@
+{
+  "deck_name": "40 - Bare-Metal ARM Assembly, Linker Scripts & Startup",
+  "cards": [
+    {
+      "id": "arm_01",
+      "category": "ARM Boot Sequence",
+      "type": "flashcard",
+      "prompt": "On an ARM Cortex-M microcontroller immediately after hardware reset, what two 32-bit words are fetched from addresses 0x00000000 and 0x00000004?",
+      "code": "",
+      "answer": "Initial Main Stack Pointer (MSP) at 0x00000000 and Reset_Handler vector address at 0x00000004",
+      "accepted_answers": [
+        "MSP and Reset_Handler",
+        "Initial SP and Reset Vector"
+      ],
+      "explanation": "Cortex-M hardware automatically loads MSP from word 0 of the vector table and branches to the Reset_Handler address in word 1 (with bit 0 = 1 for Thumb state)."
+    },
+    {
+      "id": "arm_02",
+      "category": "ARM Assembly",
+      "type": "flashcard",
+      "prompt": "Why must bit 0 (the LSB) of every function pointer and interrupt vector address in ARM Cortex-M be set to 1?",
+      "code": "",
+      "answer": "Cortex-M only executes Thumb/Thumb-2 instructions; LSB = 0 triggers a HardFault/UsageFault (INVSTATE)",
+      "accepted_answers": [
+        "indicates Thumb instruction mode",
+        "Thumb state bit"
+      ],
+      "explanation": "ARMv7-M/ARMv8-M cores do not support legacy 32-bit ARM mode; jumping to an even address clears EPSR.T and faults immediately."
+    },
+    {
+      "id": "arm_03",
+      "category": "Linker Scripts",
+      "type": "flashcard",
+      "prompt": "In a bare-metal GNU ld linker script, what is the difference between a section's VMA (Virtual Memory Address) and LMA (Load Memory Address)?",
+      "code": "",
+      "answer": "VMA is where the section runs in SRAM; LMA is where its initial values are stored in non-volatile Flash",
+      "accepted_answers": [
+        "VMA is SRAM runtime address; LMA is Flash storage address"
+      ],
+      "explanation": "Initialized globals (.data) have an LMA in Flash and a VMA in SRAM (specified via '> RAM AT> FLASH'), requiring startup code to copy them before main()."
+    },
+    {
+      "id": "arm_04",
+      "category": "Startup Code",
+      "type": "flashcard",
+      "prompt": "What two memory initialization loops must Reset_Handler execute in C or assembly before calling main()?",
+      "code": "",
+      "answer": "Copy .data from Flash (LMA) to SRAM (VMA), and zero-fill .bss in SRAM",
+      "accepted_answers": [
+        "copy .data and zero .bss",
+        "initialize .data and clear .bss"
+      ],
+      "explanation": "C guarantees that initialized globals hold their initial values (.data) and uninitialized static/global variables start at zero (.bss) when main() begins."
+    },
+    {
+      "id": "arm_05",
+      "category": "Linker Scripts",
+      "type": "flashcard",
+      "prompt": "Why must you wrap the interrupt vector table declaration in __attribute__((section(\".isr_vector\"), used)) and KEEP(*(.isr_vector)) in the linker script?",
+      "code": "",
+      "answer": "To prevent the compiler and --gc-sections linker garbage collector from stripping it as unreferenced data",
+      "accepted_answers": [
+        "prevent linker garbage collection from removing it",
+        "keep --gc-sections from stripping it"
+      ],
+      "explanation": "Nothing in C code directly calls the vector table array, so without 'used' and 'KEEP', dead-code elimination deletes the entire vector table."
+    },
+    {
+      "id": "arm_06",
+      "category": "ARM Architecture",
+      "type": "flashcard",
+      "prompt": "In the ARM Architecture Procedure Call Standard (AAPCS), which registers pass the first four 32-bit arguments to a function and hold the return value?",
+      "code": "",
+      "answer": "R0-R3 pass arguments; R0 (and R1 for 64-bit) holds the return value",
+      "accepted_answers": [
+        "R0-R3 and R0",
+        "R0, R1, R2, R3"
+      ],
+      "explanation": "R0-R3 and R12 are caller-saved scratch registers, while R4-R11 are callee-saved registers."
+    },
+    {
+      "id": "arm_07",
+      "category": "ARM Architecture",
+      "type": "flashcard",
+      "prompt": "Which 8 registers does Cortex-M hardware automatically push onto the active stack upon entering an interrupt service routine (ISR)?",
+      "code": "",
+      "answer": "R0, R1, R2, R3, R12, LR, PC, and xPSR",
+      "accepted_answers": [
+        "R0-R3, R12, LR, PC, xPSR"
+      ],
+      "explanation": "Because hardware stacks all AAPCS caller-saved registers automatically, standard C functions can be used directly as Cortex-M ISRs without special compiler attributes."
+    },
+    {
+      "id": "arm_08",
+      "category": "ARM Assembly",
+      "type": "flashcard",
+      "prompt": "What is the difference between the ARM Cortex-M instructions 'WFI' and 'SEV'?",
+      "code": "",
+      "answer": "WFI (Wait For Interrupt) puts the core into low-power sleep until an interrupt occurs; SEV (Send Event) wakes cores waiting on WFE",
+      "accepted_answers": [
+        "WFI sleeps until interrupt; SEV signals an event"
+      ],
+      "explanation": "WFI is standard in bare-metal idle loops to slash current draw while waiting for timer or peripheral interrupts."
+    },
+    {
+      "id": "arm_09",
+      "category": "Fault Debugging",
+      "type": "flashcard",
+      "prompt": "When an STM32 Cortex-M4 triggers a HardFault, which SCB register holds Configurable Fault Status flags (MMFSR, BFSR, UFSR) for diagnosing unaligned access, bus faults, or divide-by-zero?",
+      "code": "",
+      "answer": "SCB->CFSR (Configurable Fault Status Register)",
+      "accepted_answers": [
+        "CFSR",
+        "SCB->CFSR"
+      ],
+      "explanation": "Inspecting SCB->CFSR alongside the stacked PC from the fault frame pinpoints the exact instruction and cause of a HardFault."
+    },
+    {
+      "id": "arm_10",
+      "category": "ARM Assembly",
+      "type": "flashcard",
+      "prompt": "What do the Cortex-M instructions 'CPSID i' and 'CPSIE i' do?",
+      "code": "",
+      "answer": "CPSID i disables maskable interrupts (sets PRIMASK); CPSIE i enables maskable interrupts (clears PRIMASK)",
+      "accepted_answers": [
+        "disable and enable interrupts",
+        "set and clear PRIMASK"
+      ],
+      "explanation": "Setting PRIMASK = 1 blocks all configurable-priority interrupts during short bare-metal critical sections (while NMI and HardFault remain active)."
+    },
+    {
+      "id": "arm_11",
+      "category": "Memory Barriers",
+      "type": "flashcard",
+      "prompt": "Why should you execute a '__DSB()' (Data Synchronization Barrier) after clearing a peripheral interrupt flag inside an STM32 ISR?",
+      "code": "",
+      "answer": "To ensure the peripheral write completes over the bus before exiting the ISR so it does not immediately re-trigger",
+      "accepted_answers": [
+        "prevent spurious ISR re-entry",
+        "ensure bus write completes before ISR exit"
+      ],
+      "explanation": "Write buffers on the Cortex-M bus matrix can delay the flag-clear write past the ISR exit instruction, causing a phantom second interrupt."
+    },
+    {
+      "id": "arm_12",
+      "category": "Linker Scripts",
+      "type": "code_output",
+      "prompt": "Given these linker symbols, how many bytes will the startup loop copy for .data?",
+      "code": "// Linker script symbols:\n// _sdata = 0x20000000\n// _edata = 0x20000100\n// _sidata = 0x08004000\n// Loop: for (uint32_t *dst = &_sdata; dst < &_edata; ) *dst++ = *src++;",
+      "answer": "256 bytes",
+      "accepted_answers": [
+        "256",
+        "256 bytes",
+        "0x100"
+      ],
+      "explanation": "0x20000100 - 0x20000000 = 0x100 = 256 bytes (64 uint32_t words) copied from Flash LMA 0x08004000 into SRAM."
+    }
+  ]
+}

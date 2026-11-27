@@ -1,0 +1,165 @@
+{
+  "deck_name": "36 - PCB Design, KiCad, Signal Integrity & Hardware Debug",
+  "cards": [
+    {
+      "id": "pcb_01",
+      "category": "KiCad Workflow",
+      "type": "flashcard",
+      "prompt": "In KiCad, what is the exact two-step validation rule workflow you run before generating Gerber fabrication files (first in Schematic Editor, then in PCB Editor)?",
+      "code": "",
+      "answer": "ERC then DRC",
+      "accepted_answers": [
+        "ERC and DRC",
+        "Electrical Rules Check and Design Rule Check",
+        "ERC, DRC"
+      ],
+      "explanation": "Electrical Rules Check (ERC) verifies schematic pin connections and power flags, while Design Rule Check (DRC) verifies physical trace widths, clearances, and drill sizes on the PCB layout."
+    },
+    {
+      "id": "pcb_02",
+      "category": "KiCad Workflow",
+      "type": "flashcard",
+      "prompt": "In KiCad Schematic Editor, what symbol must be attached to a passive power net (like a connector VCC pin) to prevent ERC 'Input Power pin not driven by any Output Power pins' errors?",
+      "code": "",
+      "answer": "PWR_FLAG",
+      "accepted_answers": [
+        "power flag",
+        "PWR_FLAG symbol"
+      ],
+      "explanation": "PWR_FLAG tells KiCad's ERC engine that a net receives external power even when no on-board voltage regulator output pin is attached."
+    },
+    {
+      "id": "pcb_03",
+      "category": "PCB Layout & Decoupling",
+      "type": "flashcard",
+      "prompt": "Where should a 100 nF (0.1 uF) ceramic bypass capacitor be placed relative to an MCU VDD/VSS pin pair, and why?",
+      "code": "",
+      "answer": "As close as physically possible to the IC pins to minimize trace inductance",
+      "accepted_answers": [
+        "as close as possible to the pins",
+        "right next to the IC pins to minimize loop inductance"
+      ],
+      "explanation": "Long traces add parasitic inductance (V = L * di/dt), which prevents the capacitor from supplying high-frequency switching current transients cleanly."
+    },
+    {
+      "id": "pcb_04",
+      "category": "Signal Integrity",
+      "type": "flashcard",
+      "prompt": "On a 2-layer or 4-layer PCB, what happens to high-speed return currents (e.g., 20 MHz SPI clock) if you route a signal trace across a split in the reference ground plane?",
+      "code": "",
+      "answer": "The return current detours around the split, creating a large current loop, inductance, and EMI",
+      "accepted_answers": [
+        "return current detours around the split causing EMI and crosstalk",
+        "increased loop area and EMI"
+      ],
+      "explanation": "High-frequency return currents follow the path of least inductance directly underneath the signal trace; a plane split forces a wide detour."
+    },
+    {
+      "id": "pcb_05",
+      "category": "Signal Integrity",
+      "type": "flashcard",
+      "prompt": "What is the standard target differential impedance (in ohms) for USB 2.0 Full/High-Speed D+/D- traces, and for CAN_H/CAN_L bus lines?",
+      "code": "",
+      "answer": "90 ohms for USB, 120 ohms for CAN",
+      "accepted_answers": [
+        "90 and 120",
+        "90 ohms USB and 120 ohms CAN",
+        "90, 120"
+      ],
+      "explanation": "USB 2.0 requires 90-ohm differential impedance, while ISO 11898 CAN bus requires 120-ohm differential impedance with 120-ohm termination resistors at both ends."
+    },
+    {
+      "id": "pcb_06",
+      "category": "Signal Integrity",
+      "type": "flashcard",
+      "prompt": "Why is a small 22-ohm to 33-ohm series damping resistor often placed right at the driver pin of a fast SPI SCK or MOSI line?",
+      "code": "",
+      "answer": "Source series termination to match trace impedance and suppress ringing/overshoot",
+      "accepted_answers": [
+        "series termination to reduce ringing",
+        "impedance matching to prevent reflections"
+      ],
+      "explanation": "Adding ~22-33 ohms to a ~20-ohm CMOS output driver matches a ~50-ohm PCB trace, absorbing reflections and eliminating overshoot."
+    },
+    {
+      "id": "pcb_07",
+      "category": "PCB Fabrication",
+      "type": "flashcard",
+      "prompt": "What are the two industry-standard file formats exported from KiCad to manufacture and assemble a PCB (one for copper/mask/drill layers, one for component placement)?",
+      "code": "",
+      "answer": "Gerber (plus Excellon drill) and CPL / Pick-and-Place (plus BOM)",
+      "accepted_answers": [
+        "Gerber and Pick and Place",
+        "Gerber and CPL",
+        "Gerbers and BOM/CPL"
+      ],
+      "explanation": "Gerber + Excellon drill files define the physical board fabrication, while the Bill of Materials (BOM) and Component Placement List (CPL/POS) guide SMT assembly."
+    },
+    {
+      "id": "pcb_08",
+      "category": "Hardware Debug",
+      "type": "flashcard",
+      "prompt": "When probing a 40 MHz square wave on an oscilloscope, why must you switch the passive probe from 1X to 10X mode?",
+      "code": "",
+      "answer": "1X mode has low bandwidth (~6-10 MHz) and high capacitive loading (~100 pF) that distorts fast edges",
+      "accepted_answers": [
+        "10X has higher bandwidth and lower capacitive loading",
+        "to increase bandwidth and reduce probe capacitance"
+      ],
+      "explanation": "In 1X mode, coaxial cable capacitance (~100 pF) heavily loads the circuit and rolls off bandwidth below 10 MHz; 10X drops input capacitance to ~10-15 pF and unlocks full probe bandwidth."
+    },
+    {
+      "id": "pcb_09",
+      "category": "Hardware Debug",
+      "type": "flashcard",
+      "prompt": "When measuring high-frequency switching noise on a buck converter output with an oscilloscope, what replaces the long alligator ground clip to prevent ground-loop ringing?",
+      "code": "",
+      "answer": "A ground spring tip",
+      "accepted_answers": [
+        "ground spring",
+        "probe ground spring",
+        "short ground spring"
+      ],
+      "explanation": "A 6-inch alligator ground lead adds ~150 nH of inductance that resonates with probe capacitance; a short ground spring keeps the loop area tiny."
+    },
+    {
+      "id": "pcb_10",
+      "category": "Hardware Debug",
+      "type": "flashcard",
+      "prompt": "Your I2C bus is stuck with SDA held permanently LOW after an MCU reset mid-transaction. What hardware-level recovery sequence frees the slave device?",
+      "code": "",
+      "answer": "Toggle SCL up to 9 clock pulses until SDA goes high, then send a STOP condition",
+      "accepted_answers": [
+        "clock SCL 9 times then send STOP",
+        "9 clock pulses on SCL"
+      ],
+      "explanation": "An I2C slave mid-byte waits for SCL edges to shift out remaining bits; clocking SCL up to 9 times lets it release SDA so the master can issue a STOP."
+    },
+    {
+      "id": "pcb_11",
+      "category": "Power & Protection",
+      "type": "flashcard",
+      "prompt": "What two components are placed in series and shunt at a 24V industrial sensor input to protect a 3.3V MCU ADC pin from overvoltage spikes and reverse polarity?",
+      "code": "",
+      "answer": "Current-limiting series resistor and TVS diode (or Schottky clamping diodes)",
+      "accepted_answers": [
+        "series resistor and TVS diode",
+        "resistor and Zener/TVS clamp"
+      ],
+      "explanation": "The TVS diode clamps transient overvoltage spikes to a safe level while the series resistor limits fault current into the clamp and MCU ESD diodes."
+    },
+    {
+      "id": "pcb_12",
+      "category": "Hardware Debug",
+      "type": "flashcard",
+      "prompt": "You power on a newly assembled custom PCB with a bench power supply set to 3.3V and a 50 mA current limit, and it immediately hits CC (Constant Current) mode at 0.2V. What is the first safe diagnostic step?",
+      "code": "",
+      "answer": "Check for a dead short between 3.3V and GND (visual inspection, continuity, or thermal camera/IPA)",
+      "accepted_answers": [
+        "check for a short circuit between VCC and GND",
+        "find the short circuit"
+      ],
+      "explanation": "Current-limiting prevented magic smoke; inspect polarized caps/IC orientation, measure resistance across power rails, or raise current slightly while checking for hot spots."
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "deck_name": "Deck 42: C#/.NET Core & EF Core Deep Dive",
+  "cards": [
+    {
+      "id": "cs_deep_01",
+      "category": "C# Async",
+      "type": "flashcard",
+      "prompt": "When should a C# method return `ValueTask<T>` instead of `Task<T>`?",
+      "answer": "On hot paths where the result is frequently available synchronously (e.g., cache hits or buffered reads), avoiding heap allocation of a `Task` object.",
+      "accepted_answers": [
+        "hot paths that often complete synchronously",
+        "avoid heap allocation when synchronous"
+      ],
+      "explanation": "`ValueTask<T>` is a discriminated struct that avoids allocating a `Task` on the managed heap when the operation finishes synchronously."
+    },
+    {
+      "id": "cs_deep_02",
+      "category": "C# Async",
+      "type": "flashcard",
+      "prompt": "Why is `async void` dangerous in C# outside of top-level UI event handlers?",
+      "answer": "Callers cannot `await` it, and unhandled exceptions crash the entire process instead of being captured on a `Task`.",
+      "accepted_answers": [
+        "unhandled exceptions crash the process and cannot be awaited"
+      ],
+      "explanation": "Always return `Task` (or `Task<T>`) for asynchronous methods so exceptions propagate cleanly through `await`."
+    },
+    {
+      "id": "cs_deep_03",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "What happens to SQL generation when you filter a `DbSet<T>` after calling `.AsEnumerable()` vs. keeping it as `IQueryable<T>`?",
+      "answer": "`.AsEnumerable()` pulls all rows into C# memory first and filters client-side, whereas `IQueryable<T>` translates `.Where()` into a SQL `WHERE` clause.",
+      "accepted_answers": [
+        "asenumerable filters in memory on client",
+        "iqueryable translates to sql where"
+      ],
+      "explanation": "Prematurely switching to `IEnumerable<T>` can accidentally fetch millions of rows over the network before filtering."
+    },
+    {
+      "id": "cs_deep_04",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "How does `.AsNoTracking()` improve performance on read-only EF Core queries?",
+      "answer": "It skips creating change-tracker snapshots in memory for returned entities, reducing CPU and RAM overhead.",
+      "accepted_answers": [
+        "disables change tracking snapshots",
+        "skips change tracker overhead"
+      ],
+      "explanation": "If you are only serializing DTOs for an HTTP GET endpoint and won't call `SaveChanges()`, `.AsNoTracking()` is measurably faster."
+    },
+    {
+      "id": "cs_deep_05",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "Why does sharing a single EF Core `DbContext` instance across `Task.WhenAll(...)` throw an `InvalidOperationException`?",
+      "answer": "`DbContext` is not thread-safe and does not support multiple parallel operations running concurrently on the same instance.",
+      "accepted_answers": [
+        "dbcontext is not thread-safe",
+        "no concurrent operations on same dbcontext"
+      ],
+      "explanation": "For parallel queries, inject `IDbContextFactory<AppDbContext>` and create a separate `DbContext` per concurrent task."
+    },
+    {
+      "id": "cs_deep_06",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "In ASP.NET Core configuration, what is the difference between `IOptions<T>` and `IOptionsSnapshot<T>`?",
+      "answer": "`IOptions<T>` is a singleton read once at startup, whereas `IOptionsSnapshot<T>` is scoped per request and reloads changes from `appsettings.json`.",
+      "accepted_answers": [
+        "ioptions is singleton while ioptionssnapshot reloads per request"
+      ],
+      "explanation": "Use `IOptionsSnapshot<T>` (or `IOptionsMonitor<T>` in singletons) when you want live config updates without restarting the web app."
+    },
+    {
+      "id": "cs_deep_07",
+      "category": "C# Types",
+      "type": "flashcard",
+      "prompt": "What is the key difference between a C# `record` (reference type) and a `record struct` (value type) regarding mutability by default?",
+      "answer": "Positional `record` properties default to `init`-only (immutable), whereas positional `record struct` properties default to mutable `{ get; set; }` unless marked `readonly`.",
+      "accepted_answers": [
+        "record struct is mutable by default unless readonly"
+      ],
+      "explanation": "Always write `readonly record struct Point(int X, int Y);` if you want an immutable value-type record."
+    },
+    {
+      "id": "cs_deep_08",
+      "category": "C# Memory",
+      "type": "flashcard",
+      "prompt": "Why can't a C# `Span<T>` be stored as a field on a normal heap-allocated `class` or used across an `await` boundary?",
+      "answer": "`Span<T>` is a `ref struct` restricted strictly to the stack so it cannot outlive the stack memory it wraps or break GC safety.",
+      "accepted_answers": [
+        "span is a ref struct restricted to the stack"
+      ],
+      "explanation": "If you need a slice of memory that survives across `await` or lives on a class, use `Memory<T>` instead of `Span<T>`."
+    },
+    {
+      "id": "cs_deep_09",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "In EF Core, what is the difference between `ExecuteUpdateAsync()` and loading an entity followed by `SaveChangesAsync()`?",
+      "answer": "`ExecuteUpdateAsync()` executes a direct bulk SQL `UPDATE` in the database without loading entities into the change tracker.",
+      "accepted_answers": [
+        "direct sql update without loading entities"
+      ],
+      "explanation": "Added in EF Core 7+, `ExecuteUpdateAsync` and `ExecuteDeleteAsync` eliminate round-trips for bulk updates."
+    },
+    {
+      "id": "cs_deep_10",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "What HTTP status code does `[ApiController]` automatically return when model validation (`DataAnnotations`) fails before entering your controller action?",
+      "answer": "400 Bad Request",
+      "accepted_answers": [
+        "400",
+        "400 Bad Request (ValidationProblemDetails)"
+      ],
+      "explanation": "`[ApiController]` automatically short-circuits invalid `ModelState` responses with an RFC-compliant `ValidationProblemDetails` 400 payload."
+    },
+    {
+      "id": "cs_deep_11",
+      "category": "C# LINQ",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# LINQ snippet:",
+      "code": "var nums = new[] { 1, 2, 3, 4, 5 };\nvar res = nums.Where(n => n % 2 == 1).Select(n => n * 10).Skip(1).First();\nConsole.WriteLine(res);",
+      "answer": "30",
+      "explanation": "`Where` yields `1, 3, 5`; `Select` yields `10, 30, 50`; `Skip(1)` drops `10`; `First()` returns `30`."
+    },
+    {
+      "id": "cs_deep_12",
+      "category": "C# Pattern Matching",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# code:",
+      "code": "object val = \"hello\";\nstring msg = val switch {\n    string { Length: > 5 } => \"long\",\n    string s => s.ToUpper(),\n    _ => \"other\"\n};\nConsole.WriteLine(msg);",
+      "answer": "HELLO",
+      "explanation": "`\"hello\"` has length 5 (not `> 5`), so it falls through to the second arm `string s` and prints `HELLO`."
+    },
+    {
+      "id": "cs_deep_13",
+      "category": "C# Nullability",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# code:",
+      "code": "string? a = null;\nstring b = a ??= \"fallback\";\nConsole.WriteLine($\"{a}:{b}\");",
+      "answer": "fallback:fallback",
+      "explanation": "The null-coalescing assignment `a ??= \"fallback\"` assigns `\"fallback\"` to `a` because `a` is null, and evaluates to `\"fallback\"` for `b`."
+    },
+    {
+      "id": "cs_deep_14",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "In ASP.NET Core Minimal APIs or Controllers, why should you pass `CancellationToken ct` to async database calls?",
+      "answer": "So if the HTTP client disconnects or times out, the server aborts the in-flight SQL query and frees thread/DB resources immediately.",
+      "accepted_answers": [
+        "cancels work when client disconnects",
+        "aborts db query on client disconnect"
+      ],
+      "explanation": "Propagating `CancellationToken` prevents wasted database CPU when users close browser tabs or cancel requests."
+    },
+    {
+      "id": "cs_deep_15",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "How do you configure a composite primary key `(StudentId, CourseId)` in EF Core Fluent API inside `OnModelCreating`?",
+      "answer": "modelBuilder.Entity<Enrollment>().HasKey(e => new { e.StudentId, e.CourseId });",
+      "accepted_answers": [
+        "HasKey(e => new { e.StudentId, e.CourseId })",
+        "HasKey with anonymous type"
+      ],
+      "explanation": "EF Core conventions only detect single-column `Id` keys; composite keys must be defined with `HasKey` in `OnModelCreating`."
+    }
+  ]
+}

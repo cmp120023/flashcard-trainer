@@ -1,0 +1,140 @@
+{
+  "deck_name": "SQL Server / T-SQL Deep Dive: Indexes, Transactions & Isolation",
+  "cards": [
+    {
+      "id": "tsql_01",
+      "category": "Indexing",
+      "type": "flashcard",
+      "prompt": "What is the structural difference between a Clustered Index and a Non-Clustered Index in SQL Server?",
+      "answer": "A Clustered Index physically orders and stores the actual table data rows in its B-tree leaf pages (max 1 per table); a Non-Clustered Index stores sorted key columns plus a row locator pointer",
+      "accepted_answers": [
+        "clustered index stores the actual data rows non-clustered stores key pointers"
+      ],
+      "explanation": "Because the table rows themselves ARE the leaf level of the clustered index, a table can only have one clustered index."
+    },
+    {
+      "id": "tsql_02",
+      "category": "Indexing",
+      "type": "flashcard",
+      "prompt": "What is a 'Covering Index' and how does the `INCLUDE` clause eliminate Key Lookups in SQL Server?",
+      "answer": "An index that contains all columns needed by a query; `INCLUDE` adds non-key columns to the leaf level so the engine never has to jump back to the clustered index",
+      "accepted_answers": [
+        "contains all queried columns in the leaf level avoiding key lookups"
+      ],
+      "explanation": "Key Lookups (RID/Clustered Index seeks per row) become expensive once a query returns more than a small percentage of table rows."
+    },
+    {
+      "id": "tsql_03",
+      "category": "ACID",
+      "type": "flashcard",
+      "prompt": "What do the four letters of ACID stand for in relational database transactions?",
+      "answer": "Atomicity, Consistency, Isolation, Durability",
+      "accepted_answers": [
+        "Atomicity Consistency Isolation Durability"
+      ],
+      "explanation": "Atomicity guarantees all-or-nothing execution; Durability ensures committed changes survive power loss via the Write-Ahead Transaction Log (WAL)."
+    },
+    {
+      "id": "tsql_04",
+      "category": "Isolation Levels",
+      "type": "flashcard",
+      "prompt": "What concurrency anomaly is prevented by `REPEATABLE READ` that can still occur under SQL Server's default `READ COMMITTED`?",
+      "answer": "Non-Repeatable Reads (where reading the same row twice in one transaction yields different values because another transaction updated and committed it in between)",
+      "accepted_answers": [
+        "Non-Repeatable Read",
+        "Non-repeatable reads"
+      ],
+      "explanation": "`REPEATABLE READ` holds shared (`S`) locks on read rows until the transaction ends, though Phantom Rows can still be inserted unless `SERIALIZABLE` is used."
+    },
+    {
+      "id": "tsql_05",
+      "category": "Isolation Levels",
+      "type": "flashcard",
+      "prompt": "What is a 'Phantom Read' and which SQL isolation level prevents it using range locks?",
+      "answer": "Re-running a range query within the same transaction returns newly inserted rows that match the `WHERE` predicate; prevented by `SERIALIZABLE`",
+      "accepted_answers": [
+        "new rows appearing in a repeated range query; SERIALIZABLE"
+      ],
+      "explanation": "`SERIALIZABLE` places key-range locks across the predicate interval so no other transaction can insert matching rows until commit."
+    },
+    {
+      "id": "tsql_06",
+      "category": "Concurrency",
+      "type": "flashcard",
+      "prompt": "How does `READ_COMMITTED_SNAPSHOT` (RCSI) avoid reader-writer blocking in SQL Server?",
+      "answer": "Readers read committed row versions from `tempdb` version store instead of acquiring shared (`S`) locks that block on writers' exclusive (`X`) locks",
+      "accepted_answers": [
+        "row versioning in tempdb so readers do not block writers"
+      ],
+      "explanation": "RCSI provides statement-level point-in-time consistency without blocking SELECT queries during concurrent UPDATEs."
+    },
+    {
+      "id": "tsql_07",
+      "category": "Error Handling",
+      "type": "flashcard",
+      "prompt": "Why should `SET XACT_ABORT ON;` be placed at the top of T-SQL stored procedures that use explicit `BEGIN TRAN` blocks?",
+      "answer": "It guarantees that ANY runtime error immediately rolls back the entire open transaction and releases locks instead of leaving an orphaned open transaction",
+      "accepted_answers": [
+        "automatically rolls back the transaction on runtime errors"
+      ],
+      "explanation": "Without `XACT_ABORT ON`, certain errors abort only the failing statement while leaving `@@TRANCOUNT > 0` holding locks indefinitely."
+    },
+    {
+      "id": "tsql_08",
+      "category": "T-SQL Output",
+      "type": "code_output",
+      "prompt": "Predict the exact integer returned by this T-SQL batch.",
+      "code": "BEGIN TRAN;\n  BEGIN TRAN;\n    SELECT @@TRANCOUNT;\n  ROLLBACK TRAN;\nSELECT @@TRANCOUNT;",
+      "answer": "2 then 0",
+      "accepted_answers": [
+        "2, 0",
+        "2 and 0"
+      ],
+      "explanation": "Nested `BEGIN TRAN` increments `@@TRANCOUNT` to 2, `COMMIT TRAN` decrements by 1, but a single `ROLLBACK TRAN` always rolls back to the outermost transaction and resets `@@TRANCOUNT` directly to 0."
+    },
+    {
+      "id": "tsql_09",
+      "category": "Query Tuning",
+      "type": "flashcard",
+      "prompt": "What is 'Parameter Sniffing' in SQL Server and when does it hurt performance?",
+      "answer": "SQL Server compiles and caches an execution plan tailored to the parameter values from the first execution; it hurts when subsequent calls pass skewed parameters needing a completely different plan",
+      "accepted_answers": [
+        "caching a plan based on first call parameters that performs poorly for skewed data"
+      ],
+      "explanation": "For example, a plan compiled for a rare customer ID (Index Seek + Key Lookup) becomes disastrous when later called for a high-volume customer (where a Clustered Index Scan would be far faster)."
+    },
+    {
+      "id": "tsql_10",
+      "category": "Data Integrity",
+      "type": "flashcard",
+      "prompt": "Why should monetary values in SQL Server ALWAYS use `DECIMAL(19,4)` (or `MONEY`) instead of `FLOAT` or `REAL`?",
+      "answer": "`FLOAT` and `REAL` are IEEE-754 binary approximations that introduce rounding drift, whereas `DECIMAL` stores exact base-10 fixed-point digits",
+      "accepted_answers": [
+        "FLOAT is approximate binary floating point DECIMAL is exact"
+      ],
+      "explanation": "In IEEE-754 binary floating point, `0.1 + 0.2 != 0.3`, causing penny discrepancies in financial ledgers."
+    },
+    {
+      "id": "tsql_11",
+      "category": "Joins",
+      "type": "flashcard",
+      "prompt": "What happens to a `LEFT JOIN` if you place a filter on the right-hand table (`WHERE RightTable.Status = 'Active'`) in the `WHERE` clause instead of the `ON` clause?",
+      "answer": "It silently turns the `LEFT JOIN` into an `INNER JOIN` because unmatched `NULL` right-hand rows fail `NULL = 'Active'` in the `WHERE` filter",
+      "accepted_answers": [
+        "turns it into an INNER JOIN"
+      ],
+      "explanation": "Filters on the outer-joined table must go in the `ON` clause if you want unmatched left-side rows preserved with `NULL`s."
+    },
+    {
+      "id": "tsql_12",
+      "category": "Deadlocks",
+      "type": "flashcard",
+      "prompt": "How does SQL Server resolve a database deadlock between two transactions?",
+      "answer": "The Lock Monitor detects the cycle within seconds, kills the transaction with the lowest rollback cost (the deadlock victim) with Error 1205, and rolls it back",
+      "accepted_answers": [
+        "kills and rolls back the cheapest transaction with error 1205"
+      ],
+      "explanation": "Application data access layers should implement transient retry logic for Error 1205."
+    }
+  ]
+}

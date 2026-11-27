@@ -1,0 +1,413 @@
+{
+  "deck_name": "04 - CPTC AAT Systems, Security, Bitwise & Discrete Logic",
+  "cards": [
+    {
+      "id": "aat04_01",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "Which transport-layer protocol provides connection-oriented, reliable, ordered byte-stream delivery using a 3-way handshake?",
+      "code": "",
+      "answer": "TCP",
+      "accepted_answers": [
+        "TCP",
+        "Transmission Control Protocol"
+      ],
+      "explanation": "TCP uses SYN, SYN-ACK, ACK to establish a session, sequences segments, retransmits lost packets, and enforces flow/congestion control."
+    },
+    {
+      "id": "aat04_02",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "Which transport-layer protocol is connectionless, low-overhead, and used when real-time latency matters more than guaranteed packet delivery (e.g., DNS, VoIP, telemetry)?",
+      "code": "",
+      "answer": "UDP",
+      "accepted_answers": [
+        "UDP",
+        "User Datagram Protocol"
+      ],
+      "explanation": "UDP sends independent datagrams with an 8-byte header and no handshake, acknowledgments, or retransmission overhead."
+    },
+    {
+      "id": "aat04_03",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "In the 7-layer OSI model, at which layer do IP addresses and routers operate?",
+      "code": "",
+      "answer": "Layer 3 (Network Layer)",
+      "accepted_answers": [
+        "Layer 3",
+        "Network",
+        "Network Layer",
+        "Layer 3 (Network Layer)",
+        "3"
+      ],
+      "explanation": "Layer 2 (Data Link) handles MAC addresses and switches; Layer 3 (Network) handles logical IP addressing and packet routing."
+    },
+    {
+      "id": "aat04_04",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "Which HTTP status code indicates that the client's request is syntactically invalid or failed validation (Bad Request)?",
+      "code": "",
+      "answer": "400",
+      "accepted_answers": [
+        "400",
+        "400 Bad Request"
+      ],
+      "explanation": "400 Bad Request signals a client-side formatting or validation error, whereas 401 means Unauthenticated, 403 means Forbidden, and 404 means Not Found."
+    },
+    {
+      "id": "aat04_05",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "What is the key difference between HTTP 401 and HTTP 403?",
+      "code": "",
+      "answer": "401 means unauthenticated (missing/invalid credentials); 403 means authenticated but unauthorized (lacks permission)",
+      "accepted_answers": [
+        "401 means unauthenticated; 403 means forbidden/unauthorized",
+        "401 is authentication, 403 is authorization"
+      ],
+      "explanation": "401 Unauthorized actually checks authentication (who are you?); 403 Forbidden checks authorization (you are logged in, but not allowed to access this resource)."
+    },
+    {
+      "id": "aat04_06",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "Which HTTP status code should a REST API return when a POST request successfully creates a new resource?",
+      "code": "",
+      "answer": "201",
+      "accepted_answers": [
+        "201",
+        "201 Created"
+      ],
+      "explanation": "201 Created indicates resource creation and typically includes a Location header pointing to the new resource URI."
+    },
+    {
+      "id": "aat04_07",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "Which protocol translates human-readable domain names (like cptc.edu) into IP addresses?",
+      "code": "",
+      "answer": "DNS",
+      "accepted_answers": [
+        "DNS",
+        "Domain Name System"
+      ],
+      "explanation": "DNS resolves domain names to A (IPv4) or AAAA (IPv6) records, typically over UDP port 53."
+    },
+    {
+      "id": "aat04_08",
+      "category": "Application Security",
+      "type": "flashcard",
+      "prompt": "What is the primary defense against SQL Injection when querying a relational database from C#, Java, or Python?",
+      "code": "",
+      "answer": "Parameterized queries (prepared statements)",
+      "accepted_answers": [
+        "Parameterized queries",
+        "Prepared statements",
+        "Parameterized queries (prepared statements)",
+        "Bind parameters"
+      ],
+      "explanation": "Parameterized queries separate SQL command structure from user-supplied data so input is never parsed as executable SQL tokens."
+    },
+    {
+      "id": "aat04_09",
+      "category": "Application Security",
+      "type": "flashcard",
+      "prompt": "Which web vulnerability occurs when untrusted user input is rendered unescaped into a webpage's HTML/DOM and executes malicious JavaScript in another user's browser?",
+      "code": "",
+      "answer": "XSS (Cross-Site Scripting)",
+      "accepted_answers": [
+        "XSS",
+        "Cross-Site Scripting",
+        "XSS (Cross-Site Scripting)"
+      ],
+      "explanation": "Cross-Site Scripting (XSS) is prevented by context-aware HTML output encoding (which Razor's @expression syntax does automatically) and Content Security Policy (CSP)."
+    },
+    {
+      "id": "aat04_10",
+      "category": "Application Security",
+      "type": "flashcard",
+      "prompt": "Why must user passwords be stored using a slow, salted cryptographic hash (like Argon2id or bcrypt) rather than symmetric encryption or plain SHA-256?",
+      "code": "",
+      "answer": "Hashing is one-way (irreversible), salting defeats rainbow tables, and slow work factors resist GPU brute-force attacks",
+      "accepted_answers": [
+        "Hashing is one-way and salting prevents rainbow table attacks",
+        "One-way hash with salt prevents reversal and rainbow tables"
+      ],
+      "explanation": "Encrypted passwords can be decrypted if the key leaks, and fast hashes like raw SHA-256 can be cracked at billions of guesses per second."
+    },
+    {
+      "id": "aat04_11",
+      "category": "Application Security",
+      "type": "flashcard",
+      "prompt": "What security principle states that a user, process, or microcontroller peripheral should only be granted the minimum access rights necessary to perform its function?",
+      "code": "",
+      "answer": "Principle of Least Privilege",
+      "accepted_answers": [
+        "Principle of Least Privilege",
+        "Least Privilege",
+        "PoLP"
+      ],
+      "explanation": "Limiting privileges reduces the blast radius if an account, service, or firmware module is compromised."
+    },
+    {
+      "id": "aat04_12",
+      "category": "OS & Concurrency",
+      "type": "flashcard",
+      "prompt": "What is the core memory difference between an OS Process and a Thread within that process?",
+      "code": "",
+      "answer": "Processes have isolated virtual address spaces; threads share the same process heap/globals while keeping private stacks and registers",
+      "accepted_answers": [
+        "Processes have separate memory spaces; threads share heap memory and have separate stacks",
+        "Threads share address space; processes do not"
+      ],
+      "explanation": "Because threads share heap and global memory, inter-thread communication is fast but requires synchronization (mutexes/atomics) to prevent data races."
+    },
+    {
+      "id": "aat04_13",
+      "category": "OS & Concurrency",
+      "type": "flashcard",
+      "prompt": "What four Coffman conditions must all hold simultaneously for a Deadlock to occur?",
+      "code": "",
+      "answer": "Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait",
+      "accepted_answers": [
+        "Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait",
+        "Mutual exclusion, hold and wait, no preemption, circular wait"
+      ],
+      "explanation": "Breaking any one of the four conditions\u2014most commonly by enforcing a strict global lock acquisition order to break Circular Wait\u2014prevents deadlock."
+    },
+    {
+      "id": "aat04_14",
+      "category": "OS & Concurrency",
+      "type": "flashcard",
+      "prompt": "What is a Race Condition in concurrent programming?",
+      "code": "",
+      "answer": "When program correctness depends on the uncontrolled relative timing/interleaving of multiple threads accessing shared mutable state",
+      "accepted_answers": [
+        "When outcome depends on thread execution timing over shared state",
+        "Concurrent unsynchronized access to shared mutable state"
+      ],
+      "explanation": "Even a simple increment (count++) involves load, add, and store instructions that can interleave and lose updates without a mutex or atomic operation."
+    },
+    {
+      "id": "aat04_15",
+      "category": "Discrete Logic & Number Systems",
+      "type": "flashcard",
+      "prompt": "Convert the 8-bit binary value 0b10110101 to hexadecimal.",
+      "code": "",
+      "answer": "0xB5",
+      "accepted_answers": [
+        "0xB5",
+        "B5",
+        "0xb5",
+        "b5"
+      ],
+      "explanation": "Split into nibbles: 1011 = 8+2+1 = 11 (B), and 0101 = 4+1 = 5 -> 0xB5 (181 in decimal)."
+    },
+    {
+      "id": "aat04_16",
+      "category": "Discrete Logic & Number Systems",
+      "type": "flashcard",
+      "prompt": "Convert the hexadecimal byte 0x3E to decimal.",
+      "code": "",
+      "answer": "62",
+      "accepted_answers": [
+        "62"
+      ],
+      "explanation": "3 * 16 + 14 (E) = 48 + 14 = 62."
+    },
+    {
+      "id": "aat04_17",
+      "category": "Discrete Logic & Number Systems",
+      "type": "flashcard",
+      "prompt": "How is -5 represented in 8-bit Two's Complement binary?",
+      "code": "",
+      "answer": "0b11111011",
+      "accepted_answers": [
+        "0b11111011",
+        "11111011",
+        "0xFB",
+        "FB"
+      ],
+      "explanation": "+5 is 00000101. Invert all bits -> 11111010, then add 1 -> 11111011 (0xFB)."
+    },
+    {
+      "id": "aat04_18",
+      "category": "Discrete Logic & Number Systems",
+      "type": "flashcard",
+      "prompt": "State De Morgan's two laws for Boolean negation.",
+      "code": "",
+      "answer": "!(A && B) == (!A || !B) and !(A || B) == (!A && !B)",
+      "accepted_answers": [
+        "!(A && B) == (!A || !B) and !(A || B) == (!A && !B)",
+        "not (A and B) = (not A) or (not B); not (A or B) = (not A) and (not B)"
+      ],
+      "explanation": "Distributing a NOT across AND flips it to OR, and distributing a NOT across OR flips it to AND."
+    },
+    {
+      "id": "aat04_19",
+      "category": "Bitwise Operations",
+      "type": "flashcard",
+      "prompt": "Write the standard C/C++ bitwise expression to SET bit N (0-indexed) in a register variable REG without altering other bits.",
+      "code": "",
+      "answer": "REG |= (1U << N);",
+      "accepted_answers": [
+        "REG |= (1U << N);",
+        "REG |= (1 << N);",
+        "REG |= (1U << N)",
+        "REG |= (1 << N)"
+      ],
+      "explanation": "Bitwise OR with a 1 shifted left by N forces bit N to 1 while leaving all other bits unchanged (x | 0 == x)."
+    },
+    {
+      "id": "aat04_20",
+      "category": "Bitwise Operations",
+      "type": "flashcard",
+      "prompt": "Write the standard C/C++ bitwise expression to CLEAR bit N (0-indexed) in a register variable REG without altering other bits.",
+      "code": "",
+      "answer": "REG &= ~(1U << N);",
+      "accepted_answers": [
+        "REG &= ~(1U << N);",
+        "REG &= ~(1 << N);",
+        "REG &= ~(1U << N)",
+        "REG &= ~(1 << N)"
+      ],
+      "explanation": "Inverting (1U << N) creates a mask with 0 at bit N and 1s everywhere else; bitwise AND clears bit N to 0."
+    },
+    {
+      "id": "aat04_21",
+      "category": "Bitwise Operations",
+      "type": "flashcard",
+      "prompt": "Write the standard C/C++ bitwise expression to TOGGLE bit N (0-indexed) in a register variable REG.",
+      "code": "",
+      "answer": "REG ^= (1U << N);",
+      "accepted_answers": [
+        "REG ^= (1U << N);",
+        "REG ^= (1 << N);",
+        "REG ^= (1U << N)",
+        "REG ^= (1 << N)"
+      ],
+      "explanation": "Bitwise XOR with 1 flips the target bit (0^1=1, 1^1=0) while XOR with 0 preserves all other bits."
+    },
+    {
+      "id": "aat04_22",
+      "category": "Bitwise Operations",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ bitwise masking snippet:",
+      "code": "#include <iostream>\nint main() {\n    unsigned int flags = 0b1010;\n    flags |= (1U << 2);\n    flags &= ~(1U << 3);\n    std::cout << flags << \"\\n\";\n    return 0;\n}",
+      "answer": "6",
+      "accepted_answers": [
+        "6"
+      ],
+      "explanation": "0b1010 (10) | 0b0100 (bit 2 set) -> 0b1110 (14). Then & ~0b1000 (bit 3 cleared) -> 0b0110 = 6."
+    },
+    {
+      "id": "aat04_23",
+      "category": "Bitwise Operations",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python XOR swap & shift snippet:",
+      "code": "a = 5\nb = 9\na ^= b\nb ^= a\na ^= b\nprint(a, b << 1)",
+      "answer": "9 10",
+      "accepted_answers": [
+        "9 10"
+      ],
+      "explanation": "XOR swap exchanges a and b so a=9 and b=5. Left-shifting b (5) by 1 multiplies by 2, printing 9 10."
+    },
+    {
+      "id": "aat04_24",
+      "category": "Bitwise Operations",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# bit-extraction snippet:",
+      "code": "using System;\nclass Program {\n    static void Main() {\n        uint word = 0xABCD;\n        uint highByte = (word >> 8) & 0xFF;\n        uint lowNibble = word & 0x0F;\n        Console.WriteLine($\"{highByte:X2} {lowNibble:X}\");\n    }\n}",
+      "answer": "AB D",
+      "accepted_answers": [
+        "AB D"
+      ],
+      "explanation": "Shifting 0xABCD right by 8 bits yields 0xAB; masking with 0x0F isolates the lowest hex digit 0xD."
+    },
+    {
+      "id": "aat04_25",
+      "category": "Discrete Logic & Number Systems",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java short-circuit Boolean logic snippet:",
+      "code": "public class Main {\n    public static void main(String[] args) {\n        int x = 0;\n        boolean res = (x != 0) && (10 / x > 1);\n        boolean res2 = (x == 0) || (10 / x > 1);\n        System.out.println(res + \" \" + res2);\n    }\n}",
+      "answer": "false true",
+      "accepted_answers": [
+        "false true"
+      ],
+      "explanation": "Short-circuit && stops at (x != 0) which is false, and || stops at (x == 0) which is true\u2014avoiding ArithmeticException (/ by zero) in both cases."
+    },
+    {
+      "id": "aat04_26",
+      "category": "Bitwise Operations",
+      "type": "flashcard",
+      "prompt": "What does the bitwise trick (n > 0) && ((n & (n - 1)) == 0) check for an unsigned integer n?",
+      "code": "",
+      "answer": "Whether n is an exact power of 2",
+      "accepted_answers": [
+        "Whether n is a power of 2",
+        "Power of 2",
+        "Checks if n is a power of two"
+      ],
+      "explanation": "A power of 2 has exactly one set bit (e.g., 8 = 0b1000). Subtracting 1 flips that bit and all lower bits (7 = 0b0111), so n & (n - 1) equals 0."
+    },
+    {
+      "id": "aat04_27",
+      "category": "Networking & HTTP",
+      "type": "flashcard",
+      "prompt": "What is the key behavioral difference between HTTP PUT and HTTP PATCH?",
+      "code": "",
+      "answer": "PUT replaces the entire resource representation (idempotent); PATCH applies a partial update to specific fields",
+      "accepted_answers": [
+        "PUT replaces the entire resource; PATCH applies a partial update",
+        "PUT is full replacement, PATCH is partial update"
+      ],
+      "explanation": "PUT sends a complete replacement payload for the target URI; PATCH transmits only the delta/fields being modified."
+    },
+    {
+      "id": "aat04_28",
+      "category": "Linux & CLI Essentials",
+      "type": "flashcard",
+      "prompt": "In Linux/POSIX systems, what file permissions do the octal mode 0755 grant to Owner, Group, and Others?",
+      "code": "",
+      "answer": "Owner: rwx (7), Group: r-x (5), Others: r-x (5)",
+      "accepted_answers": [
+        "Owner: rwx, Group: r-x, Others: r-x",
+        "rwxr-xr-x",
+        "Owner read/write/execute, Group read/execute, Others read/execute"
+      ],
+      "explanation": "Read=4, Write=2, Execute=1. 7 = 4+2+1 (rwx), 5 = 4+0+1 (r-x)."
+    },
+    {
+      "id": "aat04_29",
+      "category": "Linux & CLI Essentials",
+      "type": "flashcard",
+      "prompt": "Which Linux command searches recursively for a regex or string pattern across files in a directory?",
+      "code": "",
+      "answer": "grep -rn \"pattern\" .",
+      "accepted_answers": [
+        "grep -r",
+        "grep -rn",
+        "grep",
+        "rg"
+      ],
+      "explanation": "grep -rn searches recursively (-r) and prints line numbers (-n) for every match."
+    },
+    {
+      "id": "aat04_30",
+      "category": "Application Security",
+      "type": "flashcard",
+      "prompt": "What security mechanism prevents a malicious third-party website from forging authenticated form submissions on behalf of a logged-in user?",
+      "code": "",
+      "answer": "CSRF (Cross-Site Request Forgery) anti-forgery tokens + SameSite cookies",
+      "accepted_answers": [
+        "CSRF token",
+        "Anti-forgery token",
+        "CSRF (Cross-Site Request Forgery) tokens",
+        "SameSite cookies and CSRF tokens"
+      ],
+      "explanation": "Synchronizer anti-forgery tokens verify that state-changing POST/PUT/DELETE requests originated from your own rendered UI rather than an external site."
+    }
+  ]
+}

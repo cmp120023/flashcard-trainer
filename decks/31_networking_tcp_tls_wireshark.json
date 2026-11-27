@@ -1,0 +1,148 @@
+{
+  "deck_name": "31 - Computer Networking, TCP/IP, TLS & Wireshark",
+  "cards": [
+    {
+      "id": "net_01",
+      "category": "TCP/IP Transport",
+      "type": "flashcard",
+      "prompt": "What are the three exact TCP control flag sequences exchanged during a standard TCP three-way handshake?",
+      "answer": "SYN, SYN-ACK, ACK",
+      "accepted_answers": [
+        "SYN -> SYN-ACK -> ACK",
+        "SYN, SYN/ACK, ACK",
+        "SYN SYN-ACK ACK"
+      ],
+      "explanation": "The client sends SYN, the server responds with SYN-ACK, and the client completes the connection with ACK."
+    },
+    {
+      "id": "net_02",
+      "category": "Embedded Networking",
+      "type": "flashcard",
+      "prompt": "Which TCP socket option disables Nagle's algorithm to prevent artificial latency on small, frequent telemetry packets?",
+      "answer": "TCP_NODELAY",
+      "accepted_answers": [
+        "NODELAY"
+      ],
+      "explanation": "Nagle's algorithm buffers small writes until an ACK arrives; setting TCP_NODELAY sends small frames immediately."
+    },
+    {
+      "id": "net_03",
+      "category": "IP Subnetting",
+      "type": "flashcard",
+      "prompt": "How many usable host IPv4 addresses are available in a /26 subnet?",
+      "answer": "62",
+      "accepted_answers": [
+        "62 hosts",
+        "62 usable hosts"
+      ],
+      "explanation": "A /26 mask leaves 6 host bits (2^6 = 64 total addresses), minus 1 network address and 1 broadcast address = 62 usable hosts."
+    },
+    {
+      "id": "net_04",
+      "category": "Link Layer",
+      "type": "flashcard",
+      "prompt": "Which Layer 2/3 helper protocol resolves a known IPv4 address on a local subnet into its corresponding 48-bit MAC address?",
+      "answer": "ARP",
+      "accepted_answers": [
+        "Address Resolution Protocol"
+      ],
+      "explanation": "ARP broadcasts a request asking 'Who has IP X.X.X.X?' so switches and NICs can map IPv4 addresses to Ethernet MAC addresses."
+    },
+    {
+      "id": "net_05",
+      "category": "Transport Protocols",
+      "type": "flashcard",
+      "prompt": "Why is UDP often preferred over TCP for real-time closed-loop robotics telemetry over Ethernet?",
+      "answer": "No head-of-line blocking or retransmission delays",
+      "accepted_answers": [
+        "No retransmissions",
+        "Lower latency",
+        "Avoids head-of-line blocking"
+      ],
+      "explanation": "In real-time control, stale sensor data is useless; TCP stalls the stream waiting to retransmit dropped packets, whereas UDP delivers the freshest packet immediately."
+    },
+    {
+      "id": "net_06",
+      "category": "TLS Security",
+      "type": "flashcard",
+      "prompt": "How many network round trips (RTT) does a standard full TLS 1.3 handshake require before application data can be sent?",
+      "answer": "1 RTT",
+      "accepted_answers": [
+        "1",
+        "One",
+        "One RTT"
+      ],
+      "explanation": "TLS 1.3 combines key share negotiation into the ClientHello/ServerHello, cutting the handshake from 2 RTT (TLS 1.2) down to 1 RTT (or 0-RTT with PSK resumption)."
+    },
+    {
+      "id": "net_07",
+      "category": "Industrial IoT Security",
+      "type": "flashcard",
+      "prompt": "In mutual TLS (mTLS) used by OPC UA servers, how does the server verify the identity of a connecting edge client?",
+      "answer": "The client presents an X.509 certificate signed by a trusted CA",
+      "accepted_answers": [
+        "Client certificate",
+        "X.509 client certificate"
+      ],
+      "explanation": "Unlike standard HTTPS where only the server sends a certificate, mTLS requires both server and client to authenticate via X.509 certificates."
+    },
+    {
+      "id": "net_08",
+      "category": "Wireshark Analysis",
+      "type": "flashcard",
+      "prompt": "Write the Wireshark display filter to show only TCP packets sent to or from port 4840 (OPC UA).",
+      "answer": "tcp.port == 4840",
+      "accepted_answers": [
+        "tcp.port==4840"
+      ],
+      "explanation": "Wireshark display filters use '==' for equality; 'tcp.port == 4840' matches both tcp.srcport and tcp.dstport."
+    },
+    {
+      "id": "net_09",
+      "category": "Wireshark Analysis",
+      "type": "flashcard",
+      "prompt": "Which Wireshark display filter isolates packets that contain TCP retransmissions, duplicate ACKs, or zero-window alerts?",
+      "answer": "tcp.analysis.flags",
+      "accepted_answers": [
+        "tcp.analysis.retransmission"
+      ],
+      "explanation": "Wireshark's built-in TCP dissector flags anomalies under 'tcp.analysis.flags', making it fast to spot packet loss or buffer starvation."
+    },
+    {
+      "id": "net_10",
+      "category": "Network Programming",
+      "type": "flashcard",
+      "prompt": "What endianness does standard Internet network byte order use, and which POSIX C function converts a 16-bit integer from host to network byte order?",
+      "answer": "Big-endian; htons()",
+      "accepted_answers": [
+        "Big-endian and htons",
+        "Big endian, htons()",
+        "htons"
+      ],
+      "explanation": "Network protocols use big-endian (most significant byte first); htons() ('host to network short') converts 16-bit values safely across architectures."
+    },
+    {
+      "id": "net_11",
+      "category": "TCP States",
+      "type": "flashcard",
+      "prompt": "Why does the active closer of a TCP connection remain in the TIME_WAIT state for 2*MSL (Maximum Segment Lifetime) after sending the final ACK?",
+      "answer": "To absorb delayed duplicate segments and ensure the remote peer received the final ACK",
+      "accepted_answers": [
+        "Ensure final ACK was received",
+        "Prevent delayed packets from corrupting new connections"
+      ],
+      "explanation": "TIME_WAIT ensures any stray packets from the old socket expire before the port tuple is reused, and allows re-sending the final ACK if it was dropped."
+    },
+    {
+      "id": "net_12",
+      "category": "Application Protocols",
+      "type": "flashcard",
+      "prompt": "In MQTT (common in IIoT edge telemetry), what does Quality of Service level 1 (QoS 1) guarantee?",
+      "answer": "At least once delivery",
+      "accepted_answers": [
+        "At least once"
+      ],
+      "explanation": "QoS 0 is fire-and-forget (at most once), QoS 1 uses PUBACK to guarantee at least once delivery (duplicates possible), and QoS 2 guarantees exactly once."
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "deck_name": "14 - Modern C++17/20, Memory & RAII Drills",
+  "cards": [
+    {
+      "id": "cpp_mod_01",
+      "category": "C++ Memory & RAII",
+      "type": "flashcard",
+      "prompt": "What C++ idiom ties the lifetime of a dynamically allocated resource (heap memory, mutex lock, file handle) to the scope lifetime of a stack-allocated object?",
+      "answer": "RAII",
+      "accepted_answers": [
+        "Resource Acquisition Is Initialization",
+        "RAII (Resource Acquisition Is Initialization)"
+      ],
+      "explanation": "RAII guarantees deterministic cleanup in the object's destructor when leaving scope, even during stack unwinding from exceptions."
+    },
+    {
+      "id": "cpp_mod_02",
+      "category": "C++ Smart Pointers",
+      "type": "flashcard",
+      "prompt": "Which C++11 smart pointer enforces exclusive single ownership with zero memory overhead over a raw pointer and cannot be copied (only moved)?",
+      "answer": "std::unique_ptr",
+      "accepted_answers": [
+        "unique_ptr"
+      ],
+      "explanation": "std::unique_ptr deletes its copy constructor and copy assignment operator while supporting move semantics via std::move."
+    },
+    {
+      "id": "cpp_mod_03",
+      "category": "C++ Smart Pointers",
+      "type": "flashcard",
+      "prompt": "Which smart pointer breaks circular reference cycles between std::shared_ptr instances without incrementing the strong reference count?",
+      "answer": "std::weak_ptr",
+      "accepted_answers": [
+        "weak_ptr"
+      ],
+      "explanation": "std::weak_ptr observes an object managed by std::shared_ptr and must be converted via .lock() before safe access."
+    },
+    {
+      "id": "cpp_mod_04",
+      "category": "C++ Modern Features",
+      "type": "flashcard",
+      "prompt": "What C++17 type represents a non-owning read-only view over a contiguous sequence of characters without allocating heap memory?",
+      "answer": "std::string_view",
+      "accepted_answers": [
+        "string_view"
+      ],
+      "explanation": "std::string_view stores only a pointer and a length, eliminating temporary std::string copies during substring or parameter passing."
+    },
+    {
+      "id": "cpp_mod_05",
+      "category": "C++20 Embedded",
+      "type": "flashcard",
+      "prompt": "What C++20 type provides a non-owning bounds-aware view over any contiguous sequence (C array, std::array, std::vector) with zero dynamic allocation?",
+      "answer": "std::span",
+      "accepted_answers": [
+        "span"
+      ],
+      "explanation": "std::span<T> replaces error-prone (T* ptr, size_t len) C-style buffer pairs in embedded interfaces."
+    },
+    {
+      "id": "cpp_mod_06",
+      "category": "C++ Keywords",
+      "type": "flashcard",
+      "prompt": "What C++11 specifier guarantees that a function or variable can be evaluated at compile time when given constant arguments?",
+      "answer": "constexpr",
+      "accepted_answers": [
+        "consteval"
+      ],
+      "explanation": "constexpr allows compile-time evaluation (saving Flash/RAM in embedded targets) while still permitting runtime calls if needed; consteval forces compile-time evaluation."
+    },
+    {
+      "id": "cpp_mod_07",
+      "category": "C++ Move Semantics",
+      "type": "flashcard",
+      "prompt": "What standard library utility casts an lvalue expression into an rvalue reference (T&&) without actually moving any bytes by itself?",
+      "answer": "std::move",
+      "accepted_answers": [
+        "move"
+      ],
+      "explanation": "std::move is purely an unconditional cast to T&& so the overload resolution selects the move constructor or move assignment operator."
+    },
+    {
+      "id": "cpp_mod_08",
+      "category": "C++ Move Semantics",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\n#include <vector>\n#include <utility>\nint main() {\n    std::vector<int> a = {1, 2, 3};\n    std::vector<int> b = std::move(a);\n    std::cout << a.size() << \" \" << b.size();\n}",
+      "answer": "0 3",
+      "accepted_answers": [
+        "0 3"
+      ],
+      "explanation": "Moving a standard std::vector transfers its internal buffer pointer to b and leaves a in a valid, empty state (size 0)."
+    },
+    {
+      "id": "cpp_mod_09",
+      "category": "C++ Object Lifetime",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nstruct Node {\n    int id;\n    Node(int i) : id(i) { std::cout << \"C\" << id; }\n    ~Node() { std::cout << \"D\" << id; }\n};\nint main() {\n    Node n1(1);\n    {\n        Node n2(2);\n    }\n    Node n3(3);\n}",
+      "answer": "C1C2D2C3D3D1",
+      "accepted_answers": [
+        "C1C2D2C3D3D1"
+      ],
+      "explanation": "n2 is destroyed at the end of the inner block; at the end of main(), automatic stack objects are destroyed in reverse order of construction (n3 then n1)."
+    },
+    {
+      "id": "cpp_mod_10",
+      "category": "C++ Polymorphism",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nstruct Base {\n    virtual void ping() { std::cout << \"B\"; }\n};\nstruct Derived : Base {\n    void ping() override { std::cout << \"D\"; }\n};\nint main() {\n    Derived d;\n    Base b = d;\n    Base& r = d;\n    b.ping();\n    r.ping();\n}",
+      "answer": "BD",
+      "accepted_answers": [
+        "BD"
+      ],
+      "explanation": "Assigning Derived to Base by value causes object slicing (b is strictly a Base). Calling through Base& invokes dynamic dispatch to Derived::ping()."
+    },
+    {
+      "id": "cpp_mod_11",
+      "category": "C++ Polymorphism",
+      "type": "flashcard",
+      "prompt": "Why must a polymorphic base class declare its destructor as virtual when derived objects are deleted through a base pointer?",
+      "answer": "To prevent undefined behavior and ensure the derived destructor runs",
+      "accepted_answers": [
+        "virtual destructor",
+        "prevent memory leaks and undefined behavior",
+        "ensure derived destructor is called"
+      ],
+      "explanation": "Deleting a derived object via a Base* without a virtual destructor triggers undefined behavior in C++ and skips the derived class cleanup."
+    },
+    {
+      "id": "cpp_mod_12",
+      "category": "C++ Rule of Five",
+      "type": "flashcard",
+      "prompt": "Name the five special member functions governed by the C++11 Rule of Five when managing raw resources manually.",
+      "answer": "Destructor, copy constructor, copy assignment, move constructor, move assignment",
+      "accepted_answers": [
+        "destructor, copy constructor, copy assignment operator, move constructor, move assignment operator"
+      ],
+      "explanation": "If a class explicitly defines any of these five, it should explicitly define or =default/=delete all five to avoid double-frees or leaks."
+    },
+    {
+      "id": "cpp_mod_13",
+      "category": "C++17 Types",
+      "type": "flashcard",
+      "prompt": "Which C++17 vocabulary type represents a type-safe union that holds one value from a fixed list of types without heap allocation?",
+      "answer": "std::variant",
+      "accepted_answers": [
+        "variant"
+      ],
+      "explanation": "std::variant<A, B, C> is ideal for zero-heap state machines and tagged events in embedded C++."
+    },
+    {
+      "id": "cpp_mod_14",
+      "category": "C++17 Types",
+      "type": "flashcard",
+      "prompt": "Which C++17 vocabulary type represents a stack-allocated value that may or may not be present, replacing nullable pointers or sentinel return values?",
+      "answer": "std::optional",
+      "accepted_answers": [
+        "optional"
+      ],
+      "explanation": "std::optional<T> avoids dynamic allocation while making missing return values explicit in the type signature."
+    },
+    {
+      "id": "cpp_mod_15",
+      "category": "C++ Concurrency",
+      "type": "flashcard",
+      "prompt": "Which C++17 RAII lock wrapper can lock multiple mutexes simultaneously without deadlock using a deadlock-avoidance algorithm?",
+      "answer": "std::scoped_lock",
+      "accepted_answers": [
+        "scoped_lock"
+      ],
+      "explanation": "std::scoped_lock locks all passed mutexes in a deadlock-safe order on construction and unlocks them all on destruction."
+    },
+    {
+      "id": "cpp_mod_16",
+      "category": "C++ Templates",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\ntemplate<typename T>\nint counter() {\n    static int c = 0;\n    return ++c;\n}\nint main() {\n    std::cout << counter<int>() << counter<int>() << counter<double>();\n}",
+      "answer": "121",
+      "accepted_answers": [
+        "121"
+      ],
+      "explanation": "Each template instantiation (counter<int> vs. counter<double>) generates a separate function with its own independent static local variable."
+    },
+    {
+      "id": "cpp_mod_17",
+      "category": "C++ Lambdas",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nint main() {\n    int x = 10;\n    auto f = [x]() mutable { x += 5; return x; };\n    std::cout << f() << \" \" << x;\n}",
+      "answer": "15 10",
+      "accepted_answers": [
+        "15 10"
+      ],
+      "explanation": "The lambda captures x by value; mutable allows modifying its internal copy (returning 15) without affecting the outer x (still 10)."
+    },
+    {
+      "id": "cpp_mod_18",
+      "category": "C++ Type Safety",
+      "type": "flashcard",
+      "prompt": "Which C++ named cast should be used to reinterpret raw memory addresses (such as hardware MMIO register addresses like 0x40020000) into a typed pointer?",
+      "answer": "reinterpret_cast",
+      "accepted_answers": [
+        "reinterpret_cast<>"
+      ],
+      "explanation": "reinterpret_cast explicitly documents low-level bit/address reinterpretation, which static_cast forbids."
+    },
+    {
+      "id": "cpp_mod_19",
+      "category": "C++ Constructors",
+      "type": "flashcard",
+      "prompt": "What keyword on a single-argument C++ constructor prevents the compiler from performing unintended implicit type conversions?",
+      "answer": "explicit",
+      "accepted_answers": [
+        "explicit constructor"
+      ],
+      "explanation": "Marking single-parameter constructors explicit prevents silent conversions like passing an int where a Buffer object is expected."
+    },
+    {
+      "id": "cpp_mod_20",
+      "category": "C++ Embedded",
+      "type": "flashcard",
+      "prompt": "What C++ technique constructs an object directly inside a pre-allocated static memory buffer without calling global operator new?",
+      "answer": "Placement new",
+      "accepted_answers": [
+        "placement new",
+        "new (buf)"
+      ],
+      "explanation": "Placement new (`new (buffer) T(...)`) constructs objects in deterministic static buffers, requiring an explicit destructor call (`obj->~T()`)."
+    }
+  ]
+}

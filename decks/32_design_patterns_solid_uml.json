@@ -1,0 +1,157 @@
+{
+  "deck_name": "Deck 32: Software Architecture, SOLID, Design Patterns & UML",
+  "cards": [
+    {
+      "id": "arch_01",
+      "category": "SOLID Principles",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that high-level modules (e.g., FlightController) should not depend on low-level concrete hardware drivers (e.g., Bmi088SpiDriver), but both should depend on abstractions (e.g., IImuSensor)?",
+      "answer": "Dependency Inversion Principle",
+      "accepted_answers": [
+        "Dependency Inversion Principle",
+        "DIP",
+        "Dependency Inversion"
+      ],
+      "explanation": "DIP decouples core business/control logic from concrete hardware or database implementations, enabling unit testing with mock sensors and easy hardware swaps."
+    },
+    {
+      "id": "arch_02",
+      "category": "SOLID Principles",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle advises splitting a bloated 'God Interface' (e.g., IPeripheral with read, write, dmaTransfer, pwmConfig) into smaller, role-specific interfaces so clients aren't forced to implement unused methods?",
+      "answer": "Interface Segregation Principle",
+      "accepted_answers": [
+        "Interface Segregation Principle",
+        "ISP",
+        "Interface Segregation"
+      ],
+      "explanation": "ISP prevents classes from carrying dead stub implementations for capabilities they do not support."
+    },
+    {
+      "id": "arch_03",
+      "category": "SOLID Principles",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that subtypes must be substitutable for their base types without altering the correctness of the program (e.g., a ReadOnlyStream shouldn't inherit from Stream and throw NotSupportedException on Write())?",
+      "answer": "Liskov Substitution Principle",
+      "accepted_answers": [
+        "Liskov Substitution Principle",
+        "LSP",
+        "Liskov Substitution"
+      ],
+      "explanation": "LSP ensures behavioral contracts (preconditions, postconditions, invariants) hold across inheritance hierarchies."
+    },
+    {
+      "id": "arch_04",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which Gang of Four behavioral pattern encapsulates a family of interchangeable algorithms (such as PID vs. LQR vs. Bang-Bang control laws) behind a common interface so they can be swapped at runtime?",
+      "answer": "Strategy",
+      "accepted_answers": [
+        "Strategy",
+        "Strategy pattern"
+      ],
+      "explanation": "The Strategy pattern replaces sprawling if/else or switch blocks with polymorphic algorithm objects."
+    },
+    {
+      "id": "arch_05",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which behavioral pattern defines a one-to-many dependency so that when a subject (e.g., a sensor hub or telemetry model) changes state, all registered subscribers/listeners are automatically notified?",
+      "answer": "Observer",
+      "accepted_answers": [
+        "Observer",
+        "Observer pattern",
+        "Pub/Sub",
+        "Publish-Subscribe"
+      ],
+      "explanation": "Observer decouples event producers from consumers (UI views, loggers, alarm handlers)."
+    },
+    {
+      "id": "arch_06",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which structural pattern wraps an incompatible third-party or legacy class interface to make it conform to the target interface expected by your application?",
+      "answer": "Adapter",
+      "accepted_answers": [
+        "Adapter",
+        "Adapter pattern",
+        "Wrapper"
+      ],
+      "explanation": "An Adapter translates calls from your domain interface (e.g., ITempSensor::readCelsius()) into a vendor SDK's proprietary API."
+    },
+    {
+      "id": "arch_07",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which structural pattern provides a simplified, unified high-level interface to a complex subsystem of multiple low-level classes (such as initializing clocks, DMA, GPIO, and SPI together via SystemInit())?",
+      "answer": "Facade",
+      "accepted_answers": [
+        "Facade",
+        "Facade pattern"
+      ],
+      "explanation": "A Facade hides internal subsystem complexity behind a clean entry point without preventing direct access if needed."
+    },
+    {
+      "id": "arch_08",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which behavioral pattern encapsulates a request as a standalone object\u2014allowing requests to be queued across threads/ISRs, logged, retried, or undone?",
+      "answer": "Command",
+      "accepted_answers": [
+        "Command",
+        "Command pattern"
+      ],
+      "explanation": "Command turns method invocations into first-class objects, ideal for RTOS message queues and undo/redo stacks."
+    },
+    {
+      "id": "arch_09",
+      "category": "Design Patterns",
+      "type": "flashcard",
+      "prompt": "Which behavioral pattern allows an object (such as a bootloader or communication protocol) to alter its behavior when its internal state changes by delegating transitions to state-specific objects?",
+      "answer": "State",
+      "accepted_answers": [
+        "State",
+        "State pattern"
+      ],
+      "explanation": "The State pattern models Finite State Machines cleanly, avoiding giant nested switch statements."
+    },
+    {
+      "id": "arch_10",
+      "category": "UML",
+      "type": "flashcard",
+      "prompt": "In UML class diagrams, what is the difference between Aggregation (hollow diamond) and Composition (filled black diamond)?",
+      "answer": "Composition implies exclusive ownership and bound lifecycle; Aggregation implies shared/independent lifecycle",
+      "accepted_answers": [
+        "Composition implies exclusive ownership and bound lifecycle; Aggregation implies shared/independent lifecycle",
+        "Composition owns the part's lifetime; Aggregation does not",
+        "Composition destroys parts when parent is destroyed; Aggregation parts survive independently"
+      ],
+      "explanation": "In Composition (filled diamond), if the parent container is destroyed, its child parts are destroyed with it. In Aggregation (hollow diamond), parts can outlive the parent."
+    },
+    {
+      "id": "arch_11",
+      "category": "Architecture",
+      "type": "flashcard",
+      "prompt": "In Hexagonal Architecture (Ports and Adapters), what is a 'Port' versus an 'Adapter'?",
+      "answer": "A Port is an application-defined interface; an Adapter is the concrete implementation connecting external tech to that Port",
+      "accepted_answers": [
+        "A Port is an application-defined interface; an Adapter is the concrete implementation connecting external tech to that Port",
+        "Port is the interface; Adapter is the implementation",
+        "Ports are interfaces; Adapters connect external infrastructure"
+      ],
+      "explanation": "Hexagonal Architecture keeps core domain logic isolated from frameworks, databases, and hardware drivers via Ports (interfaces) and Adapters (implementations)."
+    },
+    {
+      "id": "arch_12",
+      "category": "C++ Embedded Patterns",
+      "type": "flashcard",
+      "prompt": "What C++ idiom (abbreviated CRTP) achieves compile-time static polymorphism without vtable overhead by having a derived class inherit from a base template parameterized on the derived class itself (`class Derived : public Base<Derived>`)?",
+      "answer": "Curiously Recurring Template Pattern",
+      "accepted_answers": [
+        "Curiously Recurring Template Pattern",
+        "CRTP"
+      ],
+      "explanation": "CRTP resolves interface calls at compile time via static_cast<Derived*>(this), eliminating virtual dispatch overhead and enabling inlining in embedded C++."
+    }
+  ]
+}

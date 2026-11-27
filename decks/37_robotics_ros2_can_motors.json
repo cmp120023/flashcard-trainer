@@ -1,0 +1,195 @@
+{
+  "deck_name": "37 - Robotics Kinematics, ROS 2, CAN Bus & Motor Control",
+  "cards": [
+    {
+      "id": "rob_01",
+      "category": "Kinematics",
+      "type": "flashcard",
+      "prompt": "What is the difference between Forward Kinematics (FK) and Inverse Kinematics (IK) in a robotic manipulator or 2-axis gimbal?",
+      "code": "",
+      "answer": "FK computes end-effector pose from joint angles; IK computes required joint angles from a target pose",
+      "accepted_answers": [
+        "FK goes from joint angles to pose; IK goes from pose to joint angles"
+      ],
+      "explanation": "Forward kinematics has a unique closed-form solution, whereas inverse kinematics can have multiple solutions, no solution (out of workspace), or singularities."
+    },
+    {
+      "id": "rob_02",
+      "category": "Kinematics",
+      "type": "flashcard",
+      "prompt": "What matrix relates joint velocities (q_dot) to end-effector linear and angular velocities (v) in robotics, and what happens when its determinant approaches zero?",
+      "code": "",
+      "answer": "The Jacobian matrix; the robot is at a kinematic singularity",
+      "accepted_answers": [
+        "Jacobian; singularity",
+        "Jacobian matrix; kinematic singularity"
+      ],
+      "explanation": "At a kinematic singularity (det(J) = 0), the manipulator loses one or more degrees of freedom and inverse velocity commands approach infinity."
+    },
+    {
+      "id": "rob_03",
+      "category": "ROS 2 Architecture",
+      "type": "flashcard",
+      "prompt": "What underlying middleware standard does ROS 2 use for real-time node discovery and pub/sub data transport?",
+      "code": "",
+      "answer": "DDS (Data Distribution Service)",
+      "accepted_answers": [
+        "DDS"
+      ],
+      "explanation": "ROS 2 replaces ROS 1's single-point-of-failure roscore master with decentralized DDS discovery and configurable QoS policies."
+    },
+    {
+      "id": "rob_04",
+      "category": "ROS 2 Architecture",
+      "type": "flashcard",
+      "prompt": "In ROS 2, which communication primitive should you use for: (a) continuous 100 Hz IMU streams, (b) quick synchronous parameter/mode toggles, and (c) long-running trajectory execution with feedback and preemption?",
+      "code": "",
+      "answer": "(a) Topics, (b) Services, (c) Actions",
+      "accepted_answers": [
+        "Topics, Services, Actions"
+      ],
+      "explanation": "Topics handle unidirectional streaming, Services handle short request/response RPCs, and Actions handle preemptable long-running tasks with continuous feedback."
+    },
+    {
+      "id": "rob_05",
+      "category": "ROS 2 Architecture",
+      "type": "flashcard",
+      "prompt": "In ROS 2 QoS settings, why is 'Best Effort' reliability preferred over 'Reliable' for high-rate camera frames or lidar scans over Wi-Fi?",
+      "code": "",
+      "answer": "It avoids retransmission stalls and head-of-line blocking when newer sensor frames arrive milliseconds later",
+      "accepted_answers": [
+        "prevents retransmission latency on stale sensor data",
+        "avoids head of line blocking"
+      ],
+      "explanation": "Retransmitting a dropped 30 Hz camera frame delays fresh frames; Best Effort drops stale packets to keep latency minimal."
+    },
+    {
+      "id": "rob_06",
+      "category": "CAN Bus",
+      "type": "flashcard",
+      "prompt": "In CAN 2.0B, how is bus arbitration resolved when two nodes transmit simultaneously, and does a lower or higher 11-bit/29-bit ID win?",
+      "code": "",
+      "answer": "Non-destructive bitwise arbitration; the lower numeric ID wins",
+      "accepted_answers": [
+        "lower ID wins",
+        "bitwise arbitration where lower ID wins"
+      ],
+      "explanation": "Dominant bits (0) overwrite recessive bits (1); a node transmitting 1 that reads back 0 backs off immediately without corrupting the winning frame."
+    },
+    {
+      "id": "rob_07",
+      "category": "CAN Bus",
+      "type": "flashcard",
+      "prompt": "What are the maximum payload sizes (in bytes) of a Classic CAN 2.0 frame versus a CAN FD frame?",
+      "code": "",
+      "answer": "8 bytes for Classic CAN 2.0, 64 bytes for CAN FD",
+      "accepted_answers": [
+        "8 and 64",
+        "8 bytes and 64 bytes"
+      ],
+      "explanation": "CAN FD extends payload capacity from 8 bytes up to 64 bytes and allows higher bitrates during the data phase."
+    },
+    {
+      "id": "rob_08",
+      "category": "CAN Bus",
+      "type": "flashcard",
+      "prompt": "What file format defines CAN message IDs, DLC lengths, signal bit offsets, endianness, scaling factors, and physical units for embedded toolchains?",
+      "code": "",
+      "answer": ".dbc (CAN Database file)",
+      "accepted_answers": [
+        "DBC",
+        "DBC file",
+        ".dbc"
+      ],
+      "explanation": "A .dbc file acts as the single source of truth for encoding/decoding raw CAN payload bytes into physical engineering values."
+    },
+    {
+      "id": "rob_09",
+      "category": "Motor Control",
+      "type": "flashcard",
+      "prompt": "In a 3-phase BLDC motor controlled via Field-Oriented Control (FOC), what do the Clarke and Park transforms accomplish?",
+      "code": "",
+      "answer": "They transform 3-phase sinusoidal currents (abc) into a rotating 2-axis DC frame (d-q) aligned with the rotor flux",
+      "accepted_answers": [
+        "convert 3-phase AC currents into rotating DC d-q frame",
+        "transform abc to rotating d-q coordinates"
+      ],
+      "explanation": "In the rotating d-q frame, torque-producing current (Iq) and flux-producing current (Id) become constant DC quantities that standard PI controllers can regulate easily."
+    },
+    {
+      "id": "rob_10",
+      "category": "Motor Control",
+      "type": "flashcard",
+      "prompt": "Why must complementary high-side and low-side MOSFET gate signals in an H-bridge or 3-phase inverter include hardware 'dead-time'?",
+      "code": "",
+      "answer": "To prevent shoot-through (shorting Vbus directly to GND) while transistors turn off and on",
+      "accepted_answers": [
+        "prevent shoot-through",
+        "avoid shorting power to ground during switching"
+      ],
+      "explanation": "MOSFETs take tens of nanoseconds to switch off; dead-time inserts a brief off-window so both transistors in a half-bridge are never conducting simultaneously."
+    },
+    {
+      "id": "rob_11",
+      "category": "Sensors & Encoders",
+      "type": "flashcard",
+      "prompt": "How does a quadrature rotary encoder (Channels A and B 90 degrees out of phase) determine direction of rotation and multiply resolution by 4x?",
+      "code": "",
+      "answer": "Direction comes from which channel leads; 4x resolution comes from counting both rising and falling edges of both A and B",
+      "accepted_answers": [
+        "phase lead gives direction and counting all 4 edges gives 4x resolution"
+      ],
+      "explanation": "Hardware timer encoder peripherals decode all four state transitions per quadrature cycle and automatically increment or decrement the counter register."
+    },
+    {
+      "id": "rob_12",
+      "category": "Motor Control",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this fixed-point PWM duty-cycle clamping calculation in C:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    int32_t cmd = -1250;\n    uint16_t arr = 999;\n    uint16_t ccr = (cmd < 0) ? 0 : (cmd > arr ? arr : (uint16_t)cmd);\n    printf(\"CCR=%u\\n\", ccr);\n    return 0;\n}",
+      "answer": "CCR=0",
+      "accepted_answers": [
+        "CCR=0"
+      ],
+      "explanation": "Negative torque/duty commands are clamped to 0 before writing to the timer Capture/Compare Register (CCR), preventing unsigned underflow to 64286 (full throttle!)."
+    },
+    {
+      "id": "rob_13",
+      "category": "CAN Bus",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this big-endian 16-bit CAN signal unpacking snippet:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    uint8_t data[2] = {0x01, 0xF4};\n    uint16_t raw = ((uint16_t)data[0] << 8) | data[1];\n    printf(\"RPM=%u\\n\", raw * 2);\n    return 0;\n}",
+      "answer": "RPM=1000",
+      "accepted_answers": [
+        "RPM=1000"
+      ],
+      "explanation": "0x01F4 in decimal is (1 * 256) + 244 = 500; multiplying by a .dbc scaling factor of 2 yields 1000 RPM."
+    },
+    {
+      "id": "rob_14",
+      "category": "Kinematics",
+      "type": "flashcard",
+      "prompt": "In a 2D differential-drive mobile robot with wheel radius R and wheelbase L, what happens physically when left and right wheel angular velocities are equal and opposite (w_R = -w_L)?",
+      "code": "",
+      "answer": "The robot rotates in place around its center (zero linear velocity)",
+      "accepted_answers": [
+        "rotates in place",
+        "zero linear velocity pure rotation"
+      ],
+      "explanation": "Linear velocity v = (R/2)*(w_R + w_L) = 0, while angular velocity omega = (R/L)*(w_R - w_L) != 0."
+    },
+    {
+      "id": "rob_15",
+      "category": "ROS 2 Architecture",
+      "type": "flashcard",
+      "prompt": "Which standard ROS 2 package maintains the time-varying 3D coordinate frame tree (e.g., map -> odom -> base_link -> camera_link)?",
+      "code": "",
+      "answer": "tf2",
+      "accepted_answers": [
+        "tf2",
+        "tf2_ros"
+      ],
+      "explanation": "tf2 tracks relationships between coordinate frames over time and lets nodes transform sensor points from camera coordinates into robot base or world coordinates."
+    }
+  ]
+}

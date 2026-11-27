@@ -1,0 +1,113 @@
+{
+  "deck_name": "Deck 44: Code Output Gauntlet v7 (Final Boss)",
+  "cards": [
+    {
+      "id": "gauntlet7_01",
+      "category": "C Short-Circuit",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C code:",
+      "code": "#include <stdio.h>\nint main(void) {\n    int a = 0, b = 5;\n    int r = (a != 0) && (++b > 5);\n    printf(\"%d %d\", r, b);\n    return 0;\n}",
+      "answer": "0 5",
+      "explanation": "Because `a != 0` is false (`0`), `&&` short-circuits and never evaluates `++b`, leaving `b` at `5`."
+    },
+    {
+      "id": "gauntlet7_02",
+      "category": "C Array Decay",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C code (assuming 32-bit `int` = 4 bytes, 64-bit pointer = 8 bytes):",
+      "code": "#include <stdio.h>\nvoid fn(int arr[]) { printf(\"%zu \", sizeof(arr)); }\nint main(void) {\n    int a[10] = {0};\n    fn(a);\n    printf(\"%zu\", sizeof(a));\n    return 0;\n}",
+      "answer": "8 40",
+      "explanation": "In function parameters, `int arr[]` decays to `int*` (8 bytes), whereas inside `main`, `sizeof(a)` returns `10 * 4 = 40` bytes."
+    },
+    {
+      "id": "gauntlet7_03",
+      "category": "C++ Virtual Destructor",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ code:",
+      "code": "#include <iostream>\nstruct Base { virtual ~Base() { std::cout << \"B\"; } };\nstruct Derived : Base { ~Derived() override { std::cout << \"D\"; } };\nint main() {\n    Base* p = new Derived();\n    delete p;\n}",
+      "answer": "DB",
+      "explanation": "Because `~Base()` is `virtual`, `delete p` runs `~Derived()` first (`D`) and then `~Base()` (`B`)."
+    },
+    {
+      "id": "gauntlet7_04",
+      "category": "C++ std::variant",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++17 code:",
+      "code": "#include <iostream>\n#include <variant>\nint main() {\n    std::variant<int, double> v = 3.5;\n    std::cout << v.index() << \":\" << std::holds_alternative<int>(v);\n}",
+      "answer": "1:0",
+      "explanation": "`double` is at index `1` of the variant, and `holds_alternative<int>(v)` is false (`0`)."
+    },
+    {
+      "id": "gauntlet7_05",
+      "category": "C# Span<T>",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# code:",
+      "code": "int[] data = { 10, 20, 30, 40 };\nSpan<int> slice = data.AsSpan(1, 2);\nslice[0] = 99;\nConsole.WriteLine(string.Join(\",\", data));",
+      "answer": "10,99,30,40",
+      "explanation": "`Span<T>` is a zero-copy view over `data`, so modifying `slice[0]` directly mutates `data[1]` in place."
+    },
+    {
+      "id": "gauntlet7_06",
+      "category": "C# Structs",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# code:",
+      "code": "struct Counter { public int X; }\nvar c1 = new Counter { X = 1 };\nvar c2 = c1;\nc2.X = 9;\nConsole.WriteLine($\"{c1.X}-{c2.X}\");",
+      "answer": "1-9",
+      "explanation": "`Counter` is a `struct` (value type), so `var c2 = c1` copies the value; mutating `c2.X` leaves `c1.X` unchanged."
+    },
+    {
+      "id": "gauntlet7_07",
+      "category": "Python defaultdict",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python code:",
+      "code": "from collections import defaultdict\nd = defaultdict(list)\nd['a'].append(1)\n_ = d['b']\nprint(sorted(d.keys()))",
+      "answer": "['a', 'b']",
+      "explanation": "Simply reading `d['b']` on a `defaultdict` invokes the factory `list()` and inserts key `'b'` into the dictionary."
+    },
+    {
+      "id": "gauntlet7_08",
+      "category": "Python Unpacking",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python code:",
+      "code": "first, *mid, last = [1, 2, 3, 4, 5]\nprint(mid)",
+      "answer": "[2, 3, 4]",
+      "explanation": "Extended iterable unpacking (`*mid`) always collects the remaining middle elements into a `list`."
+    },
+    {
+      "id": "gauntlet7_09",
+      "category": "Java Streams",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java code:",
+      "code": "import java.util.List;\npublic class Main {\n    public static void main(String[] args) {\n        int sum = List.of(1, 2, 3, 4).stream()\n            .filter(n -> n % 2 == 0)\n            .mapToInt(n -> n * n)\n            .sum();\n        System.out.println(sum);\n    }\n}",
+      "answer": "20",
+      "explanation": "Even numbers are `2` and `4`; squaring them gives `4` and `16`; `.sum()` returns `20`."
+    },
+    {
+      "id": "gauntlet7_10",
+      "category": "Java Varargs",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java code:",
+      "code": "public class Main {\n    static int count(int... nums) { return nums.length; }\n    public static void main(String[] args) {\n        System.out.println(count() + \"-\" + count(7, 8, 9));\n    }\n}",
+      "answer": "0-3",
+      "explanation": "Java varargs compile to an array (`int[]`), so calling `count()` passes an empty 0-length array."
+    },
+    {
+      "id": "gauntlet7_11",
+      "category": "JavaScript Promises",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript code:",
+      "code": "Promise.allSettled([Promise.resolve(1), Promise.reject(\"err\")])\n  .then(res => console.log(res.map(r => r.status).join(\",\")));",
+      "answer": "fulfilled,rejected",
+      "explanation": "Unlike `Promise.all`, `Promise.allSettled` never short-circuits on rejection and reports each promise's `status`."
+    },
+    {
+      "id": "gauntlet7_12",
+      "category": "JavaScript Object.freeze",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this non-strict JavaScript code:",
+      "code": "const cfg = Object.freeze({ nested: { port: 80 } });\ncfg.nested.port = 443;\nconsole.log(cfg.nested.port);",
+      "answer": "443",
+      "explanation": "`Object.freeze()` is shallow—it freezes top-level properties on `cfg`, not nested objects like `cfg.nested`."
+    }
+  ]
+}

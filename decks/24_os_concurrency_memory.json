@@ -1,0 +1,181 @@
+{
+  "deck_name": "Operating Systems, Concurrency & Memory Management",
+  "cards": [
+    {
+      "id": "os_01",
+      "category": "Processes & Threads",
+      "type": "flashcard",
+      "prompt": "What is the primary memory difference between two OS processes versus two threads within the same process?",
+      "answer": "Processes have isolated virtual address spaces; threads share the same heap and global address space while maintaining separate stacks and registers",
+      "accepted_answers": [
+        "threads share memory processes are isolated",
+        "processes have separate address spaces threads share heap"
+      ],
+      "explanation": "A context switch between processes requires switching page tables (flushing TLB), whereas threads share virtual memory mappings and only swap stack pointers and CPU registers."
+    },
+    {
+      "id": "os_02",
+      "category": "Synchronization",
+      "type": "flashcard",
+      "prompt": "Why can a Mutex only be unlocked by the thread that locked it, whereas a Binary Semaphore can be signaled by any thread or ISR?",
+      "answer": "Mutexes enforce strict ownership (enabling priority inheritance), while semaphores are ownership-agnostic signaling primitives",
+      "accepted_answers": [
+        "mutex has ownership semaphore does not",
+        "ownership"
+      ],
+      "explanation": "Because a Mutex tracks its owning thread, the OS kernel can temporarily boost the owner's priority if a higher-priority thread blocks on it (preventing unbounded priority inversion)."
+    },
+    {
+      "id": "os_03",
+      "category": "Deadlocks",
+      "type": "flashcard",
+      "prompt": "What are the four Coffman conditions that must ALL hold simultaneously for a deadlock to occur?",
+      "answer": "Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait",
+      "accepted_answers": [
+        "mutual exclusion hold and wait no preemption circular wait"
+      ],
+      "explanation": "Breaking any single condition\u2014most commonly enforcing a global lock acquisition ordering to break Circular Wait\u2014mathematically prevents deadlocks."
+    },
+    {
+      "id": "os_04",
+      "category": "Memory Management",
+      "type": "flashcard",
+      "prompt": "What hardware unit inside the CPU translates virtual memory addresses into physical RAM addresses using page tables?",
+      "answer": "MMU (Memory Management Unit)",
+      "accepted_answers": [
+        "MMU",
+        "Memory Management Unit"
+      ],
+      "explanation": "The MMU enforces per-page read/write/execute permissions and caches recent translations in the Translation Lookaside Buffer (TLB)."
+    },
+    {
+      "id": "os_05",
+      "category": "Memory Management",
+      "type": "flashcard",
+      "prompt": "What happens when a process accesses a virtual page whose Page Table Entry (PTE) has its Present/Valid bit set to 0?",
+      "answer": "A Page Fault exception is triggered in the CPU",
+      "accepted_answers": [
+        "Page Fault",
+        "page fault"
+      ],
+      "explanation": "The OS page fault handler checks whether the access is valid (e.g., demand paging or copy-on-write) to map a physical frame, or terminates the process with SIGSEGV if invalid."
+    },
+    {
+      "id": "os_06",
+      "category": "Concurrency",
+      "type": "flashcard",
+      "prompt": "Why does a Condition Variable (`std::condition_variable` / `pthread_cond_wait`) ALWAYS require a `while` loop around `wait()` instead of an `if` statement?",
+      "answer": "To guard against spurious wakeups and stolen conditions where another thread modified the predicate before the woken thread re-acquired the mutex",
+      "accepted_answers": [
+        "spurious wakeups",
+        "spurious wakeup"
+      ],
+      "explanation": "OS schedulers may wake a thread waiting on a condition variable without a signal, or another consumer may consume the item before the woken thread locks the mutex."
+    },
+    {
+      "id": "os_07",
+      "category": "Memory Ordering",
+      "type": "flashcard",
+      "prompt": "In C++11/20 `std::atomic`, what guarantee does a Release-Acquire (`memory_order_release` / `memory_order_acquire`) pair provide across two threads?",
+      "answer": "All memory writes performed by Thread A before the atomic store-release become visible to Thread B after the atomic load-acquire",
+      "accepted_answers": [
+        "happens-before synchronization",
+        "writes before release are visible after acquire"
+      ],
+      "explanation": "Release-Acquire prevents compiler and CPU instruction reordering across the atomic boundary without paying the full hardware barrier cost of `seq_cst` on weak memory architectures like ARM."
+    },
+    {
+      "id": "os_08",
+      "category": "CPU Cache",
+      "type": "flashcard",
+      "prompt": "What is 'False Sharing' in multi-core systems and how do you fix it in C++17?",
+      "answer": "Two threads on different cores modify independent variables that sit on the same 64-byte CPU cache line, causing cache invalidation ping-pong; fix with `alignas(64)`",
+      "accepted_answers": [
+        "independent variables sharing a cache line",
+        "cache line ping pong"
+      ],
+      "explanation": "Hardware cache coherence protocols (MESI) track ownership at cache-line granularity (typically 64 bytes), so padding or `alignas(std::hardware_destructive_interference_size)` eliminates contention."
+    },
+    {
+      "id": "os_09",
+      "category": "Linux Processes",
+      "type": "flashcard",
+      "prompt": "What is a Zombie process (`Z` state) in Linux and how is it cleaned up?",
+      "answer": "A terminated process whose exit status has not yet been read by its parent via `wait()` or `waitpid()`",
+      "accepted_answers": [
+        "terminated process waiting for parent to call wait",
+        "unreaped child process"
+      ],
+      "explanation": "A zombie uses zero RAM or CPU\u2014only a PID slot in the kernel process table\u2014until its parent reaps it (or init/systemd adopts and reaps it if the parent dies)."
+    },
+    {
+      "id": "os_10",
+      "category": "Lock-Free Programming",
+      "type": "flashcard",
+      "prompt": "What is the 'ABA Problem' in lock-free Compare-And-Swap (CAS) algorithms?",
+      "answer": "A shared location changes from A to B and back to A while a thread is preempted, tricking CAS into thinking nothing changed",
+      "accepted_answers": [
+        "value changes A to B to A fooling CAS"
+      ],
+      "explanation": "If A is a freed and reallocated pointer, CAS succeeds even though the underlying node's next-pointer structure changed; tagged pointers or hazard pointers prevent it."
+    },
+    {
+      "id": "os_11",
+      "category": "Scheduling",
+      "type": "flashcard",
+      "prompt": "In Rate-Monotonic Scheduling (RMS) for periodic real-time tasks, how are static priorities assigned?",
+      "answer": "Tasks with shorter periods (higher execution frequency) receive higher static priority",
+      "accepted_answers": [
+        "shorter period gets higher priority"
+      ],
+      "explanation": "RMS is optimal among fixed-priority preemptive schedulers and guarantees schedulability if total CPU utilization is <= n*(2^(1/n) - 1) (~69.3% as n -> infinity)."
+    },
+    {
+      "id": "os_12",
+      "category": "System Calls",
+      "type": "flashcard",
+      "prompt": "Why does calling `fork()` in Linux not immediately duplicate all physical RAM pages of a large parent process?",
+      "answer": "Copy-on-Write (CoW) shares read-only physical pages between parent and child until either process attempts a write",
+      "accepted_answers": [
+        "Copy-on-Write",
+        "CoW"
+      ],
+      "explanation": "CoW makes `fork()` followed by `execve()` nearly instantaneous because physical memory pages are only copied on demand when modified."
+    },
+    {
+      "id": "os_13",
+      "category": "Synchronization",
+      "type": "flashcard",
+      "prompt": "When is a Spinlock preferable over a sleeping Mutex?",
+      "answer": "On multi-core systems when the critical section is extremely short (fewer cycles than two context switches) and sleeping is forbidden (e.g., inside an ISR)",
+      "accepted_answers": [
+        "very short critical sections on multicore or in ISRs"
+      ],
+      "explanation": "Never use a spinlock on a single-core CPU with preemption disabled\u2014the spinning thread will monopolize the sole core forever while the lock holder cannot run."
+    },
+    {
+      "id": "os_14",
+      "category": "Memory Management",
+      "type": "flashcard",
+      "prompt": "What is the difference between Internal Fragmentation and External Fragmentation?",
+      "answer": "Internal is wasted unused bytes inside an allocated fixed-size block/page; External is free memory broken into non-contiguous holes too small to satisfy a large request",
+      "accepted_answers": [
+        "internal is inside allocated blocks external is between blocks"
+      ],
+      "explanation": "Fixed-block memory pools eliminate external fragmentation completely in safety-critical embedded systems at the cost of minor internal fragmentation."
+    },
+    {
+      "id": "os_15",
+      "category": "IPC",
+      "type": "flashcard",
+      "prompt": "Which Linux Inter-Process Communication (IPC) mechanism provides the lowest latency and highest throughput for bulk sensor frames?",
+      "answer": "POSIX Shared Memory (`shm_open` + `mmap`) paired with atomics or semaphores",
+      "accepted_answers": [
+        "Shared Memory",
+        "POSIX shared memory",
+        "mmap"
+      ],
+      "explanation": "Unlike pipes or sockets, shared memory avoids copying payloads twice through kernel space (zero-copy between processes)."
+    }
+  ]
+}

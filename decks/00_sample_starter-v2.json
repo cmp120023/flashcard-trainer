@@ -1,0 +1,37 @@
+{
+  "deck_name": "00 - Starter Verification Pack",
+  "cards": [
+    {
+      "id": "starter_01",
+      "category": "ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "In ASP.NET Core MVC, what two EF Core CLI commands create a migration named InitialCreate and apply it to the database?",
+      "code": "",
+      "answer": "dotnet ef migrations add InitialCreate\ndotnet ef database update",
+      "accepted_answers": [],
+      "explanation": "migrations add scaffolds the C# Up()/Down() snapshot files; database update executes pending migrations against the configured DbContext connection string."
+    },
+    {
+      "id": "starter_02",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++17 snippet:",
+      "code": "#include <iostream>\nint main() {\n    int arr[] = {10, 20, 30, 40};\n    int* p = arr + 1;\n    std::cout << *p++ << \" \" << *p << \"\\n\";\n    return 0;\n}",
+      "answer": "20 30",
+      "accepted_answers": [],
+      "explanation": "p starts pointing to arr[1] (20). Post-increment *p++ yields 20 and advances p to arr[2] (30). Note: in C++17, << operands are strictly evaluated left-to-right."
+    },
+    {
+      "id": "starter_03",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "How do you create and switch to a new feature branch named feat/uart-ring-buffer in a single Git command?",
+      "code": "",
+      "answer": "git switch -c feat/uart-ring-buffer",
+      "accepted_answers": [
+        "git checkout -b feat/uart-ring-buffer"
+      ],
+      "explanation": "git switch -c was introduced in Git 2.23 as the dedicated, safer alternative to git checkout -b for branch creation."
+    }
+  ]
+}

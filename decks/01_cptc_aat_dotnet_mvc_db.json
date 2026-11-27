@@ -1,0 +1,397 @@
+{
+  "deck_name": "01 - CPTC AAT: .NET, C#, ASP.NET Core MVC & SQL",
+  "cards": [
+    {
+      "id": "aat_01_001",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "Which SQL clause filters groups AFTER an aggregate function like COUNT() or SUM() has been evaluated?",
+      "code": "",
+      "answer": "HAVING",
+      "accepted_answers": [
+        "HAVING",
+        "HAVING clause"
+      ],
+      "explanation": "WHERE filters individual rows before grouping; HAVING filters aggregated groups produced by GROUP BY."
+    },
+    {
+      "id": "aat_01_002",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "What T-SQL column constraint automatically generates sequential integer primary keys starting at 1 and incrementing by 1?",
+      "code": "",
+      "answer": "IDENTITY(1,1)",
+      "accepted_answers": [
+        "IDENTITY(1,1)",
+        "IDENTITY(1, 1)",
+        "IDENTITY"
+      ],
+      "explanation": "In SQL Server (used in CPTC's CPW 152), IDENTITY(seed, increment) auto-increments numeric primary keys."
+    },
+    {
+      "id": "aat_01_003",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "Which normal form eliminates transitive dependencies (where a non-key column depends on another non-key column)?",
+      "code": "",
+      "answer": "3NF",
+      "accepted_answers": [
+        "3NF",
+        "Third Normal Form",
+        "3rd Normal Form"
+      ],
+      "explanation": "1NF removes repeating groups, 2NF removes partial dependencies on composite keys, and 3NF removes transitive dependencies."
+    },
+    {
+      "id": "aat_01_004",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "Which SQL JOIN returns all rows from the left table and matching rows from the right table (or NULLs when no match exists)?",
+      "code": "",
+      "answer": "LEFT JOIN",
+      "accepted_answers": [
+        "LEFT JOIN",
+        "LEFT OUTER JOIN"
+      ],
+      "explanation": "LEFT JOIN (or LEFT OUTER JOIN) preserves every record from the left table regardless of whether a match exists in the right table."
+    },
+    {
+      "id": "aat_01_005",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "What are the four ACID properties of a reliable relational database transaction?",
+      "code": "",
+      "answer": "Atomicity, Consistency, Isolation, Durability",
+      "accepted_answers": [
+        "Atomicity, Consistency, Isolation, Durability",
+        "Atomicity Consistency Isolation Durability"
+      ],
+      "explanation": "ACID guarantees all-or-nothing execution, valid state transitions, concurrent transaction separation, and permanent storage after commit."
+    },
+    {
+      "id": "aat_01_006",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "Which DDL command removes all rows from a table rapidly without logging individual row deletions and resets its IDENTITY counter?",
+      "code": "",
+      "answer": "TRUNCATE TABLE",
+      "accepted_answers": [
+        "TRUNCATE TABLE",
+        "TRUNCATE"
+      ],
+      "explanation": "TRUNCATE TABLE deallocates data pages minimally logged and resets identity seeds, unlike DELETE."
+    },
+    {
+      "id": "aat_01_007",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "Which C# operator returns the left-hand operand if it is not null, and otherwise evaluates and returns the right-hand operand?",
+      "code": "",
+      "answer": "??",
+      "accepted_answers": [
+        "??",
+        "null-coalescing operator",
+        "null coalescing operator"
+      ],
+      "explanation": "Example: string name = inputName ?? \"Guest\"; returns \"Guest\" only when inputName is null."
+    },
+    {
+      "id": "aat_01_008",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "Which C# keyword must be applied to a derived class method to replace a base class method marked virtual or abstract?",
+      "code": "",
+      "answer": "override",
+      "accepted_answers": [
+        "override"
+      ],
+      "explanation": "override enables runtime polymorphism in C#; omitting it or using 'new' hides the base method instead of overriding it."
+    },
+    {
+      "id": "aat_01_009",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "Which C# modifier prevents a class from being inherited by any other class?",
+      "code": "",
+      "answer": "sealed",
+      "accepted_answers": [
+        "sealed"
+      ],
+      "explanation": "A sealed class cannot serve as a base class (equivalent to 'final' in Java)."
+    },
+    {
+      "id": "aat_01_010",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "Which interface must a C# type implement to be deterministically cleaned up by a 'using' statement?",
+      "code": "",
+      "answer": "IDisposable",
+      "accepted_answers": [
+        "IDisposable",
+        "System.IDisposable",
+        "IAsyncDisposable"
+      ],
+      "explanation": "IDisposable defines Dispose(), which the compiler automatically invokes inside a finally block when exiting a using scope."
+    },
+    {
+      "id": "aat_01_011",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# value-vs-reference type snippet:",
+      "code": "int a = 10;\nint b = a;\nb = 25;\nint[] arr1 = { 1, 2 };\nint[] arr2 = arr1;\narr2[0] = 99;\nConsole.WriteLine($\"{a} {arr1[0]}\");",
+      "answer": "10 99",
+      "accepted_answers": [
+        "10 99"
+      ],
+      "explanation": "int is a value type (copied by value), whereas int[] is a reference type (arr1 and arr2 point to the same heap array)."
+    },
+    {
+      "id": "aat_01_012",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# LINQ query:",
+      "code": "var nums = new[] { 1, 2, 3, 4, 5, 6 };\nvar res = nums.Where(n => n % 2 == 0).Select(n => n * 10);\nConsole.WriteLine(string.Join(\",\", res));",
+      "answer": "20,40,60",
+      "accepted_answers": [
+        "20,40,60"
+      ],
+      "explanation": "Where filters even numbers (2, 4, 6), and Select multiplies each by 10."
+    },
+    {
+      "id": "aat_01_013",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# virtual dispatch snippet:",
+      "code": "class Base {\n    public virtual string Speak() => \"Base\";\n}\nclass Derived : Base {\n    public override string Speak() => \"Derived\";\n}\nBase obj = new Derived();\nConsole.WriteLine(obj.Speak());",
+      "answer": "Derived",
+      "accepted_answers": [
+        "Derived"
+      ],
+      "explanation": "Because Speak() is virtual and overridden, runtime dispatch invokes Derived.Speak() even through a Base reference."
+    },
+    {
+      "id": "aat_01_014",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "What two dotnet CLI commands create an EF Core migration named InitialCreate and apply it to the database?",
+      "code": "",
+      "answer": "dotnet ef migrations add InitialCreate\ndotnet ef database update",
+      "accepted_answers": [
+        "dotnet ef migrations add InitialCreate && dotnet ef database update",
+        "dotnet ef migrations add InitialCreate; dotnet ef database update",
+        "dotnet ef migrations add InitialCreate\ndotnet ef database update"
+      ],
+      "explanation": "migrations add scaffolds the C# migration files; database update executes them against the database."
+    },
+    {
+      "id": "aat_01_015",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "In Program.cs, which Dependency Injection extension method registers ApplicationDbContext with per-HTTP-request lifetime?",
+      "code": "",
+      "answer": "builder.Services.AddDbContext<ApplicationDbContext>(...)",
+      "accepted_answers": [
+        "AddDbContext",
+        "AddDbContext<ApplicationDbContext>",
+        "builder.Services.AddDbContext<ApplicationDbContext>",
+        "AddScoped"
+      ],
+      "explanation": "AddDbContext<T>() registers the EF Core DbContext with a Scoped lifetime (one instance per HTTP request)."
+    },
+    {
+      "id": "aat_01_016",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which controller property checks whether incoming form/model data passed all Data Annotation validation rules?",
+      "code": "",
+      "answer": "ModelState.IsValid",
+      "accepted_answers": [
+        "ModelState.IsValid",
+        "ModelState"
+      ],
+      "explanation": "ModelState.IsValid returns true only if model binding succeeded and all [Required], [Range], [StringLength], etc. attributes passed."
+    },
+    {
+      "id": "aat_01_017",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which attribute on an [HttpPost] action protects an ASP.NET Core MVC form submission against Cross-Site Request Forgery?",
+      "code": "",
+      "answer": "[ValidateAntiForgeryToken]",
+      "accepted_answers": [
+        "[ValidateAntiForgeryToken]",
+        "ValidateAntiForgeryToken"
+      ],
+      "explanation": "It validates the hidden __RequestVerificationToken generated automatically by Razor <form> tag helpers."
+    },
+    {
+      "id": "aat_01_018",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which EF Core LINQ method performs eager loading of a related navigation property in a single query?",
+      "code": "",
+      "answer": ".Include()",
+      "accepted_answers": [
+        ".Include()",
+        "Include()",
+        "Include"
+      ],
+      "explanation": "Example: _context.Orders.Include(o => o.Customer).ToList() loads related Customer entities eagerly."
+    },
+    {
+      "id": "aat_01_019",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which EF Core method disables change tracking on read-only queries to improve performance?",
+      "code": "",
+      "answer": ".AsNoTracking()",
+      "accepted_answers": [
+        ".AsNoTracking()",
+        "AsNoTracking()",
+        "AsNoTracking"
+      ],
+      "explanation": "AsNoTracking() avoids snapshotting entities in the DbContext ChangeTracker when you only need to display data."
+    },
+    {
+      "id": "aat_01_020",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "What is the standard default route pattern configured in ASP.NET Core MVC Program.cs?",
+      "code": "",
+      "answer": "{controller=Home}/{action=Index}/{id?}",
+      "accepted_answers": [
+        "{controller=Home}/{action=Index}/{id?}",
+        "/{controller=Home}/{action=Index}/{id?}"
+      ],
+      "explanation": "Requests without explicit segments default to HomeController.Index() with an optional id parameter."
+    },
+    {
+      "id": "aat_01_021",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which Razor directive at the top of a .cshtml view binds strongly typed model data to the view?",
+      "code": "",
+      "answer": "@model",
+      "accepted_answers": [
+        "@model"
+      ],
+      "explanation": "Example: @model MyApp.Models.ProductViewModel enables compile-time IntelliSense via @Model."
+    },
+    {
+      "id": "aat_01_022",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which MVC dictionary persists short-lived messages (such as \"Item saved!\") across a single RedirectToAction()?",
+      "code": "",
+      "answer": "TempData",
+      "accepted_answers": [
+        "TempData"
+      ],
+      "explanation": "Unlike ViewBag or ViewData (which clear on redirect), TempData survives one subsequent HTTP request."
+    },
+    {
+      "id": "aat_01_023",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "In an ApplicationDbContext class, what generic property type represents a queryable database table?",
+      "code": "",
+      "answer": "DbSet<T>",
+      "accepted_answers": [
+        "DbSet<T>",
+        "DbSet"
+      ],
+      "explanation": "Example: public DbSet<Student> Students { get; set; } maps the Student entity to a Students table."
+    },
+    {
+      "id": "aat_01_024",
+      "category": "CPW 122 Web & JavaScript",
+      "type": "flashcard",
+      "prompt": "Which CSS property ensures an element's specified width and height include its padding and border?",
+      "code": "",
+      "answer": "box-sizing: border-box;",
+      "accepted_answers": [
+        "box-sizing: border-box;",
+        "box-sizing: border-box",
+        "border-box"
+      ],
+      "explanation": "With border-box, padding and border shrink the inner content box rather than expanding the total rendered width."
+    },
+    {
+      "id": "aat_01_025",
+      "category": "CPW 122 Web & JavaScript",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript equality and typeof snippet:",
+      "code": "console.log(5 == \"5\", 5 === \"5\", typeof null);",
+      "answer": "true false object",
+      "accepted_answers": [
+        "true false object"
+      ],
+      "explanation": "== performs type coercion (true), === checks strict value + type (false), and typeof null is historically \"object\"."
+    },
+    {
+      "id": "aat_01_026",
+      "category": "CPW 122 Web & JavaScript",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript block-scoping snippet:",
+      "code": "let x = 1;\nif (true) {\n    let x = 2;\n}\nconsole.log(x);",
+      "answer": "1",
+      "accepted_answers": [
+        "1"
+      ],
+      "explanation": "let is block-scoped, so the inner x = 2 exists only inside the if block and does not overwrite outer x."
+    },
+    {
+      "id": "aat_01_027",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "Which ASP.NET Core DI service lifetime creates a single shared instance for the entire lifetime of the application?",
+      "code": "",
+      "answer": "Singleton",
+      "accepted_answers": [
+        "Singleton",
+        "AddSingleton"
+      ],
+      "explanation": "Transient = per resolution, Scoped = per HTTP request, Singleton = one instance for the whole app."
+    },
+    {
+      "id": "aat_01_028",
+      "category": "CPW 155 / 211 C# & .NET",
+      "type": "flashcard",
+      "prompt": "What keyword is required on a C# method signature in order to use the 'await' keyword inside its body?",
+      "code": "",
+      "answer": "async",
+      "accepted_answers": [
+        "async"
+      ],
+      "explanation": "Marking a method async enables non-blocking await expressions and typically returns Task or Task<T>."
+    },
+    {
+      "id": "aat_01_029",
+      "category": "CPW 152 Relational Databases",
+      "type": "flashcard",
+      "prompt": "Which SQL constraint enforces referential integrity by requiring values in a column to match primary key values in another table?",
+      "code": "",
+      "answer": "FOREIGN KEY",
+      "accepted_answers": [
+        "FOREIGN KEY",
+        "FOREIGN KEY constraint"
+      ],
+      "explanation": "A FOREIGN KEY prevents orphaned child records that point to non-existent parent rows."
+    },
+    {
+      "id": "aat_01_030",
+      "category": "CPW 219 / 230 ASP.NET Core MVC",
+      "type": "flashcard",
+      "prompt": "Which Data Annotation attribute restricts a string property in an ASP.NET Core MVC model to at most 50 characters?",
+      "code": "",
+      "answer": "[StringLength(50)]",
+      "accepted_answers": [
+        "[StringLength(50)]",
+        "StringLength(50)",
+        "[MaxLength(50)]",
+        "MaxLength(50)"
+      ],
+      "explanation": "[StringLength(50)] enforces both client/server model validation and configures the EF Core nvarchar(50) column size."
+    }
+  ]
+}

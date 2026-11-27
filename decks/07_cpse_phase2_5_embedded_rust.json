@@ -1,0 +1,201 @@
+{
+  "deck_name": "07 - BS-CS-CPSE Phase 2.5: Embedded Rust (#![no_std] & Embassy)",
+  "cards": [
+    {
+      "id": "rust_01",
+      "category": "Embedded Rust Core",
+      "type": "flashcard",
+      "prompt": "What crate-level attribute disables the Rust standard library so code can run on bare-metal microcontrollers without an OS or heap?",
+      "code": "",
+      "answer": "#![no_std]",
+      "accepted_answers": [
+        "#![no_std]"
+      ],
+      "explanation": "#![no_std] links only against core (and optionally alloc), removing OS-dependent abstractions like std::fs or std::thread."
+    },
+    {
+      "id": "rust_02",
+      "category": "Embedded Rust Core",
+      "type": "flashcard",
+      "prompt": "What attribute marks the custom entry point function in a bare-metal Rust firmware binary using cortex-m-rt?",
+      "code": "",
+      "answer": "#[entry]",
+      "accepted_answers": [
+        "#[entry]",
+        "#[cortex_m_rt::entry]"
+      ],
+      "explanation": "#[entry] requires a diverging function signature fn main() -> ! because bare-metal firmware never returns."
+    },
+    {
+      "id": "rust_03",
+      "category": "Embedded Rust Core",
+      "type": "flashcard",
+      "prompt": "What does the return type '-> !' signify on a Rust bare-metal main() or panic handler function?",
+      "code": "",
+      "answer": "Diverging function (never returns)",
+      "accepted_answers": [
+        "Diverging function (never returns)",
+        "Never returns",
+        "Diverging function"
+      ],
+      "explanation": "Enforces at compile time that the firmware loops infinitely or triggers a hardware reset."
+    },
+    {
+      "id": "rust_04",
+      "category": "Ownership & Lifetimes",
+      "type": "flashcard",
+      "prompt": "What are Rust's 3 core ownership rules that prevent data races and use-after-free at compile time?",
+      "code": "",
+      "answer": "1) Each value has one owner; 2) Only one owner at a time; 3) Value is dropped when owner goes out of scope",
+      "accepted_answers": [
+        "1) Each value has one owner; 2) Only one owner at a time; 3) Value is dropped when owner goes out of scope",
+        "Each value has a single owner, only one owner at a time, and the value is dropped when the owner leaves scope"
+      ],
+      "explanation": "Combined with borrowing rules (many &T OR one &mut T), Rust guarantees memory and thread safety without a garbage collector."
+    },
+    {
+      "id": "rust_05",
+      "category": "Ownership & Lifetimes",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Rust ownership/borrowing snippet:",
+      "code": "fn bump(x: &mut i32) {\n    *x += 7;\n}\nfn main() {\n    let mut val = 10;\n    bump(&mut val);\n    let r1 = &val;\n    let r2 = &val;\n    println!(\"{} {}\", r1, r2);\n}",
+      "answer": "17 17",
+      "accepted_answers": [
+        "17 17"
+      ],
+      "explanation": "The mutable borrow in bump(&mut val) ends when bump returns, allowing multiple immutable shared borrows (r1, r2) afterward."
+    },
+    {
+      "id": "rust_06",
+      "category": "Type-State Pattern",
+      "type": "flashcard",
+      "prompt": "How does the Rust Type-State pattern prevent configuring a GPIO pin as an output and accidentally calling .is_high() (an input-only method)?",
+      "code": "",
+      "answer": "Zero-sized marker types (PhantomData<State>) encode hardware modes in the type signature so invalid methods do not exist on that type",
+      "accepted_answers": [
+        "Zero-sized marker types (PhantomData<State>) encode hardware modes in the type signature so invalid methods do not exist on that type",
+        "Encodes pin state in generic type parameters using PhantomData",
+        "Uses PhantomData zero-sized types to enforce state transitions at compile time"
+      ],
+      "explanation": "Consuming self during mode transitions (into_push_pull_output(self) -> Pin<Output>) makes invalid hardware states unrepresentable at zero runtime cost."
+    },
+    {
+      "id": "rust_07",
+      "category": "Type-State Pattern",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this zero-cost Rust Type-State state machine:",
+      "code": "use std::marker::PhantomData;\nstruct Locked;\nstruct Unlocked;\nstruct Door<S> { _state: PhantomData<S> }\nimpl Door<Locked> {\n    fn new() -> Self { Door { _state: PhantomData } }\n    fn unlock(self) -> Door<Unlocked> { println!(\"Unlocked\"); Door { _state: PhantomData } }\n}\nimpl Door<Unlocked> {\n    fn open(&self) { println!(\"Opened\"); }\n}\nfn main() {\n    let d = Door::<Locked>::new();\n    let d = d.unlock();\n    d.open();\n}",
+      "answer": "Unlocked\nOpened",
+      "accepted_answers": [
+        "Unlocked\nOpened"
+      ],
+      "explanation": "Door<Locked> has no .open() method; calling .unlock() consumes the Locked instance and returns Door<Unlocked>."
+    },
+    {
+      "id": "rust_08",
+      "category": "Embedded Rust Ecosystem",
+      "type": "flashcard",
+      "prompt": "What are the 4 architectural layers of the Embedded Rust hardware stack from lowest to highest?",
+      "code": "",
+      "answer": "PAC (Peripheral Access Crate) -> HAL (Hardware Abstraction Layer) -> embedded-hal Traits -> Board/Application Driver",
+      "accepted_answers": [
+        "PAC (Peripheral Access Crate) -> HAL (Hardware Abstraction Layer) -> embedded-hal Traits -> Board/Application Driver",
+        "PAC -> HAL -> embedded-hal -> Driver"
+      ],
+      "explanation": "PAC is auto-generated from SVD files via svd2rust; HAL adds safe type-state wrappers; embedded-hal provides portable bus traits (SpiDevice, I2c)."
+    },
+    {
+      "id": "rust_09",
+      "category": "Embedded Rust Ecosystem",
+      "type": "flashcard",
+      "prompt": "What async embedded Rust framework runs cooperative async/await tasks on bare-metal microcontrollers without heap allocation?",
+      "code": "",
+      "answer": "Embassy",
+      "accepted_answers": [
+        "Embassy",
+        "embassy-executor"
+      ],
+      "explanation": "Embassy compiles async tasks into statically allocated state machines driven directly by hardware interrupts."
+    },
+    {
+      "id": "rust_10",
+      "category": "Embedded Rust Tooling",
+      "type": "flashcard",
+      "prompt": "What modern Rust embedded debugging/flashing tool replaces OpenOCD + GDB and streams defmt logs over RTT?",
+      "code": "",
+      "answer": "probe-rs",
+      "accepted_answers": [
+        "probe-rs",
+        "cargo embed",
+        "cargo run with probe-rs"
+      ],
+      "explanation": "probe-rs flashes ELF binaries over ST-Link/J-Link and decodes compact defmt log frames on the host PC."
+    },
+    {
+      "id": "rust_11",
+      "category": "Embedded Rust Tooling",
+      "type": "flashcard",
+      "prompt": "What Cargo subcommand inspects compiled firmware binaries to break down Flash/RAM usage per crate and function?",
+      "code": "",
+      "answer": "cargo bloat",
+      "accepted_answers": [
+        "cargo bloat",
+        "cargo-bloat"
+      ],
+      "explanation": "Essential for auditing code size bloat on Flash-constrained Cortex-M microcontrollers."
+    },
+    {
+      "id": "rust_12",
+      "category": "Concurrency in Rust",
+      "type": "flashcard",
+      "prompt": "In cortex-m bare-metal Rust, what synchronization primitive wraps shared ISR/main data inside a Mutex requiring a CriticalSection token to access?",
+      "code": "",
+      "answer": "critical_section::Mutex<RefCell<T>>",
+      "accepted_answers": [
+        "critical_section::Mutex<RefCell<T>>",
+        "Mutex<RefCell<T>>",
+        "cortex_m::interrupt::Mutex<RefCell<T>>"
+      ],
+      "explanation": "Guarantees interrupts are disabled while borrowing the RefCell, preventing concurrent ISR preemption data races."
+    },
+    {
+      "id": "rust_13",
+      "category": "Embedded Rust Core",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Rust Result/Option combinator chain:",
+      "code": "fn main() {\n    let readings = [Some(12), None, Some(25), Some(8)];\n    let sum: i32 = readings.iter().filter_map(|&x| x).filter(|&v| v >= 10).sum();\n    println!(\"{}\", sum);\n}",
+      "answer": "37",
+      "accepted_answers": [
+        "37"
+      ],
+      "explanation": "filter_map unwraps Some(12), Some(25), Some(8); filter keeps >= 10 (12 and 25); sum() yields 37 with zero heap allocations."
+    },
+    {
+      "id": "rust_14",
+      "category": "Embedded Rust Core",
+      "type": "flashcard",
+      "prompt": "Why does defmt ('deferred formatting') dramatically outperform core::fmt::Write on microcontrollers?",
+      "code": "",
+      "answer": "String formatting happens on the host PC rather than the MCU; the MCU only transmits compact log indices and raw binary arguments",
+      "accepted_answers": [
+        "String formatting happens on the host PC rather than the MCU; the MCU only transmits compact log indices and raw binary arguments",
+        "Formatting is deferred to the host computer",
+        "Moves formatting off the microcontroller to the host"
+      ],
+      "explanation": "Saves tens of kilobytes of Flash and avoids slow printf formatting inside real-time code."
+    },
+    {
+      "id": "rust_15",
+      "category": "Embedded Rust Core",
+      "type": "flashcard",
+      "prompt": "What Rust attribute prevents the compiler from mangling a symbol name so C startup code or linker scripts can call it directly?",
+      "code": "",
+      "answer": "#[no_mangle]",
+      "accepted_answers": [
+        "#[no_mangle]",
+        "#[unsafe(no_mangle)]"
+      ],
+      "explanation": "Often paired with extern \"C\" to expose Rust ISR handlers or FFI functions to C toolchains."
+    }
+  ]
+}

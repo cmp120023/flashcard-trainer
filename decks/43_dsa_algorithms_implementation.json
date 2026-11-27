@@ -1,0 +1,174 @@
+{
+  "deck_name": "Deck 43: Data Structures & Algorithms Drills",
+  "cards": [
+    {
+      "id": "dsa_impl_01",
+      "category": "Trees",
+      "type": "flashcard",
+      "prompt": "Which depth-first traversal of a Binary Search Tree (BST) visits all keys in ascending sorted order?",
+      "answer": "Inorder traversal (Left, Root, Right)",
+      "accepted_answers": [
+        "Inorder",
+        "In-order"
+      ],
+      "explanation": "Because every left subtree holds smaller keys and every right subtree holds larger keys, Left -> Root -> Right yields sorted output in O(n)."
+    },
+    {
+      "id": "dsa_impl_02",
+      "category": "Trees",
+      "type": "flashcard",
+      "prompt": "Why do self-balancing trees like AVL or Red-Black trees exist instead of using a plain BST?",
+      "answer": "To prevent sorted insertions from degenerating the tree into an O(n) linked list, guaranteeing O(log n) search, insert, and delete.",
+      "accepted_answers": [
+        "prevent degeneration into O(n) linked list",
+        "guarantee O(log n) height"
+      ],
+      "explanation": "Inserting `1, 2, 3, 4, 5` into an unbalanced BST creates a chain of height `n`; rotations keep height bounded by `O(log n)`."
+    },
+    {
+      "id": "dsa_impl_03",
+      "category": "Heaps",
+      "type": "flashcard",
+      "prompt": "What is the time complexity of building a binary heap bottom-up from an unsorted array of `n` elements (Floyd's heapify)?",
+      "answer": "O(n)",
+      "accepted_answers": [
+        "O(n)",
+        "linear"
+      ],
+      "explanation": "Although each sift-down is O(log n), half the nodes are leaves (0 swaps) and most others are near the bottom, summing to O(n)."
+    },
+    {
+      "id": "dsa_impl_04",
+      "category": "Graphs",
+      "type": "flashcard",
+      "prompt": "Why does Dijkstra's shortest-path algorithm fail on graphs with negative edge weights, and which algorithm handles them?",
+      "answer": "Dijkstra greedily assumes popped vertices already have final shortest distances; Bellman-Ford handles negative edge weights (and detects negative cycles).",
+      "accepted_answers": [
+        "Bellman-Ford"
+      ],
+      "explanation": "Once Dijkstra marks a node visited, a later negative edge cannot reduce its cost; Bellman-Ford relaxes all edges V-1 times."
+    },
+    {
+      "id": "dsa_impl_05",
+      "category": "Graphs",
+      "type": "flashcard",
+      "prompt": "In Kahn's algorithm for Topological Sort of a Directed Acyclic Graph (DAG), which vertices are added to the queue first?",
+      "answer": "All vertices with an in-degree of 0 (no prerequisites).",
+      "accepted_answers": [
+        "in-degree 0",
+        "vertices with zero incoming edges"
+      ],
+      "explanation": "If Kahn's algorithm finishes having visited fewer than `V` vertices, the graph contains a cycle and has no valid topological ordering."
+    },
+    {
+      "id": "dsa_impl_06",
+      "category": "Graphs",
+      "type": "flashcard",
+      "prompt": "Which data structure does Kruskal's Minimum Spanning Tree algorithm use to detect in nearly O(1) amortized time whether adding an edge creates a cycle?",
+      "answer": "Disjoint Set Union (Union-Find) with path compression and union by rank.",
+      "accepted_answers": [
+        "Union-Find",
+        "Disjoint Set Union",
+        "DSU"
+      ],
+      "explanation": "If `find(u) == find(v)`, both endpoints are already in the same connected component, so adding `(u, v)` would form a cycle."
+    },
+    {
+      "id": "dsa_impl_07",
+      "category": "Dynamic Programming",
+      "type": "flashcard",
+      "prompt": "What are the two properties a problem must have to be solvable with Dynamic Programming?",
+      "answer": "Overlapping subproblems and optimal substructure.",
+      "accepted_answers": [
+        "overlapping subproblems and optimal substructure"
+      ],
+      "explanation": "Without overlapping subproblems, caching results doesn't save work (that's plain divide-and-conquer like MergeSort)."
+    },
+    {
+      "id": "dsa_impl_08",
+      "category": "Arrays",
+      "type": "flashcard",
+      "prompt": "When can you use the Sliding Window technique instead of nested O(n^2) loops on an array?",
+      "answer": "When finding a contiguous subarray/substring that satisfies a monotonic condition (like sum <= K with positive numbers or unique characters).",
+      "accepted_answers": [
+        "contiguous subarray with monotonic condition"
+      ],
+      "explanation": "Sliding window expands `right` and shrinks `left` each at most `n` times, reducing O(n^2) brute force to O(n)."
+    },
+    {
+      "id": "dsa_impl_09",
+      "category": "Binary Search",
+      "type": "flashcard",
+      "prompt": "Why should you write `mid = low + (high - low) / 2` instead of `mid = (low + high) / 2` in C/C++/Java?",
+      "answer": "To prevent signed integer overflow when `low + high` exceeds `INT_MAX`.",
+      "accepted_answers": [
+        "prevent integer overflow"
+      ],
+      "explanation": "If `low` and `high` are both around `1.5e9`, `low + high` overflows 32-bit `int` into a negative index."
+    },
+    {
+      "id": "dsa_impl_10",
+      "category": "Hash Tables",
+      "type": "flashcard",
+      "prompt": "What is the difference between Separate Chaining and Open Addressing (Linear Probing) for hash table collision resolution?",
+      "answer": "Separate chaining stores a linked list/bucket per slot, whereas open addressing probes other empty slots directly inside the backing array.",
+      "accepted_answers": [
+        "separate chaining uses buckets/lists while open addressing probes array slots"
+      ],
+      "explanation": "Open addressing has much better CPU cache locality, which is why modern flat hash maps (like `absl::flat_hash_map`) use it."
+    },
+    {
+      "id": "dsa_impl_11",
+      "category": "Sorting",
+      "type": "flashcard",
+      "prompt": "Why is MergeSort preferred over QuickSort when sorting linked lists or external disk files?",
+      "answer": "MergeSort accesses data sequentially without needing O(1) random array indexing, and guarantees O(n log n) worst-case time and stability.",
+      "accepted_answers": [
+        "sequential access without random indexing",
+        "no random access needed"
+      ],
+      "explanation": "QuickSort relies heavily on random-access swaps and degrades to O(n^2) on bad pivots, whereas MergeSort merges sequential streams cleanly."
+    },
+    {
+      "id": "dsa_impl_12",
+      "category": "Strings",
+      "type": "flashcard",
+      "prompt": "What is the time complexity to search for a word of length `m` inside a Trie (prefix tree) containing `N` total words?",
+      "answer": "O(m)",
+      "accepted_answers": [
+        "O(m)",
+        "proportional to word length"
+      ],
+      "explanation": "Trie lookup walks one character per edge, independent of how many total words `N` are stored in the dictionary."
+    },
+    {
+      "id": "dsa_impl_13",
+      "category": "Stacks & Queues",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python stack/queue trace:",
+      "code": "from collections import deque\nq = deque([10, 20, 30])\nq.append(40)\nq.popleft()\nq.appendleft(5)\nprint(list(q))",
+      "answer": "[5, 20, 30, 40]",
+      "explanation": "`append(40)` -> `[10, 20, 30, 40]`; `popleft()` removes `10` -> `[20, 30, 40]`; `appendleft(5)` -> `[5, 20, 30, 40]`."
+    },
+    {
+      "id": "dsa_impl_14",
+      "category": "Bit Manipulation",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ bitwise expression (Brian Kernighan's trick):",
+      "code": "#include <iostream>\nint main() {\n    int x = 12, count = 0;\n    while (x) { x &= (x - 1); count++; }\n    std::cout << count;\n}",
+      "answer": "2",
+      "explanation": "`x &= (x - 1)` clears the lowest set bit. `12` in binary is `1100` (two 1-bits), so the loop runs twice."
+    },
+    {
+      "id": "dsa_impl_15",
+      "category": "Recursion",
+      "type": "flashcard",
+      "prompt": "Why is Tail-Call Optimization (TCO) critical if you write recursive state machines or loops in C/C++ or Rust?",
+      "answer": "TCO reuses the current stack frame when the recursive call is the very last operation, preventing stack overflow on embedded targets.",
+      "accepted_answers": [
+        "reuses stack frame to prevent stack overflow"
+      ],
+      "explanation": "Without TCO, deep recursion quickly exhausts a 2 KB–8 KB microcontroller stack."
+    }
+  ]
+}

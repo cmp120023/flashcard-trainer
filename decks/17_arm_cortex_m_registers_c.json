@@ -1,0 +1,246 @@
+{
+  "deck_name": "17 - ARM Cortex-M Registers, Bitwise & Bare-Metal C",
+  "cards": [
+    {
+      "id": "arm_01",
+      "category": "ARM Cortex-M Registers",
+      "type": "flashcard",
+      "prompt": "In the ARM Cortex-M core register set (R0–R15), which three special registers correspond to R13, R14, and R15?",
+      "answer": "R13 = SP (Stack Pointer), R14 = LR (Link Register), R15 = PC (Program Counter)",
+      "accepted_answers": [
+        "SP, LR, PC",
+        "Stack Pointer, Link Register, Program Counter"
+      ],
+      "explanation": "R13 is SP (MSP/PSP), R14 is LR (holds return address on BL/interrupt entry), and R15 is PC."
+    },
+    {
+      "id": "arm_02",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "What are the first two 32-bit words stored at the base of the ARM Cortex-M Vector Table (0x0800_0000 on STM32)?",
+      "answer": "Initial Main Stack Pointer (MSP) value and Reset_Handler address",
+      "accepted_answers": [
+        "Initial SP and Reset_Handler",
+        "MSP and Reset Vector"
+      ],
+      "explanation": "On hardware reset, the Cortex-M core loads word 0 into MSP and jumps to the address in word 1 (Reset_Handler)."
+    },
+    {
+      "id": "arm_03",
+      "category": "ARM Cortex-M Exceptions",
+      "type": "flashcard",
+      "prompt": "Which registers are automatically pushed onto the stack by ARM Cortex-M hardware upon entering an Interrupt Service Routine (ISR)?",
+      "answer": "R0, R1, R2, R3, R12, LR, PC, xPSR",
+      "accepted_answers": [
+        "R0-R3, R12, LR, PC, xPSR",
+        "xPSR, PC, LR, R12, R3, R2, R1, R0"
+      ],
+      "explanation": "Hardware stacking of these 8 caller-saved registers allows standard C functions to serve as ISRs without assembly wrappers."
+    },
+    {
+      "id": "arm_04",
+      "category": "Bare-Metal C Bitwise",
+      "type": "flashcard",
+      "prompt": "Write the standard C bitwise expression to SET bit `n` in a 32-bit hardware register `REG` without altering other bits.",
+      "answer": "REG |= (1U << n);",
+      "accepted_answers": [
+        "REG |= (1U << n)",
+        "REG |= (1 << n)",
+        "REG |= (1UL << n)"
+      ],
+      "explanation": "Using unsigned 1U avoids undefined behavior when shifting into bit 31 (the sign bit of a 32-bit signed int)."
+    },
+    {
+      "id": "arm_05",
+      "category": "Bare-Metal C Bitwise",
+      "type": "flashcard",
+      "prompt": "Write the standard C bitwise expression to CLEAR bit `n` in a 32-bit hardware register `REG` without altering other bits.",
+      "answer": "REG &= ~(1U << n);",
+      "accepted_answers": [
+        "REG &= ~(1U << n)",
+        "REG &= ~(1 << n)",
+        "REG &= ~(1UL << n)"
+      ],
+      "explanation": "~(1U << n) creates a mask with 0 at bit n and 1s everywhere else; bitwise AND clears only bit n."
+    },
+    {
+      "id": "arm_06",
+      "category": "Bare-Metal C Bitwise",
+      "type": "flashcard",
+      "prompt": "Write the standard C bitwise expression to TOGGLE bit `n` in a 32-bit hardware register `REG`.",
+      "answer": "REG ^= (1U << n);",
+      "accepted_answers": [
+        "REG ^= (1U << n)",
+        "REG ^= (1 << n)"
+      ],
+      "explanation": "Bitwise XOR flips bit n while preserving every bit masked with 0."
+    },
+    {
+      "id": "arm_07",
+      "category": "Bare-Metal C Keywords",
+      "type": "flashcard",
+      "prompt": "Why must pointers to Memory-Mapped I/O (MMIO) registers and variables shared with ISRs be qualified with `volatile` in C?",
+      "answer": "To prevent the compiler from caching the value in a CPU register or optimizing away repeated reads/writes",
+      "accepted_answers": [
+        "Prevent compiler optimization/caching",
+        "Force every read and write to hit memory"
+      ],
+      "explanation": "volatile tells the compiler the value can change asynchronously outside normal program flow (by hardware or an ISR)."
+    },
+    {
+      "id": "arm_08",
+      "category": "Bare-Metal C Keywords",
+      "type": "flashcard",
+      "prompt": "Does `volatile` alone guarantee atomic read-modify-write operations or thread synchronization across interrupts?",
+      "answer": "No",
+      "accepted_answers": [
+        "No, it does not",
+        "No. Use critical sections or atomics"
+      ],
+      "explanation": "A read-modify-write like `REG |= (1U << 3)` compiles to LDR, ORR, STR; an ISR firing mid-sequence can cause a lost update unless protected."
+    },
+    {
+      "id": "arm_09",
+      "category": "STM32 Peripherals",
+      "type": "flashcard",
+      "prompt": "Why do STM32 GPIO peripherals provide a dedicated BSRR (Bit Set/Reset Register) in addition to ODR (Output Data Register)?",
+      "answer": "BSRR performs atomic single-cycle pin set/reset writes without a read-modify-write race condition",
+      "accepted_answers": [
+        "Atomic pin set/reset without read-modify-write",
+        "Avoids race conditions with ISRs"
+      ],
+      "explanation": "Writing 1 to the lower 16 bits of BSRR sets pins and writing 1 to the upper 16 bits resets pins atomically (0 bits are ignored)."
+    },
+    {
+      "id": "arm_10",
+      "category": "Linker & Memory Map",
+      "type": "flashcard",
+      "prompt": "In an embedded C executable, what is the difference between the `.data` section and the `.bss` section?",
+      "answer": ".data holds initialized global/static variables (copied from Flash to RAM at startup); .bss holds zero-initialized globals/statics (zeroed in RAM at startup)",
+      "accepted_answers": [
+        ".data is initialized non-zero globals, .bss is zero-initialized globals"
+      ],
+      "explanation": ".bss consumes zero Flash storage for initial values—only its start and end addresses are stored so Reset_Handler can zero-fill it."
+    },
+    {
+      "id": "arm_11",
+      "category": "Linker & Memory Map",
+      "type": "flashcard",
+      "prompt": "In which memory region and section are `const` lookup tables and string literals stored on an ARM Cortex-M microcontroller?",
+      "answer": "Flash memory (.rodata section)",
+      "accepted_answers": [
+        ".rodata in Flash",
+        "Flash (.rodata)",
+        "rodata"
+      ],
+      "explanation": "Placing constant tables in .rodata keeps them in non-volatile Flash rather than consuming scarce SRAM."
+    },
+    {
+      "id": "arm_12",
+      "category": "ARM Interrupt Controller",
+      "type": "flashcard",
+      "prompt": "In the ARM Cortex-M NVIC, does a lower numerical priority value (e.g., 0) represent higher or lower interrupt urgency than priority 5?",
+      "answer": "Higher urgency (priority 0 preempts priority 5)",
+      "accepted_answers": [
+        "Higher urgency",
+        "Higher priority"
+      ],
+      "explanation": "On ARM Cortex-M, lower priority numbers have higher urgency; priority 0 is the highest configurable interrupt priority."
+    },
+    {
+      "id": "arm_13",
+      "category": "ARM Cortex-M System",
+      "type": "flashcard",
+      "prompt": "What built-in 24-bit downward-counting timer inside every ARM Cortex-M core is typically used to generate a 1 ms system tick?",
+      "answer": "SysTick",
+      "accepted_answers": [
+        "SysTick timer"
+      ],
+      "explanation": "SysTick is part of the Cortex-M System Control Space (SCS), making 1 ms tick drivers portable across all Cortex-M vendors."
+    },
+    {
+      "id": "arm_14",
+      "category": "Bare-Metal C Bitwise",
+      "type": "code_output",
+      "prompt": "Predict the exact hex output (formatted as 0xXXXX):",
+      "code": "#include <stdio.h>\n#include <stdint.h>\nint main() {\n    uint16_t reg = 0x1234;\n    reg = (reg & ~0x00F0U) | (0x00A0U);\n    printf(\"0x%04X\", reg);\n}",
+      "answer": "0x12A4",
+      "accepted_answers": [
+        "0x12A4",
+        "12A4"
+      ],
+      "explanation": "Masking with ~0x00F0 clears bits [7:4] (yielding 0x1204), and ORing with 0x00A0 inserts 0xA into that nibble -> 0x12A4."
+    },
+    {
+      "id": "arm_15",
+      "category": "ARM Cortex-M Faults",
+      "type": "flashcard",
+      "prompt": "On ARM Cortex-M, what exception is triggered by an invalid memory access, unaligned access, or stack overflow when configurable faults are disabled?",
+      "answer": "HardFault",
+      "accepted_answers": [
+        "HardFault_Handler"
+      ],
+      "explanation": "HardFault (priority -1) is the catch-all fault handler; inspecting SCB->CFSR and the stacked PC reveals the faulting instruction."
+    },
+    {
+      "id": "arm_16",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "Why do I2C SDA and SCL lines require external or internal pull-up resistors?",
+      "answer": "Because I2C uses open-drain drivers that can only pull the bus LOW, relying on pull-ups to return the line HIGH",
+      "accepted_answers": [
+        "Open-drain bus",
+        "Devices only drive LOW; pull-ups bring the line HIGH"
+      ],
+      "explanation": "Open-drain signaling prevents bus contention when multiple devices share SDA/SCL and enables clock stretching and arbitration."
+    },
+    {
+      "id": "arm_17",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "In SPI communication, what do CPOL and CPHA configure?",
+      "answer": "Clock Polarity (idle clock level) and Clock Phase (which clock edge samples/shifts data)",
+      "accepted_answers": [
+        "Clock Polarity and Clock Phase"
+      ],
+      "explanation": "CPOL (0 or 1) and CPHA (0 or 1) combine to define SPI Modes 0, 1, 2, and 3."
+    },
+    {
+      "id": "arm_18",
+      "category": "Embedded Concurrency",
+      "type": "flashcard",
+      "prompt": "In a Single-Producer Single-Consumer (SPSC) lock-free ring buffer (e.g., UART RX ISR -> main loop), why is no mutex required?",
+      "answer": "Only the producer updates the head/write index and only the consumer updates the tail/read index",
+      "accepted_answers": [
+        "Single writer per index",
+        "Producer owns write index, consumer owns read index"
+      ],
+      "explanation": "With power-of-two capacity and proper memory barriers/atomics, disjoint index ownership prevents concurrent writes to the same variable."
+    },
+    {
+      "id": "arm_19",
+      "category": "Fixed-Point Math",
+      "type": "code_output",
+      "prompt": "In Q16.16 fixed-point arithmetic (1.0 == 65536 == 0x00010000), what integer value represents 2.5?",
+      "code": "#include <stdio.h>\n#include <stdint.h>\nint main() {\n    int32_t q = (int32_t)(2.5 * (1 << 16));\n    printf(\"%d\", q);\n}",
+      "answer": "163840",
+      "accepted_answers": [
+        "163840",
+        "0x00028000"
+      ],
+      "explanation": "2.5 * 65536 = 163840 (0x00028000), allowing fast deterministic integer math on MCUs without an FPU."
+    },
+    {
+      "id": "arm_20",
+      "category": "ARM Assembly / Startup",
+      "type": "flashcard",
+      "prompt": "Why does the Thumb-2 instruction set on ARM Cortex-M require the least significant bit (LSB, bit 0) of every function address in the Vector Table to be 1?",
+      "answer": "Bit 0 indicates Thumb execution state; clearing bit 0 causes an INVSTATE UsageFault/HardFault",
+      "accepted_answers": [
+        "Indicates Thumb state",
+        "Thumb mode bit"
+      ],
+      "explanation": "Cortex-M cores only execute Thumb/Thumb-2 instructions; the `.thumb_func` assembler directive automatically sets bit 0 on handler labels."
+    }
+  ]
+}

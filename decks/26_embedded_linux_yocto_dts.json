@@ -1,0 +1,140 @@
+{
+  "deck_name": "Embedded Linux: Yocto, Device Trees, U-Boot & Kernel Modules",
+  "cards": [
+    {
+      "id": "elin_01",
+      "category": "Boot Sequence",
+      "type": "flashcard",
+      "prompt": "List the four standard stages of an Embedded Linux boot chain on an ARM SoC.",
+      "answer": "1. BootROM -> 2. SPL (Secondary Program Loader) -> 3. U-Boot -> 4. Linux Kernel + Root Filesystem",
+      "accepted_answers": [
+        "BootROM, SPL, U-Boot, Linux Kernel"
+      ],
+      "explanation": "Because the SoC's internal SRAM is tiny (e.g., 64\u2013256 KB), BootROM loads SPL to initialize external DDR DRAM before loading full U-Boot into DDR."
+    },
+    {
+      "id": "elin_02",
+      "category": "Device Tree",
+      "type": "flashcard",
+      "prompt": "What is the role of the `compatible` property inside a Linux Device Tree (`.dts`) node?",
+      "answer": "It binds the hardware node to a matching Linux kernel driver (`of_match_table`) using a `'vendor,device'` string",
+      "accepted_answers": [
+        "matches the hardware node to its kernel driver"
+      ],
+      "explanation": "When the kernel parses the compiled `.dtb` at boot, it searches registered `platform_driver` / `i2c_driver` tables for the exact `compatible` string."
+    },
+    {
+      "id": "elin_03",
+      "category": "Device Tree",
+      "type": "flashcard",
+      "prompt": "In a Device Tree file, what is the difference between `status = \"okay\";` and `status = \"disabled\";`?",
+      "answer": "`\"disabled\"` prevents the kernel from instantiating/probing the device node (common in SoC `.dtsi` files until a board `.dts` enables specific peripherals with `\"okay\"`)",
+      "accepted_answers": [
+        "okay enables the peripheral node disabled skips probing it"
+      ],
+      "explanation": "SoC vendor `.dtsi` headers declare all on-chip peripherals as `disabled` by default so board-specific `.dts` files only activate wired pins."
+    },
+    {
+      "id": "elin_04",
+      "category": "Yocto Project",
+      "type": "flashcard",
+      "prompt": "In the Yocto Project / BitBake, distinguish between a Recipe (`.bb`), a Layer (`meta-*`), and a Board Support Package (BSP).",
+      "answer": "A Recipe (`.bb`) defines how to fetch, patch, compile, and package one software component; a Layer groups related recipes; a BSP layer defines machine-specific kernel, U-Boot, and Device Tree configs",
+      "accepted_answers": [
+        "recipe builds one package layer groups recipes BSP defines hardware support"
+      ],
+      "explanation": "Keeping custom changes in your own `meta-custom` layer using `.bbappend` files avoids modifying upstream Poky/vendor layers directly."
+    },
+    {
+      "id": "elin_05",
+      "category": "Yocto Project",
+      "type": "flashcard",
+      "prompt": "What is the purpose of a `.bbappend` file in Yocto?",
+      "answer": "To extend or override variables, patches, or `do_install` steps of an existing recipe in another layer without copying the entire `.bb` file",
+      "accepted_answers": [
+        "extends or modifies an existing recipe from another layer"
+      ],
+      "explanation": "A `.bbappend` must match the target recipe's name (or use `%` wildcard versioning) and requires `FILESEXTRAPATHS:prepend := \"${THISDIR}/files:\"` to add local patches."
+    },
+    {
+      "id": "elin_06",
+      "category": "Kernel Drivers",
+      "type": "flashcard",
+      "prompt": "What are the entry and exit macros used in an out-of-tree Linux Loadable Kernel Module (LKM)?",
+      "answer": "`module_init(...)` and `module_exit(...)` (along with `MODULE_LICENSE(\"GPL\")`)",
+      "accepted_answers": [
+        "module_init and module_exit"
+      ],
+      "explanation": "Omitting `MODULE_LICENSE(\"GPL\")` taints the kernel and blocks access to `EXPORT_SYMBOL_GPL` kernel functions."
+    },
+    {
+      "id": "elin_07",
+      "category": "Kernel Drivers",
+      "type": "flashcard",
+      "prompt": "Why must you NEVER use `printf()`, `malloc()`, or floating-point math inside a Linux kernel module?",
+      "answer": "User-space libc is unavailable in kernel space (`printk` and `kmalloc`/`devm_kzalloc` are used instead), and kernel context does not save/restore FPU registers by default",
+      "accepted_answers": [
+        "no libc in kernel space and FPU registers are not saved"
+      ],
+      "explanation": "Using floating-point instructions in kernel space corrupts user-space FPU/SIMD registers unless explicitly wrapped in `kernel_fpu_begin()`/`end()`."
+    },
+    {
+      "id": "elin_08",
+      "category": "Kernel Concurrency",
+      "type": "flashcard",
+      "prompt": "What happens if a Linux kernel driver calls a sleeping function (like `mutex_lock()` or `msleep()`) inside an Interrupt Service Routine (top-half)?",
+      "answer": "Kernel Panic (`scheduling while atomic`), because interrupt context has no backing process `task_struct` to put to sleep",
+      "accepted_answers": [
+        "Kernel Panic",
+        "scheduling while atomic"
+      ],
+      "explanation": "ISRs must only use non-sleeping `spin_lock_irqsave()` and defer blocking work to threaded IRQs (`request_threaded_irq`) or workqueues."
+    },
+    {
+      "id": "elin_09",
+      "category": "Real-Time Linux",
+      "type": "flashcard",
+      "prompt": "How does the `PREEMPT_RT` patch convert hardware interrupt handlers and spinlocks to achieve deterministic real-time latency in Linux?",
+      "answer": "It converts hardware IRQs into preemptible kernel threads and replaces sleeping `spinlock_t` primitives with priority-inheriting `rt_mutex` locks",
+      "accepted_answers": [
+        "threaded IRQs and priority-inheriting rt_mutex spinlocks"
+      ],
+      "explanation": "Only raw spinlocks (`raw_spinlock_t`) remain non-preemptible for tiny critical sections like hardware scheduler queues."
+    },
+    {
+      "id": "elin_10",
+      "category": "User-Space Hardware I/O",
+      "type": "flashcard",
+      "prompt": "Why is the legacy `/sys/class/gpio` sysfs interface deprecated in modern Linux kernels in favor of `/dev/gpiochipN` (`libgpiod`)?",
+      "answer": "Sysfs GPIO suffers from race conditions, slow ASCII file overhead, no bulk multi-pin reads, and does not auto-release pins if a user process crashes",
+      "accepted_answers": [
+        "character device libgpiod fixes race conditions, supports bulk I/O, and releases pins on crash"
+      ],
+      "explanation": "`libgpiod` uses file descriptors on `/dev/gpiochip*`, so the kernel automatically cleans up pin ownership when the process exits."
+    },
+    {
+      "id": "elin_11",
+      "category": "Storage & Reliability",
+      "type": "flashcard",
+      "prompt": "Why should production Embedded Linux devices mount their root filesystem as Read-Only (`ro`) with an OverlayFS or separate data partition?",
+      "answer": "To prevent filesystem corruption during sudden power loss and avoid wearing out eMMC/SD flash cells",
+      "accepted_answers": [
+        "prevents corruption on sudden power loss and reduces flash wear"
+      ],
+      "explanation": "Unbuffered writes to ext4 during unexpected power cuts can corrupt critical system binaries unless rootfs is read-only or uses atomic A/B updates (RAUC/SWUpdate)."
+    },
+    {
+      "id": "elin_12",
+      "category": "U-Boot",
+      "type": "flashcard",
+      "prompt": "Which U-Boot command loads the Linux kernel image (`Image` or `zImage`) and Device Tree Blob (`.dtb`) into RAM and transfers execution to the kernel?",
+      "answer": "`booti` (for 64-bit ARM64 `Image`) or `bootz` (for 32-bit ARM `zImage`)",
+      "accepted_answers": [
+        "booti",
+        "bootz",
+        "bootm"
+      ],
+      "explanation": "For example, `booti ${kernel_addr_r} - ${fdt_addr_r}` passes the Device Tree address in register `x0` to the ARM64 kernel."
+    }
+  ]
+}

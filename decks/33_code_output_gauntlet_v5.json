@@ -1,0 +1,151 @@
+{
+  "deck_name": "33 - Code Output Gauntlet v5 (C++, C, C#, Python, Java, JS)",
+  "cards": [
+    {
+      "id": "cog5_01",
+      "category": "C++ Object Slicing",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ snippet:",
+      "code": "#include <iostream>\nstruct Base {\n    virtual void id() const { std::cout << \"Base\"; }\n};\nstruct Derived : Base {\n    void id() const override { std::cout << \"Derived\"; }\n};\nvoid printId(Base b) { b.id(); }\nint main() {\n    Derived d;\n    printId(d);\n}",
+      "answer": "Base",
+      "accepted_answers": [
+        "Base",
+        "\"Base\""
+      ],
+      "explanation": "Passing Derived by value to a Base parameter copies only the Base subobject (object slicing) and resets the vptr to Base's vtable."
+    },
+    {
+      "id": "cog5_02",
+      "category": "C++ Member Initialization Order",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ snippet:",
+      "code": "#include <iostream>\nstruct Pair {\n    int a;\n    int b;\n    Pair(int x) : b(x), a(b + 5) {}\n};\nint main() {\n    Pair p(10);\n    std::cout << p.b;\n}",
+      "answer": "10",
+      "accepted_answers": [
+        "10"
+      ],
+      "explanation": "Members initialize in declaration order (a first using uninitialized b, then b = 10). Printing p.b outputs 10 cleanly."
+    },
+    {
+      "id": "cog5_03",
+      "category": "C sizeof Side Effects",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C snippet:",
+      "code": "#include <stdio.h>\nint main(void) {\n    int x = 5;\n    size_t s = sizeof(x++);\n    printf(\"%d\", x);\n    return 0;\n}",
+      "answer": "5",
+      "accepted_answers": [
+        "5"
+      ],
+      "explanation": "sizeof evaluates the type of its operand at compile time and does not evaluate the expression at runtime (unless it's a VLA), so x++ never executes."
+    },
+    {
+      "id": "cog5_04",
+      "category": "C Unsigned Integer Promotion",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C snippet:",
+      "code": "#include <stdio.h>\nint main(void) {\n    unsigned int u = 1;\n    int s = -2;\n    printf(\"%s\", (s < u) ? \"LESS\" : \"GREATER\");\n    return 0;\n}",
+      "answer": "GREATER",
+      "accepted_answers": [
+        "GREATER",
+        "\"GREATER\""
+      ],
+      "explanation": "Under usual arithmetic conversions, signed int -2 is converted to unsigned int (UINT_MAX - 1), which is greater than 1u."
+    },
+    {
+      "id": "cog5_05",
+      "category": "C# Deferred LINQ Execution",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# snippet:",
+      "code": "var nums = new List<int> { 1, 2, 3 };\nvar query = nums.Where(n => n > 1);\nnums.Add(4);\nConsole.WriteLine(query.Count());",
+      "answer": "3",
+      "accepted_answers": [
+        "3"
+      ],
+      "explanation": "LINQ Where uses deferred execution: the query runs when Count() is called, after 4 has been added (matching 2, 3, 4)."
+    },
+    {
+      "id": "cog5_06",
+      "category": "C# try-finally Execution Order",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# snippet:",
+      "code": "static int Test() {\n    int x = 1;\n    try { return x; }\n    finally { x = 99; Console.Write(x + \"-\"); }\n}\nConsole.Write(Test());",
+      "answer": "99-1",
+      "accepted_answers": [
+        "99-1"
+      ],
+      "explanation": "The return value (1) is evaluated and cached before finally runs; finally mutates local x and prints '99-', then the cached 1 is returned and printed."
+    },
+    {
+      "id": "cog5_07",
+      "category": "Python List Reference Aliasing",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python snippet:",
+      "code": "grid = [[0] * 2] * 3\ngrid[0][1] = 7\nprint(grid[2][1])",
+      "answer": "7",
+      "accepted_answers": [
+        "7"
+      ],
+      "explanation": "Multiplying a list of lists copies references to the same inner list object three times, so mutating grid[0][1] mutates all rows."
+    },
+    {
+      "id": "cog5_08",
+      "category": "Python Chained Comparisons",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python snippet:",
+      "code": "print(1 < 2 == 2)",
+      "answer": "True",
+      "accepted_answers": [
+        "True"
+      ],
+      "explanation": "Python chains comparisons as (1 < 2) and (2 == 2), both of which evaluate to True."
+    },
+    {
+      "id": "cog5_09",
+      "category": "Java String Concatenation Precedence",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java snippet:",
+      "code": "System.out.println(1 + 2 + \"3\" + 4 + 5);",
+      "answer": "3345",
+      "accepted_answers": [
+        "3345"
+      ],
+      "explanation": "+ is left-associative: 1 + 2 evaluates numerically to 3, then 3 + \"3\" becomes \"33\", followed by string concatenations \"334\" and \"3345\"."
+    },
+    {
+      "id": "cog5_10",
+      "category": "Java Compound Assignment Narrowing",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java snippet:",
+      "code": "byte b = 127;\nb += 1;\nSystem.out.println(b);",
+      "answer": "-128",
+      "accepted_answers": [
+        "-128"
+      ],
+      "explanation": "Compound assignment (+=) includes an implicit narrowing cast (byte)(b + 1), wrapping two's-complement 127 + 1 around to -128."
+    },
+    {
+      "id": "cog5_11",
+      "category": "JavaScript Array.prototype.sort()",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript snippet:",
+      "code": "const arr = [10, 2, 30];\narr.sort();\nconsole.log(arr[1]);",
+      "answer": "2",
+      "accepted_answers": [
+        "2"
+      ],
+      "explanation": "Without a comparator function, Array.prototype.sort() converts elements to UTF-16 strings and sorts lexicographically: ['10', '2', '30']."
+    },
+    {
+      "id": "cog5_12",
+      "category": "JavaScript Nullish Coalescing (??)",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript snippet:",
+      "code": "const a = 0 ?? 42;\nconst b = 0 || 42;\nconsole.log(`${a}:${b}`);",
+      "answer": "0:42",
+      "accepted_answers": [
+        "0:42"
+      ],
+      "explanation": "?? only falls back on null or undefined (preserving 0), whereas || falls back on any falsy value (replacing 0 with 42)."
+    }
+  ]
+}

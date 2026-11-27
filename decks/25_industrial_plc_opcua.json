@@ -1,0 +1,141 @@
+{
+  "deck_name": "Industrial Automation: PLCs, IEC 61131-3, Modbus & OPC UA",
+  "cards": [
+    {
+      "id": "ind_01",
+      "category": "PLC Execution",
+      "type": "flashcard",
+      "prompt": "What are the four sequential stages of a deterministic PLC Scan Cycle?",
+      "answer": "1. Read Physical Inputs -> 2. Execute Program Logic -> 3. Write Physical Outputs -> 4. Housekeeping / Communications",
+      "accepted_answers": [
+        "Input scan, Program execution, Output scan, Housekeeping"
+      ],
+      "explanation": "Snapshotting inputs into an input image table at the start of the scan ensures input values remain consistent throughout the entire logic evaluation pass."
+    },
+    {
+      "id": "ind_02",
+      "category": "IEC 61131-3",
+      "type": "flashcard",
+      "prompt": "Name the five programming languages standardized under IEC 61131-3 for Programmable Logic Controllers.",
+      "answer": "Ladder Diagram (LD), Function Block Diagram (FBD), Structured Text (ST), Instruction List (IL), and Sequential Function Chart (SFC)",
+      "accepted_answers": [
+        "LD, FBD, ST, IL, SFC"
+      ],
+      "explanation": "Structured Text (ST) resembles Pascal/C and is preferred for complex math/state machines, while LD/FBD excel at discrete Boolean interlocks."
+    },
+    {
+      "id": "ind_03",
+      "category": "IEC 61131-3",
+      "type": "flashcard",
+      "prompt": "In IEC 61131-3, what is the difference between a Function (`FC`) and a Function Block (`FB`)?",
+      "answer": "A Function (`FC`) is stateless and returns the same output for given inputs; a Function Block (`FB`) retains internal persistent state across scan cycles",
+      "accepted_answers": [
+        "FC is stateless FB has persistent internal state"
+      ],
+      "explanation": "Timers (`TON`), counters (`CTU`), and PID controllers must be Function Blocks because they store elapsed time or integral accumulators between scans."
+    },
+    {
+      "id": "ind_04",
+      "category": "Safety Engineering",
+      "type": "flashcard",
+      "prompt": "Why are industrial Emergency Stop (E-Stop) buttons wired as Normally Closed (NC) contacts?",
+      "answer": "Fail-safe detection: if a wire breaks, vibrates loose, or loses power, the circuit opens and immediately trips the machine into a safe stop",
+      "accepted_answers": [
+        "fail-safe broken wire detection",
+        "broken wire opens circuit"
+      ],
+      "explanation": "A Normally Open (NO) E-stop would silently fail to stop a hazardous machine if a conductor severed."
+    },
+    {
+      "id": "ind_05",
+      "category": "Industrial Sensors",
+      "type": "flashcard",
+      "prompt": "Why do industrial analog sensors commonly use a 4\u201320 mA current loop instead of a 0\u201310 V voltage signal?",
+      "answer": "Current is immune to resistive voltage drop over long cables, and a 0 mA reading distinguishes a broken wire ('live zero') from a valid 0% reading (4 mA)",
+      "accepted_answers": [
+        "immune to voltage drop and 4mA live zero detects broken wires"
+      ],
+      "explanation": "Over hundreds of feet of factory conduit, voltage signals attenuate and pick up EMI, whereas current stays constant everywhere in a series loop."
+    },
+    {
+      "id": "ind_06",
+      "category": "Modbus",
+      "type": "flashcard",
+      "prompt": "What physical layer does Modbus RTU typically run over, and how does it frame messages without start/stop delimiter bytes?",
+      "answer": "RS-485 differential serial, using a silent bus interval of at least 3.5 character times to mark frame boundaries",
+      "accepted_answers": [
+        "RS-485 with 3.5 character silent interval",
+        "RS485"
+      ],
+      "explanation": "Because Modbus RTU transmits raw binary bytes, any gap longer than 3.5 character times resets the receiver state machine for a new frame."
+    },
+    {
+      "id": "ind_07",
+      "category": "Modbus",
+      "type": "flashcard",
+      "prompt": "In Modbus, what is the difference between Coils (0x) and Holding Registers (4x)?",
+      "answer": "Coils are 1-bit read/write discrete outputs; Holding Registers are 16-bit read/write analog/configuration words",
+      "accepted_answers": [
+        "Coils are 1-bit Holding Registers are 16-bit"
+      ],
+      "explanation": "Discrete Inputs (1x) are 1-bit read-only, and Input Registers (3x) are 16-bit read-only."
+    },
+    {
+      "id": "ind_08",
+      "category": "OPC UA",
+      "type": "flashcard",
+      "prompt": "How does OPC UA improve upon legacy OPC Classic (DCOM) for smart manufacturing and CPS?",
+      "answer": "OPC UA is platform-independent (runs on Linux/RTOS/Windows), uses firewall-friendly TCP/HTTPS ports, supports rich semantic Information Models, and includes built-in X.509 mTLS encryption",
+      "accepted_answers": [
+        "cross-platform, built-in security, rich information modeling"
+      ],
+      "explanation": "Legacy OPC Classic relied on Windows-only Microsoft DCOM, which was notoriously difficult to route through firewalls and lacked modern cryptography."
+    },
+    {
+      "id": "ind_09",
+      "category": "OPC UA",
+      "type": "flashcard",
+      "prompt": "In OPC UA (`open62541`), what is the difference between Polling (`Read` service) and `MonitoredItems` inside a `Subscription`?",
+      "answer": "Polling repeatedly queries values on a timer; Subscriptions push data change notifications from server to client only when a value changes beyond a deadband",
+      "accepted_answers": [
+        "Subscriptions push changes on deadband instead of constant polling"
+      ],
+      "explanation": "Subscriptions drastically reduce network bandwidth while preserving deterministic publish intervals and sequence numbers."
+    },
+    {
+      "id": "ind_10",
+      "category": "PLC Timers",
+      "type": "code_output",
+      "prompt": "An IEC 61131-3 `TON` (On-Delay Timer) has `PT := T#500ms`. `IN` turns TRUE at t = 0 ms, stays TRUE until t = 300 ms, then turns FALSE. What is `Q` at t = 300 ms and t = 600 ms?",
+      "code": "Timer1(IN := SensorActive, PT := T#500ms);\nMotorCmd := Timer1.Q;",
+      "answer": "FALSE at 300 ms and FALSE at 600 ms",
+      "accepted_answers": [
+        "FALSE, FALSE",
+        "FALSE and FALSE"
+      ],
+      "explanation": "A `TON` timer only sets `Q := TRUE` if `IN` remains continuously TRUE for the full preset time (`500 ms`). Dropping `IN` at 300 ms immediately resets `ET` to 0."
+    },
+    {
+      "id": "ind_11",
+      "category": "Industrial Networking",
+      "type": "flashcard",
+      "prompt": "Why does Time-Sensitive Networking (TSN) or EtherCAT outperform standard TCP/IP Ethernet for multi-axis motion control?",
+      "answer": "Standard Ethernet is non-deterministic under congestion, whereas EtherCAT/TSN guarantee bounded sub-millisecond cycle times and nanosecond clock synchronization (IEEE 1588 PTP)",
+      "accepted_answers": [
+        "deterministic bounded latency and IEEE 1588 clock synchronization"
+      ],
+      "explanation": "EtherCAT processes frames 'on the fly' in hardware at each slave node without store-and-forward switch delays."
+    },
+    {
+      "id": "ind_12",
+      "category": "Safety Integrity",
+      "type": "flashcard",
+      "prompt": "What do SIL (IEC 61508) and PL (ISO 13849) measure in industrial control systems?",
+      "answer": "Safety Integrity Level (SIL 1\u20134) and Performance Level (PL a\u2013e) quantify the reliability and probability of dangerous failure per hour for safety-related control functions",
+      "accepted_answers": [
+        "Safety Integrity Level and Performance Level"
+      ],
+      "explanation": "High-risk robotic cells typically require SIL 3 / PL e using redundant dual-channel safety relays or safety PLCs with cross-monitoring."
+    }
+  ]
+}

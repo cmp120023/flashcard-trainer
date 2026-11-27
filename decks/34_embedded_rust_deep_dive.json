@@ -1,0 +1,208 @@
+{
+  "deck_name": "34 - Embedded Rust Deep Dive (#![no_std], Type-State & Embassy)",
+  "cards": [
+    {
+      "id": "rust_emb_01",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What crate-level inner attribute removes the Rust standard library (std) so firmware can compile for bare-metal targets without an OS?",
+      "code": "",
+      "answer": "#![no_std]",
+      "accepted_answers": [
+        "#![no_std]",
+        "no_std"
+      ],
+      "explanation": "#![no_std] links only against the hardware-agnostic `core` library instead of `std`, eliminating OS dependencies like heap allocators, threads, and filesystem APIs."
+    },
+    {
+      "id": "rust_emb_02",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What crate-level inner attribute tells the Rust compiler that a bare-metal binary defines its own entry point (such as `#[entry]` from cortex-m-rt) rather than a standard `fn main()`?",
+      "code": "",
+      "answer": "#![no_main]",
+      "accepted_answers": [
+        "#![no_main]",
+        "no_main"
+      ],
+      "explanation": "Without an OS runtime to invoke `main(argc, argv)`, `#![no_main]` disables the standard C-runtime entry shim so the microcontroller's Reset_Handler can jump directly to your custom entry function."
+    },
+    {
+      "id": "rust_emb_03",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "In `#![no_std]` firmware, what attribute must be placed on a function `fn panic(_info: &PanicInfo) -> !` to define behavior when a runtime panic occurs?",
+      "code": "",
+      "answer": "#[panic_handler]",
+      "accepted_answers": [
+        "#[panic_handler]",
+        "panic_handler"
+      ],
+      "explanation": "`std` normally provides the default panic handler. In `#![no_std]`, you must supply one function annotated with `#[panic_handler]` (or link a crate like `panic-halt` or `panic-probe`)."
+    },
+    {
+      "id": "rust_emb_04",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "In Rust embedded HALs, what zero-sized marker type (e.g., `PhantomData<Output>`) allows a struct to carry compile-time state parameters without consuming RAM or flash?",
+      "code": "struct Pin<MODE> {\n    _mode: PhantomData<MODE>,\n}",
+      "answer": "PhantomData",
+      "accepted_answers": [
+        "PhantomData",
+        "core::marker::PhantomData",
+        "PhantomData<T>"
+      ],
+      "explanation": "`PhantomData<T>` is a zero-sized type (0 bytes at runtime) that lets the Type-State pattern enforce valid hardware state transitions (e.g., Input vs. Output) purely at compile time."
+    },
+    {
+      "id": "rust_emb_05",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "In the Rust Type-State pattern for a GPIO pin, how does a method like `into_push_pull_output(self)` prevent code from continuing to call input-only methods on the old pin state?",
+      "code": "",
+      "answer": "It consumes self by value (moves ownership)",
+      "accepted_answers": [
+        "It consumes self by value",
+        "It takes self by value",
+        "Ownership transfer",
+        "Moves ownership of self"
+      ],
+      "explanation": "Taking `self` by value moves ownership into the transition method and returns a new type (`Pin<Output<PushPull>>`), invalidating the old `Pin<Input>` binding at compile time."
+    },
+    {
+      "id": "rust_emb_06",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What two crate layers sit between vendor SVD register definitions and portable board drivers in the standard Embedded Rust ecosystem?",
+      "code": "Hardware -> [ 1 ] -> [ 2 ] -> Board / Application",
+      "answer": "PAC and HAL",
+      "accepted_answers": [
+        "PAC and HAL",
+        "Peripheral Access Crate and Hardware Abstraction Layer",
+        "PAC, HAL"
+      ],
+      "explanation": "The Peripheral Access Crate (PAC, generated via `svd2rust`) exposes raw memory-mapped registers, while the Hardware Abstraction Layer (HAL) wraps them into safe, idiomatic `embedded-hal` traits."
+    },
+    {
+      "id": "rust_emb_07",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "Why does `Peripherals::take()` in a Cortex-M PAC return `Option<Peripherals>` instead of `Peripherals` directly?",
+      "code": "let dp = stm32::Peripherals::take().unwrap();",
+      "answer": "To enforce a runtime singleton so only one owner can take the hardware peripherals",
+      "accepted_answers": [
+        "Singleton enforcement",
+        "To enforce a singleton",
+        "Prevents multiple mutable aliases to hardware registers",
+        "Ensures peripherals can only be taken once"
+      ],
+      "explanation": "Returning `Some` only on the first call guarantees exclusive ownership of memory-mapped registers across the firmware, preventing two drivers from silently clobbering the same peripheral."
+    },
+    {
+      "id": "rust_emb_08",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What crate provides an interior-mutability mutex for sharing static data safely between main code and interrupt handlers on single-core microcontrollers by disabling interrupts briefly?",
+      "code": "",
+      "answer": "critical-section",
+      "accepted_answers": [
+        "critical-section",
+        "critical_section",
+        "cortex-m::interrupt::Mutex"
+      ],
+      "explanation": "`critical_section::Mutex<RefCell<T>>` proves to the Rust borrow checker that interrupts cannot preempt the critical section, allowing safe shared mutable access across ISR boundaries."
+    },
+    {
+      "id": "rust_emb_09",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What type in `core::cell` performs runtime borrow checking (panicking if two mutable borrows overlap) so you can mutate data inside a `critical_section::Mutex`?",
+      "code": "",
+      "answer": "RefCell",
+      "accepted_answers": [
+        "RefCell",
+        "core::cell::RefCell",
+        "RefCell<T>"
+      ],
+      "explanation": "Because `Mutex` only gives shared `&T` access, pairing it with `RefCell<T>` provides safe interior mutability (`borrow_mut()`) once inside the critical section."
+    },
+    {
+      "id": "rust_emb_10",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "How does the `Embassy` embedded async runtime achieve multitasking on Cortex-M without dynamic heap allocation (`alloc`)?",
+      "code": "#[embassy_executor::task]\nasync fn blink_task() { ... }",
+      "answer": "It compiles async functions into static state machines stored in pre-allocated task arenas",
+      "accepted_answers": [
+        "Static state machines",
+        "Compile-time state machines with static task storage",
+        "Compiler-generated state machines"
+      ],
+      "explanation": "Rust `async/await` lowers each task into a fixed-size state machine struct whose exact size is known at compile time, allowing Embassy to allocate task pools statically in `.bss`."
+    },
+    {
+      "id": "rust_emb_11",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What deferred-formatting logging framework sends compact string indices over RTT instead of formatting strings on the MCU, saving flash and CPU cycles?",
+      "code": "defmt::info!(\"Sensor temp: {=u16} C\", temp);",
+      "answer": "defmt",
+      "accepted_answers": [
+        "defmt",
+        "defmt-rtt"
+      ],
+      "explanation": "`defmt` strips format strings out of the MCU binary into ELF metadata and transmits only numeric tags and raw argument bytes to the host debugger (`probe-rs`) for formatting."
+    },
+    {
+      "id": "rust_emb_12",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "What Cargo subcommand inspects an ELF binary to show which functions and crates consume the largest share of Flash (`.text` / `.rodata`)?",
+      "code": "",
+      "answer": "cargo bloat",
+      "accepted_answers": [
+        "cargo bloat",
+        "cargo-bloat"
+      ],
+      "explanation": "`cargo bloat --release` parses symbol sizes in the compiled firmware ELF so you can spot unexpected formatting or panic bloat in tight flash budgets."
+    },
+    {
+      "id": "rust_emb_13",
+      "category": "Embedded Rust",
+      "type": "flashcard",
+      "prompt": "Why does `vcell::VolatileCell` (or `core::ptr::read_volatile` / `write_volatile`) exist when accessing hardware registers in Embedded Rust?",
+      "code": "",
+      "answer": "To prevent the compiler from optimizing away, reordering, or caching memory-mapped I/O reads and writes",
+      "accepted_answers": [
+        "Prevents compiler optimization of MMIO accesses",
+        "Prevents optimizing away register reads and writes",
+        "Forces actual memory reads and writes"
+      ],
+      "explanation": "Without volatile semantics, LLVM assumes normal RAM behavior and may eliminate repeated status-register polling loops or dead-store configuration writes."
+    },
+    {
+      "id": "rust_emb_14",
+      "category": "Embedded Rust",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Rust ownership and slice snippet:",
+      "code": "fn main() {\n    let mut buf = [10u8, 20, 30, 40];\n    let window = &mut buf[1..3];\n    window[0] += 5;\n    window[1] *= 2;\n    println!(\"{:?}\", buf);\n}",
+      "answer": "[10, 25, 60, 40]",
+      "accepted_answers": [
+        "[10, 25, 60, 40]"
+      ],
+      "explanation": "`&mut buf[1..3]` borrows elements at indices 1 (`20`) and 2 (`30`) mutably. `20 + 5 = 25` and `30 * 2 = 60`, updating `buf` in place without copying."
+    },
+    {
+      "id": "rust_emb_15",
+      "category": "Embedded Rust",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this zero-sized Type-State size check:",
+      "code": "use core::marker::PhantomData;\nstruct Input;\nstruct Gpio<MODE> { _m: PhantomData<MODE> }\nfn main() {\n    println!(\"{}\", core::mem::size_of::<Gpio<Input>>());\n}",
+      "answer": "0",
+      "accepted_answers": [
+        "0"
+      ],
+      "explanation": "Because `PhantomData<MODE>` is a zero-sized type (ZST) and `Gpio` holds no runtime fields, `size_of::<Gpio<Input>>()` is 0 bytes."
+    }
+  ]
+}

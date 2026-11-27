@@ -1,0 +1,263 @@
+{
+  "deck_name": "11 - ASP.NET Core MVC Architecture Blueprints",
+  "cards": [
+    {
+      "id": "mvc_arch_01",
+      "category": "ASP.NET Core DI",
+      "type": "flashcard",
+      "prompt": "Register a service interface IOrderService and implementation OrderService in Program.cs so a new instance is created once per HTTP request.",
+      "code": "",
+      "answer": "builder.Services.AddScoped<IOrderService, OrderService>();",
+      "accepted_answers": [
+        "builder.Services.AddScoped<IOrderService, OrderService>();",
+        "services.AddScoped<IOrderService, OrderService>();"
+      ],
+      "explanation": "AddScoped creates one instance per client HTTP request, making it the standard lifetime for services using DbContext."
+    },
+    {
+      "id": "mvc_arch_02",
+      "category": "ASP.NET Core DI",
+      "type": "flashcard",
+      "prompt": "Register IAppCache / MemoryAppCache in Program.cs so a single shared instance lives for the entire application lifetime.",
+      "code": "",
+      "answer": "builder.Services.AddSingleton<IAppCache, MemoryAppCache>();",
+      "accepted_answers": [
+        "builder.Services.AddSingleton<IAppCache, MemoryAppCache>();",
+        "services.AddSingleton<IAppCache, MemoryAppCache>();"
+      ],
+      "explanation": "AddSingleton creates one instance on first request (or at registration) and reuses it across all threads and requests."
+    },
+    {
+      "id": "mvc_arch_03",
+      "category": "ASP.NET Core DI",
+      "type": "flashcard",
+      "prompt": "Register a lightweight stateless helper IEmailFormatter / HtmlEmailFormatter in Program.cs so a brand-new instance is created every time it is injected.",
+      "code": "",
+      "answer": "builder.Services.AddTransient<IEmailFormatter, HtmlEmailFormatter>();",
+      "accepted_answers": [
+        "builder.Services.AddTransient<IEmailFormatter, HtmlEmailFormatter>();",
+        "services.AddTransient<IEmailFormatter, HtmlEmailFormatter>();"
+      ],
+      "explanation": "AddTransient creates a fresh object every time the service is requested from the DI container."
+    },
+    {
+      "id": "mvc_arch_04",
+      "category": "ASP.NET Core Middleware",
+      "type": "flashcard",
+      "prompt": "Write the exact 3 middleware calls in Program.cs in their mandatory execution order for endpoint routing, identity authentication, and role/policy authorization.",
+      "code": "",
+      "answer": "app.UseRouting();\napp.UseAuthentication();\napp.UseAuthorization();",
+      "accepted_answers": [
+        "app.UseRouting();\napp.UseAuthentication();\napp.UseAuthorization();",
+        "app.UseRouting(); app.UseAuthentication(); app.UseAuthorization();"
+      ],
+      "explanation": "UseRouting must resolve the endpoint first, UseAuthentication identifies the user principal, and UseAuthorization enforces access rules before endpoint execution."
+    },
+    {
+      "id": "mvc_arch_05",
+      "category": "ASP.NET Core Controllers",
+      "type": "flashcard",
+      "prompt": "Write the two attributes placed above a POST Create(ProductViewModel vm) controller action to restrict HTTP verbs and prevent CSRF attacks.",
+      "code": "",
+      "answer": "[HttpPost]\n[ValidateAntiForgeryToken]",
+      "accepted_answers": [
+        "[HttpPost]\n[ValidateAntiForgeryToken]",
+        "[HttpPost] [ValidateAntiForgeryToken]"
+      ],
+      "explanation": "[HttpPost] restricts the action to POST requests, and [ValidateAntiForgeryToken] verifies the hidden antiforgery token emitted by Razor forms."
+    },
+    {
+      "id": "mvc_arch_06",
+      "category": "ASP.NET Core Controllers",
+      "type": "flashcard",
+      "prompt": "Restrict an entire ProductsController so only authenticated users in the 'Admin' role can access any of its actions.",
+      "code": "",
+      "answer": "[Authorize(Roles = \"Admin\")]",
+      "accepted_answers": [
+        "[Authorize(Roles = \"Admin\")]"
+      ],
+      "explanation": "Applying [Authorize(Roles = \"Admin\")] at the controller class level protects all actions unless overridden with [AllowAnonymous]."
+    },
+    {
+      "id": "mvc_arch_07",
+      "category": "ASP.NET Core Controllers",
+      "type": "flashcard",
+      "prompt": "Which attribute allows unauthenticated visitors to access a specific Login action inside a controller decorated with [Authorize]?",
+      "code": "",
+      "answer": "[AllowAnonymous]",
+      "accepted_answers": [
+        "[AllowAnonymous]"
+      ],
+      "explanation": "[AllowAnonymous] bypasses authorization checks for that specific action method."
+    },
+    {
+      "id": "mvc_arch_08",
+      "category": "ASP.NET Core Controllers",
+      "type": "flashcard",
+      "prompt": "In an MVC controller action, what return call sends HTTP 404 when a queried entity ID is not found in the database?",
+      "code": "",
+      "answer": "return NotFound();",
+      "accepted_answers": [
+        "return NotFound();",
+        "NotFound()"
+      ],
+      "explanation": "NotFound() returns a NotFoundResult (HTTP 404)."
+    },
+    {
+      "id": "mvc_arch_09",
+      "category": "ASP.NET Core Controllers",
+      "type": "flashcard",
+      "prompt": "After a successful POST Create or Edit in MVC (Post-Redirect-Get pattern), how do you redirect to the Index action of the same controller?",
+      "code": "",
+      "answer": "return RedirectToAction(nameof(Index));",
+      "accepted_answers": [
+        "return RedirectToAction(nameof(Index));",
+        "return RedirectToAction(\"Index\");",
+        "RedirectToAction(nameof(Index))",
+        "RedirectToAction(\"Index\")"
+      ],
+      "explanation": "Post-Redirect-Get prevents duplicate form submissions if the user refreshes the browser."
+    },
+    {
+      "id": "mvc_arch_10",
+      "category": "EF Core Fluent API",
+      "type": "flashcard",
+      "prompt": "In OnModelCreating, configure a unique database index on the Sku property of entity Product using Fluent API (parameter 'b').",
+      "code": "",
+      "answer": "b.HasIndex(p => p.Sku).IsUnique();",
+      "accepted_answers": [
+        "b.HasIndex(p => p.Sku).IsUnique();",
+        "modelBuilder.Entity<Product>().HasIndex(p => p.Sku).IsUnique();"
+      ],
+      "explanation": "HasIndex(...).IsUnique() enforces uniqueness at the relational database schema level."
+    },
+    {
+      "id": "mvc_arch_11",
+      "category": "EF Core Fluent API",
+      "type": "flashcard",
+      "prompt": "In EF Core Fluent API, what DeleteBehavior prevents deleting a parent Category if child Products still reference it?",
+      "code": "",
+      "answer": "DeleteBehavior.Restrict",
+      "accepted_answers": [
+        "DeleteBehavior.Restrict",
+        "Restrict"
+      ],
+      "explanation": "DeleteBehavior.Restrict disables cascade delete so the database throws a foreign key constraint error if dependent rows exist."
+    },
+    {
+      "id": "mvc_arch_12",
+      "category": "EF Core Queries",
+      "type": "flashcard",
+      "prompt": "Write the asynchronous EF Core call to materialize a query 'query' into a List<T>.",
+      "code": "",
+      "answer": "await query.ToListAsync();",
+      "accepted_answers": [
+        "await query.ToListAsync();",
+        "query.ToListAsync()"
+      ],
+      "explanation": "ToListAsync() executes the SQL query asynchronously without blocking the ASP.NET Core thread pool."
+    },
+    {
+      "id": "mvc_arch_13",
+      "category": "EF Core Queries",
+      "type": "flashcard",
+      "prompt": "Write the asynchronous EF Core call on _context.Products to look up an entity by its primary key 'id' (checks change tracker first).",
+      "code": "",
+      "answer": "await _context.Products.FindAsync(id);",
+      "accepted_answers": [
+        "await _context.Products.FindAsync(id);",
+        "_context.Products.FindAsync(id)"
+      ],
+      "explanation": "FindAsync checks the DbContext in-memory identity map before querying the database."
+    },
+    {
+      "id": "mvc_arch_14",
+      "category": "Razor Views & Tag Helpers",
+      "type": "flashcard",
+      "prompt": "Write a Razor <input> tag bound to the model property 'Price' with class 'form-control'.",
+      "code": "",
+      "answer": "<input asp-for=\"Price\" class=\"form-control\" />",
+      "accepted_answers": [
+        "<input asp-for=\"Price\" class=\"form-control\" />",
+        "<input asp-for=\"Price\" class=\"form-control\">"
+      ],
+      "explanation": "asp-for generates the id, name, value, and unobtrusive validation data-* attributes from the model property."
+    },
+    {
+      "id": "mvc_arch_15",
+      "category": "Razor Views & Tag Helpers",
+      "type": "flashcard",
+      "prompt": "Write a Razor <span> tag that displays field-level validation errors for model property 'Price' with class 'text-danger'.",
+      "code": "",
+      "answer": "<span asp-validation-for=\"Price\" class=\"text-danger\"></span>",
+      "accepted_answers": [
+        "<span asp-validation-for=\"Price\" class=\"text-danger\"></span>"
+      ],
+      "explanation": "asp-validation-for renders ModelState errors associated with the specified property."
+    },
+    {
+      "id": "mvc_arch_16",
+      "category": "Razor Views & Tag Helpers",
+      "type": "flashcard",
+      "prompt": "Write a Razor <div> tag that displays model-level (non-property-specific) validation errors with class 'text-danger'.",
+      "code": "",
+      "answer": "<div asp-validation-summary=\"ModelOnly\" class=\"text-danger\"></div>",
+      "accepted_answers": [
+        "<div asp-validation-summary=\"ModelOnly\" class=\"text-danger\"></div>",
+        "<div asp-validation-summary=\"All\" class=\"text-danger\"></div>"
+      ],
+      "explanation": "ValidationSummary.ModelOnly shows errors keyed to string.Empty without duplicating individual field errors."
+    },
+    {
+      "id": "mvc_arch_17",
+      "category": "Data Annotations",
+      "type": "flashcard",
+      "prompt": "Write the Data Annotation attribute that restricts a string property to a maximum length of 100 characters.",
+      "code": "",
+      "answer": "[StringLength(100)]",
+      "accepted_answers": [
+        "[StringLength(100)]",
+        "[MaxLength(100)]"
+      ],
+      "explanation": "[StringLength(100)] enforces both client/server model validation and nvarchar(100) schema generation in EF Core."
+    },
+    {
+      "id": "mvc_arch_18",
+      "category": "Data Annotations",
+      "type": "flashcard",
+      "prompt": "Write the Data Annotation attribute that constrains a decimal Price property between 0.01 and 9999.99.",
+      "code": "",
+      "answer": "[Range(0.01, 9999.99)]",
+      "accepted_answers": [
+        "[Range(0.01, 9999.99)]"
+      ],
+      "explanation": "[Range(min, max)] validates inclusive numeric bounds during model binding."
+    },
+    {
+      "id": "mvc_arch_19",
+      "category": "Data Annotations",
+      "type": "flashcard",
+      "prompt": "Write the Data Annotation attribute that sets the label text of a ViewModel property 'FirstName' to 'First Name'.",
+      "code": "",
+      "answer": "[Display(Name = \"First Name\")]",
+      "accepted_answers": [
+        "[Display(Name = \"First Name\")]"
+      ],
+      "explanation": "<label asp-for=\"FirstName\"> reads the Display Name attribute automatically."
+    },
+    {
+      "id": "mvc_arch_20",
+      "category": "ASP.NET Core Routing",
+      "type": "flashcard",
+      "prompt": "Write the attribute route template on an action method to match GET requests with an integer route parameter 'id' (e.g., /products/details/5).",
+      "code": "",
+      "answer": "[HttpGet(\"details/{id:int}\")]",
+      "accepted_answers": [
+        "[HttpGet(\"details/{id:int}\")]",
+        "[Route(\"details/{id:int}\")]",
+        "[HttpGet(\"{id:int}\")]"
+      ],
+      "explanation": "Route constraints like {id:int} reject non-integer segments before invoking the controller action."
+    }
+  ]
+}

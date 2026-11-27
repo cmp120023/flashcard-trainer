@@ -1,0 +1,167 @@
+{
+  "deck_name": "09 - BS-CS-CPSE Phase 4: Secure Boot, STRIDE, MISRA C++ & HIL CI",
+  "cards": [
+    {
+      "id": "cpse4_01",
+      "category": "Cryptographic Secure Boot",
+      "type": "flashcard",
+      "prompt": "What are the 3 cryptographic primitives used together in an ECDSA P-256 firmware secure boot verification chain?",
+      "code": "",
+      "answer": "SHA-256 hash of firmware image + ECDSA P-256 signature verification + Immutable Root-of-Trust Public Key in OTP/Flash",
+      "accepted_answers": [
+        "SHA-256 hash of firmware image + ECDSA P-256 signature verification + Immutable Root-of-Trust Public Key in OTP/Flash",
+        "SHA-256, ECDSA P-256, and an immutable Root-of-Trust public key"
+      ],
+      "explanation": "The private signing key stays offline in an HSM/build server; the MCU only stores the public key in write-locked memory."
+    },
+    {
+      "id": "cpse4_02",
+      "category": "Cryptographic Secure Boot",
+      "type": "flashcard",
+      "prompt": "What attack occurs when an attacker flashes an older, legitimately signed firmware binary containing a known vulnerability, and how is it blocked?",
+      "code": "",
+      "answer": "Rollback (Downgrade) Attack — blocked by a monotonic security version counter stored in OTP fuses or secure hardware storage",
+      "accepted_answers": [
+        "Rollback (Downgrade) Attack — blocked by a monotonic security version counter stored in OTP fuses or secure hardware storage",
+        "Rollback attack, prevented with a monotonic counter",
+        "Anti-rollback monotonic counter"
+      ],
+      "explanation": "The bootloader rejects any image whose header version number is lower than the burned monotonic counter."
+    },
+    {
+      "id": "cpse4_03",
+      "category": "Hardware Security Elements",
+      "type": "flashcard",
+      "prompt": "Why store ECDSA private keys inside a dedicated secure element like the Microchip ATECC608A instead of internal MCU Flash?",
+      "code": "",
+      "answer": "Private keys never leave the tamper-resistant chip boundary; all signing/ECDH operations execute internally on dedicated hardware",
+      "accepted_answers": [
+        "Private keys never leave the tamper-resistant chip boundary; all signing/ECDH operations execute internally on dedicated hardware",
+        "Private keys cannot be read out of the secure element",
+        "Tamper-resistant key storage where private keys never leave the chip"
+      ],
+      "explanation": "Protects against firmware extraction, SWD debug dumps, and side-channel probing."
+    },
+    {
+      "id": "cpse4_04",
+      "category": "Network & Industrial Security",
+      "type": "flashcard",
+      "prompt": "How does Mutual TLS (mTLS) differ from standard server-only TLS in an OPC UA smart-factory network?",
+      "code": "",
+      "answer": "Both the client AND the server present X.509 certificates and authenticate each other's identities during the handshake",
+      "accepted_answers": [
+        "Both the client AND the server present X.509 certificates and authenticate each other's identities during the handshake",
+        "Both client and server authenticate each other with X.509 certificates",
+        "Two-way certificate authentication"
+      ],
+      "explanation": "Prevents rogue devices plugged into the factory network from connecting to PLC/OPC UA endpoints."
+    },
+    {
+      "id": "cpse4_05",
+      "category": "Threat Modeling",
+      "type": "flashcard",
+      "prompt": "What do the 6 letters of the STRIDE threat modeling framework stand for?",
+      "code": "",
+      "answer": "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege",
+      "accepted_answers": [
+        "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege"
+      ],
+      "explanation": "Applied across Trust Boundaries in Data Flow Diagrams (DFDs) to systematically identify firmware and protocol threats."
+    },
+    {
+      "id": "cpse4_06",
+      "category": "MISRA C++:2023 & Safety",
+      "type": "flashcard",
+      "prompt": "Why does MISRA C++:2023 forbid dynamic heap allocation (new / malloc) after system initialization in safety-critical firmware?",
+      "code": "",
+      "answer": "Prevents non-deterministic allocation latency, heap fragmentation, and out-of-memory runtime failures",
+      "accepted_answers": [
+        "Prevents non-deterministic allocation latency, heap fragmentation, and out-of-memory runtime failures",
+        "Prevents heap fragmentation and non-deterministic timing",
+        "Avoids heap fragmentation and runtime OOM"
+      ],
+      "explanation": "All buffers, pools, and state machines must have statically bounded memory footprints."
+    },
+    {
+      "id": "cpse4_07",
+      "category": "MISRA C++:2023 & Safety",
+      "type": "flashcard",
+      "prompt": "What two open-source static analysis tools are standard in CMake C/C++ CI pipelines to enforce coding rules and catch undefined behavior?",
+      "code": "",
+      "answer": "clang-tidy and cppcheck",
+      "accepted_answers": [
+        "clang-tidy and cppcheck",
+        "cppcheck and clang-tidy"
+      ],
+      "explanation": "Configured with compile_commands.json and -Werror to block pull requests with static analysis warnings."
+    },
+    {
+      "id": "cpse4_08",
+      "category": "Hardware-in-the-Loop (HIL)",
+      "type": "flashcard",
+      "prompt": "What is a Hardware-in-the-Loop (HIL) test rig in embedded systems CI/CD?",
+      "code": "",
+      "answer": "A self-hosted test bench where a runner flashes real target MCU hardware and uses a second tester MCU/instruments to stimulate GPIO/UART/CAN and assert physical responses",
+      "accepted_answers": [
+        "A self-hosted test bench where a runner flashes real target MCU hardware and uses a second tester MCU/instruments to stimulate GPIO/UART/CAN and assert physical responses",
+        "Automated testing against real physical microcontroller hardware stimulated by test instrumentation"
+      ],
+      "explanation": "Validates real peripheral silicon, DMA timing, and electrical behavior that host-side unit tests cannot emulate."
+    },
+    {
+      "id": "cpse4_09",
+      "category": "Hardware-in-the-Loop (HIL)",
+      "type": "flashcard",
+      "prompt": "Why does a 24V industrial sensor interface use an optocoupler (opto-isolator) before feeding a 3.3V STM32 GPIO pin?",
+      "code": "",
+      "answer": "Provides galvanic isolation (optical barrier) that translates 24V logic to 3.3V while protecting the MCU from ground loops and high-voltage surges",
+      "accepted_answers": [
+        "Provides galvanic isolation (optical barrier) that translates 24V logic to 3.3V while protecting the MCU from ground loops and high-voltage surges",
+        "Galvanic isolation and 24V to 3.3V level shifting",
+        "Galvanic isolation"
+      ],
+      "explanation": "No direct electrical conductor connects the noisy 24V industrial field side to the 3.3V logic domain."
+    },
+    {
+      "id": "cpse4_10",
+      "category": "Hardware-in-the-Loop (HIL)",
+      "type": "flashcard",
+      "prompt": "What hardware peripheral automatically resets the microcontroller if firmware hangs in an infinite loop or deadlock?",
+      "code": "",
+      "answer": "Independent Watchdog Timer (IWDG)",
+      "accepted_answers": [
+        "Independent Watchdog Timer (IWDG)",
+        "Watchdog Timer",
+        "IWDG",
+        "Watchdog"
+      ],
+      "explanation": "Driven by its own dedicated low-speed internal oscillator (LSI) so it continues counting even if the main system clock fails."
+    },
+    {
+      "id": "cpse4_11",
+      "category": "Cryptographic Secure Boot",
+      "type": "flashcard",
+      "prompt": "Why must cryptographic signature or MAC comparisons use constant-time comparison functions rather than standard memcmp()?",
+      "code": "",
+      "answer": "memcmp() returns early on the first mismatched byte, leaking timing side-channel information to attackers",
+      "accepted_answers": [
+        "memcmp() returns early on the first mismatched byte, leaking timing side-channel information to attackers",
+        "Prevents timing side-channel attacks",
+        "memcmp leaks timing information via early exit"
+      ],
+      "explanation": "Constant-time comparisons XOR all bytes and accumulate differences so execution time is independent of where a mismatch occurs."
+    },
+    {
+      "id": "cpse4_12",
+      "category": "MISRA C++:2023 & Safety",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this safe saturating integer addition helper:",
+      "code": "#include <iostream>\n#include <cstdint>\n#include <limits>\nuint8_t sat_add(uint8_t a, uint8_t b) {\n    uint16_t sum = static_cast<uint16_t>(a) + b;\n    return sum > 255 ? 255 : static_cast<uint8_t>(sum);\n}\nint main() {\n    std::cout << (int)sat_add(200, 100) << \" \" << (int)sat_add(40, 15) << \"\\n\";\n    return 0;\n}",
+      "answer": "255 55",
+      "accepted_answers": [
+        "255 55"
+      ],
+      "explanation": "Widening to uint16_t prevents silent 8-bit wrap-around overflow (300 -> 44), clamping safely to 255."
+    }
+  ]
+}

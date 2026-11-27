@@ -1,0 +1,219 @@
+{
+  "deck_name": "15 - Multi-Language Unit Testing (xUnit, pytest, GTest, JUnit 5, Jest)",
+  "cards": [
+    {
+      "id": "test_01",
+      "category": "Testing Fundamentals",
+      "type": "flashcard",
+      "prompt": "What does the AAA pattern stand for in structuring clean unit tests?",
+      "answer": "Arrange, Act, Assert",
+      "accepted_answers": [
+        "Arrange Act Assert",
+        "Arrange, Act, and Assert"
+      ],
+      "explanation": "Arrange sets up inputs and mocks, Act invokes the unit under test, and Assert verifies the expected outcome."
+    },
+    {
+      "id": "test_02",
+      "category": "C# xUnit",
+      "type": "flashcard",
+      "prompt": "In C# xUnit, what attribute marks a standalone, parameterless test method?",
+      "answer": "[Fact]",
+      "accepted_answers": [
+        "Fact",
+        "[Fact]"
+      ],
+      "explanation": "[Fact] is used for invariant tests with no parameters, whereas [Theory] is used for parameterized data-driven tests."
+    },
+    {
+      "id": "test_03",
+      "category": "C# xUnit",
+      "type": "flashcard",
+      "prompt": "In C# xUnit, which pair of attributes defines a parameterized test method and supplies inline test case arguments?",
+      "answer": "[Theory] and [InlineData]",
+      "accepted_answers": [
+        "Theory and InlineData",
+        "[Theory], [InlineData]"
+      ],
+      "explanation": "[Theory] marks a data-driven test and each [InlineData(...)] attribute executes the method once with those arguments."
+    },
+    {
+      "id": "test_04",
+      "category": "C# xUnit",
+      "type": "flashcard",
+      "prompt": "How does xUnit handle test class instantiation across multiple [Fact] methods in the same class?",
+      "answer": "It creates a brand-new instance of the test class for every test method",
+      "accepted_answers": [
+        "new instance per test",
+        "instantiates the class for each test"
+      ],
+      "explanation": "xUnit creates a fresh test class instance per test method to guarantee test isolation without [SetUp] attributes."
+    },
+    {
+      "id": "test_05",
+      "category": "Python pytest",
+      "type": "flashcard",
+      "prompt": "In Python pytest, what decorator turns a function into a reusable dependency-injected setup/teardown provider for test functions?",
+      "answer": "@pytest.fixture",
+      "accepted_answers": [
+        "pytest.fixture",
+        "fixture"
+      ],
+      "explanation": "Functions decorated with @pytest.fixture are injected by parameter name into tests; code after `yield` runs as teardown."
+    },
+    {
+      "id": "test_06",
+      "category": "Python pytest",
+      "type": "flashcard",
+      "prompt": "In Python pytest, what decorator runs a single test function across multiple sets of input/expected values?",
+      "answer": "@pytest.mark.parametrize",
+      "accepted_answers": [
+        "pytest.mark.parametrize",
+        "mark.parametrize"
+      ],
+      "explanation": "@pytest.mark.parametrize(\"arg1,expected\", [(1, 2), (2, 4)]) generates distinct test cases per tuple."
+    },
+    {
+      "id": "test_07",
+      "category": "Python pytest",
+      "type": "flashcard",
+      "prompt": "In Python pytest, how do you assert that a block of code raises a specific exception such as ValueError?",
+      "answer": "with pytest.raises(ValueError):",
+      "accepted_answers": [
+        "pytest.raises(ValueError)",
+        "pytest.raises"
+      ],
+      "explanation": "pytest.raises acts as a context manager that fails the test if the specified exception is not raised inside the block."
+    },
+    {
+      "id": "test_08",
+      "category": "C++ GoogleTest",
+      "type": "flashcard",
+      "prompt": "In C++ GoogleTest, what is the difference between EXPECT_EQ(a, b) and ASSERT_EQ(a, b)?",
+      "answer": "EXPECT_EQ logs a non-fatal failure and continues; ASSERT_EQ aborts the current test immediately",
+      "accepted_answers": [
+        "EXPECT_EQ is non-fatal, ASSERT_EQ is fatal",
+        "ASSERT_EQ aborts the test, EXPECT_EQ continues"
+      ],
+      "explanation": "Use ASSERT_* when subsequent lines in the test would crash (e.g., dereferencing a pointer after ASSERT_NE(ptr, nullptr))."
+    },
+    {
+      "id": "test_09",
+      "category": "C++ GoogleTest",
+      "type": "flashcard",
+      "prompt": "In C++ GoogleTest, which macro defines a test case that uses a test fixture class inheriting from ::testing::Test?",
+      "answer": "TEST_F",
+      "accepted_answers": [
+        "TEST_F(FixtureName, TestName)"
+      ],
+      "explanation": "TEST() is for standalone tests; TEST_F() instantiates the specified ::testing::Test fixture and calls SetUp()/TearDown()."
+    },
+    {
+      "id": "test_10",
+      "category": "Java JUnit 5",
+      "type": "flashcard",
+      "prompt": "In Java JUnit 5 (Jupiter), which annotation marks a method to run before EACH individual @Test method?",
+      "answer": "@BeforeEach",
+      "accepted_answers": [
+        "BeforeEach"
+      ],
+      "explanation": "@BeforeEach runs before every @Test method (replacing JUnit 4's @Before), while @BeforeAll runs once statically before all tests."
+    },
+    {
+      "id": "test_11",
+      "category": "Java JUnit 5",
+      "type": "flashcard",
+      "prompt": "In Java JUnit 5, which assertion method verifies that executing a lambda throws a specific exception type?",
+      "answer": "assertThrows",
+      "accepted_answers": [
+        "Assertions.assertThrows",
+        "assertThrows()"
+      ],
+      "explanation": "assertThrows(IllegalArgumentException.class, () -> svc.parse(null)) returns the thrown exception for further inspection."
+    },
+    {
+      "id": "test_12",
+      "category": "JavaScript Jest",
+      "type": "flashcard",
+      "prompt": "In JavaScript Jest/Vitest, what is the key difference between the .toBe() and .toEqual() matchers?",
+      "answer": ".toBe() checks strict reference/primitive equality (Object.is); .toEqual() checks deep recursive value equality",
+      "accepted_answers": [
+        "toBe checks reference equality, toEqual checks deep value equality",
+        "toBe is strict equality, toEqual is deep equality"
+      ],
+      "explanation": "Comparing two distinct object literals `{a: 1}` with `.toBe()` fails because they have different references; `.toEqual()` passes."
+    },
+    {
+      "id": "test_13",
+      "category": "JavaScript Jest",
+      "type": "flashcard",
+      "prompt": "In JavaScript Jest/Vitest, which function groups related test() or it() blocks into a logical test suite?",
+      "answer": "describe",
+      "accepted_answers": [
+        "describe()"
+      ],
+      "explanation": "describe('Suite Name', () => { ... }) scopes beforeEach/afterEach hooks and organizes test runner output."
+    },
+    {
+      "id": "test_14",
+      "category": "Test Doubles",
+      "type": "flashcard",
+      "prompt": "What is the difference between a Stub and a Mock in unit testing?",
+      "answer": "A Stub provides canned return values to the unit under test; a Mock verifies interaction behavior (method calls/arguments)",
+      "accepted_answers": [
+        "Stub returns canned data, Mock verifies interactions",
+        "Stubs provide canned answers, Mocks verify calls"
+      ],
+      "explanation": "Stubs support state verification (e.g., fake sensor returning 25.0C); Mocks assert that a dependency method was called."
+    },
+    {
+      "id": "test_15",
+      "category": "Embedded Testing",
+      "type": "flashcard",
+      "prompt": "What is a Fake in unit testing (for example, an in-memory ring buffer or fake flash driver)?",
+      "answer": "A lightweight, working implementation of an interface suitable for tests but not production",
+      "accepted_answers": [
+        "A working lightweight implementation",
+        "Working implementation with shortcuts"
+      ],
+      "explanation": "Fakes (like an in-memory SQLite DB or RAM-backed flash simulator) provide realistic behavior without hardware or network overhead."
+    },
+    {
+      "id": "test_16",
+      "category": "C# xUnit",
+      "type": "flashcard",
+      "prompt": "In C# xUnit, which assertion method verifies that an async method throws a specific exception?",
+      "answer": "Assert.ThrowsAsync",
+      "accepted_answers": [
+        "await Assert.ThrowsAsync",
+        "ThrowsAsync"
+      ],
+      "explanation": "await Assert.ThrowsAsync<InvalidOperationException>(() => service.RunAsync()) properly awaits the returned Task."
+    },
+    {
+      "id": "test_17",
+      "category": "Python pytest",
+      "type": "flashcard",
+      "prompt": "What CLI flag runs pytest in verbose mode so every individual test name and PASS/FAIL status is printed?",
+      "answer": "-v",
+      "accepted_answers": [
+        "pytest -v",
+        "--verbose"
+      ],
+      "explanation": "Running `pytest -v` displays full node IDs and individual parametrized case names."
+    },
+    {
+      "id": "test_18",
+      "category": "C++ GoogleTest",
+      "type": "flashcard",
+      "prompt": "In C++ GoogleTest, which macro checks floating-point equality within a small default ULP tolerance rather than exact bit equality?",
+      "answer": "EXPECT_FLOAT_EQ",
+      "accepted_answers": [
+        "EXPECT_DOUBLE_EQ",
+        "EXPECT_NEAR",
+        "EXPECT_FLOAT_EQ / EXPECT_DOUBLE_EQ"
+      ],
+      "explanation": "EXPECT_FLOAT_EQ / EXPECT_DOUBLE_EQ handle rounding errors (within 4 ULPs), while EXPECT_NEAR(a, b, abs_err) checks an explicit tolerance."
+    }
+  ]
+}

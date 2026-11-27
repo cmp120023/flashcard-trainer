@@ -1,0 +1,244 @@
+{
+  "deck_name": "13 - CMake & Git CLI Workflows",
+  "cards": [
+    {
+      "id": "cmake_git_01",
+      "category": "CMake Modern Targets",
+      "type": "flashcard",
+      "prompt": "In modern CMake, which visibility keyword in target_include_directories() exposes headers to consumers of a library WITHOUT using them to compile the library itself?",
+      "answer": "INTERFACE",
+      "accepted_answers": [
+        "INTERFACE"
+      ],
+      "explanation": "PRIVATE applies only to building the target itself, INTERFACE applies only to downstream targets linking to it, and PUBLIC applies to both."
+    },
+    {
+      "id": "cmake_git_02",
+      "category": "CMake Modern Targets",
+      "type": "flashcard",
+      "prompt": "Which CMake command links libraries and propagates PUBLIC/INTERFACE compile definitions, include paths, and compiler flags transitively?",
+      "answer": "target_link_libraries",
+      "accepted_answers": [
+        "target_link_libraries",
+        "target_link_libraries()"
+      ],
+      "explanation": "Modern target_link_libraries(app PRIVATE mylib) automatically propagates mylib's PUBLIC and INTERFACE usage requirements to app."
+    },
+    {
+      "id": "cmake_git_03",
+      "category": "CMake Cross-Compilation",
+      "type": "flashcard",
+      "prompt": "Which CMake variable or CLI flag specifies a cross-compilation configuration file (e.g., for arm-none-eabi-gcc)?",
+      "answer": "CMAKE_TOOLCHAIN_FILE",
+      "accepted_answers": [
+        "CMAKE_TOOLCHAIN_FILE",
+        "-DCMAKE_TOOLCHAIN_FILE"
+      ],
+      "explanation": "Passing -DCMAKE_TOOLCHAIN_FILE=arm-none-eabi.cmake configures compilers, sysroots, and search paths before CMake inspects the host environment."
+    },
+    {
+      "id": "cmake_git_04",
+      "category": "CMake Out-of-Source Builds",
+      "type": "flashcard",
+      "prompt": "What modern CMake CLI command configures a project from source directory '.' into a separate build directory 'build'?",
+      "answer": "cmake -S . -B build",
+      "accepted_answers": [
+        "cmake -S . -B build",
+        "cmake -B build -S .",
+        "cmake -B build"
+      ],
+      "explanation": "cmake -S <source_dir> -B <build_dir> keeps generated build artifacts isolated from tracked source files."
+    },
+    {
+      "id": "cmake_git_05",
+      "category": "CMake & CTest",
+      "type": "flashcard",
+      "prompt": "Which command must be called in the root CMakeLists.txt before register_test / add_test() works with ctest?",
+      "answer": "enable_testing()",
+      "accepted_answers": [
+        "enable_testing()",
+        "enable_testing",
+        "include(CTest)"
+      ],
+      "explanation": "enable_testing() (or include(CTest)) activates CTest test generation for the directory and its subdirectories."
+    },
+    {
+      "id": "cmake_git_06",
+      "category": "CMake Static Analysis",
+      "type": "flashcard",
+      "prompt": "Which CMake target property runs clang-tidy automatically on every C++ source file compiled for a target?",
+      "answer": "CXX_CLANG_TIDY",
+      "accepted_answers": [
+        "CXX_CLANG_TIDY",
+        "CMAKE_CXX_CLANG_TIDY"
+      ],
+      "explanation": "Setting CMAKE_CXX_CLANG_TIDY or the target property CXX_CLANG_TIDY integrates clang-tidy checks directly into the build step."
+    },
+    {
+      "id": "cmake_git_07",
+      "category": "CMake Compilation Database",
+      "type": "flashcard",
+      "prompt": "Which boolean CMake variable generates compile_commands.json for IDE IntelliSense, clangd, and static analysis tools?",
+      "answer": "CMAKE_EXPORT_COMPILE_COMMANDS",
+      "accepted_answers": [
+        "CMAKE_EXPORT_COMPILE_COMMANDS",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "explanation": "Setting -DCMAKE_EXPORT_COMPILE_COMMANDS=ON writes compile_commands.json in the build directory with exact compiler flags for every translation unit."
+    },
+    {
+      "id": "cmake_git_08",
+      "category": "CMake Generator Expressions",
+      "type": "flashcard",
+      "prompt": "What CMake generator expression evaluates to 1 only when building in Debug configuration?",
+      "answer": "$<CONFIG:Debug>",
+      "accepted_answers": [
+        "$<CONFIG:Debug>"
+      ],
+      "explanation": "Generator expressions like $<$<CONFIG:Debug>:-O0 -g3> are evaluated at build-system generation time, supporting multi-config generators."
+    },
+    {
+      "id": "cmake_git_09",
+      "category": "Git Recovery & History",
+      "type": "flashcard",
+      "prompt": "Which Git command displays the local chronological log of where HEAD and branch tips have pointed, allowing recovery of deleted commits or reset branches?",
+      "answer": "git reflog",
+      "accepted_answers": [
+        "git reflog"
+      ],
+      "explanation": "git reflog records local reference updates even after git reset --hard or branch deletion until garbage collection expires them."
+    },
+    {
+      "id": "cmake_git_10",
+      "category": "Git Reset Modes",
+      "type": "flashcard",
+      "prompt": "Which git reset flag moves HEAD back one commit while keeping all changes from that commit staged in the index?",
+      "answer": "git reset --soft HEAD~1",
+      "accepted_answers": [
+        "git reset --soft HEAD~1",
+        "--soft"
+      ],
+      "explanation": "--soft moves HEAD only (changes stay staged); --mixed (default) resets HEAD and index (changes stay in working tree); --hard discards all changes."
+    },
+    {
+      "id": "cmake_git_11",
+      "category": "Git Safe History Undo",
+      "type": "flashcard",
+      "prompt": "Which Git command undoes a commit that has already been pushed to a shared branch by creating a new inverse commit without rewriting history?",
+      "answer": "git revert",
+      "accepted_answers": [
+        "git revert"
+      ],
+      "explanation": "git revert <commit> records a new commit that reverses the earlier commit's changes, preserving safe linear history for collaborators."
+    },
+    {
+      "id": "cmake_git_12",
+      "category": "Git Cherry-Pick",
+      "type": "flashcard",
+      "prompt": "Which Git command applies a single specific commit from another branch onto your current HEAD without merging the entire branch?",
+      "answer": "git cherry-pick",
+      "accepted_answers": [
+        "git cherry-pick"
+      ],
+      "explanation": "git cherry-pick <commit-hash> copies the diff of a specific commit and creates a new commit on the active branch."
+    },
+    {
+      "id": "cmake_git_13",
+      "category": "Git Debugging",
+      "type": "flashcard",
+      "prompt": "Which Git command performs a binary search through commit history to locate the exact commit that introduced a bug?",
+      "answer": "git bisect",
+      "accepted_answers": [
+        "git bisect"
+      ],
+      "explanation": "Using git bisect start, git bisect bad, and git bisect good <rev>, Git checks out midpoint commits to isolate regressions in O(log N) steps."
+    },
+    {
+      "id": "cmake_git_14",
+      "category": "Git Stashing",
+      "type": "flashcard",
+      "prompt": "Which Git command saves uncommitted tracked changes onto a stack and ALSO includes untracked files?",
+      "answer": "git stash -u",
+      "accepted_answers": [
+        "git stash -u",
+        "git stash --include-untracked",
+        "git stash push -u"
+      ],
+      "explanation": "By default git stash ignores untracked files; adding -u (--include-untracked) saves new untracked files as well."
+    },
+    {
+      "id": "cmake_git_15",
+      "category": "Git Remote Safety",
+      "type": "flashcard",
+      "prompt": "When force-pushing an amended or rebased feature branch, which flag prevents overwriting remote commits you haven't fetched yet?",
+      "answer": "--force-with-lease",
+      "accepted_answers": [
+        "--force-with-lease",
+        "git push --force-with-lease"
+      ],
+      "explanation": "--force-with-lease checks that the remote branch ref still matches your local remote-tracking ref before updating, protecting teammates' commits."
+    },
+    {
+      "id": "cmake_git_16",
+      "category": "Conventional Commits",
+      "type": "flashcard",
+      "prompt": "In the Conventional Commits specification, what prefix indicates a commit that fixes a bug (and triggers a PATCH version bump in SemVer)?",
+      "answer": "fix:",
+      "accepted_answers": [
+        "fix:",
+        "fix",
+        "fix(scope):"
+      ],
+      "explanation": "fix: maps to a SemVer PATCH release, feat: maps to a MINOR release, and feat!: or BREAKING CHANGE: maps to a MAJOR release."
+    },
+    {
+      "id": "cmake_git_17",
+      "category": "Conventional Commits",
+      "type": "flashcard",
+      "prompt": "In Conventional Commits, what commit type is used for updating CMakeLists.txt, build scripts, or external dependencies without changing production source code?",
+      "answer": "build:",
+      "accepted_answers": [
+        "build:",
+        "build",
+        "chore:"
+      ],
+      "explanation": "build: is specifically designated for changes affecting the build system or external dependencies (such as CMake, Cargo, or NuGet)."
+    },
+    {
+      "id": "cmake_git_18",
+      "category": "Git Interactive Staging",
+      "type": "flashcard",
+      "prompt": "Which Git command lets you interactively stage individual hunks of changes within a single modified file?",
+      "answer": "git add -p",
+      "accepted_answers": [
+        "git add -p",
+        "git add --patch"
+      ],
+      "explanation": "git add -p (--patch) steps through diff hunks so you can split unrelated edits in one file into clean, atomic commits."
+    },
+    {
+      "id": "cmake_git_19",
+      "category": "Git Submodules",
+      "type": "flashcard",
+      "prompt": "Which Git command initializes and checks out nested submodules (such as vendor SDKs or GoogleTest) after cloning a repository?",
+      "answer": "git submodule update --init --recursive",
+      "accepted_answers": [
+        "git submodule update --init --recursive",
+        "git submodule update --init"
+      ],
+      "explanation": "git submodule update --init --recursive registers submodule URLs in .git/config and checks out the exact pinned commit hashes."
+    },
+    {
+      "id": "cmake_git_20",
+      "category": "CMake FetchContent",
+      "type": "flashcard",
+      "prompt": "Which built-in CMake module downloads and builds external dependencies (such as GoogleTest) directly at configure time?",
+      "answer": "FetchContent",
+      "accepted_answers": [
+        "FetchContent",
+        "include(FetchContent)"
+      ],
+      "explanation": "include(FetchContent) with FetchContent_Declare() and FetchContent_MakeAvailable() integrates external CMake dependencies seamlessly."
+    }
+  ]
+}

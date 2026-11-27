@@ -1,0 +1,365 @@
+{
+  "deck_name": "04b - CPTC AAT Multi-Language Code-Output Gauntlet (30 Drills)",
+  "cards": [
+    {
+      "id": "aat_out_01",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# snippet:",
+      "code": "int a = 7, b = 2;\ndouble r1 = a / b;\ndouble r2 = (double)a / b;\nConsole.WriteLine($\"{r1} | {r2}\");",
+      "answer": "3 | 3.5",
+      "accepted_answers": [
+        "3 | 3.5"
+      ],
+      "explanation": "a / b performs integer division first (7 / 2 = 3), then widens to 3.0. Casting (double)a forces floating-point division (3.5)."
+    },
+    {
+      "id": "aat_out_02",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# closure loop snippet:",
+      "code": "var actions = new List<Func<int>>();\nfor (int i = 0; i < 3; i++) {\n    actions.Add(() => i);\n}\nConsole.WriteLine(string.Join(\",\", actions.Select(f => f())));",
+      "answer": "3,3,3",
+      "accepted_answers": [
+        "3,3,3"
+      ],
+      "explanation": "In C#, a for-loop variable i is shared across all iterations. All three lambdas capture the same variable reference, which equals 3 after the loop finishes."
+    },
+    {
+      "id": "aat_out_03",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# deferred LINQ snippet:",
+      "code": "var nums = new List<int> { 1, 2, 3 };\nvar query = nums.Where(n => n > 1).Select(n => n * 10);\nnums.Add(4);\nConsole.WriteLine(string.Join(\"-\", query));",
+      "answer": "20-30-40",
+      "accepted_answers": [
+        "20-30-40"
+      ],
+      "explanation": "LINQ uses deferred execution. The query does not run until string.Join iterates over it, so 4 is included."
+    },
+    {
+      "id": "aat_out_04",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# string immutability snippet:",
+      "code": "string s1 = \"CPTC\";\nstring s2 = s1;\ns1 += \" AAT\";\nConsole.WriteLine($\"{s1} / {s2}\");",
+      "answer": "CPTC AAT / CPTC",
+      "accepted_answers": [
+        "CPTC AAT / CPTC"
+      ],
+      "explanation": "Strings in C# are immutable. s1 += \" AAT\" allocates a new string and updates s1, leaving s2 pointing to \"CPTC\"."
+    },
+    {
+      "id": "aat_out_05",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# pattern matching & null-coalescing snippet:",
+      "code": "string? text = null;\nint len = text?.Length ?? -1;\nConsole.WriteLine(len);",
+      "answer": "-1",
+      "accepted_answers": [
+        "-1"
+      ],
+      "explanation": "Null-conditional text?.Length evaluates to null, and ?? supplies the fallback -1."
+    },
+    {
+      "id": "aat_out_06",
+      "category": "C# Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# ref parameter snippet:",
+      "code": "static void Bump(ref int x, int y) { x += 5; y += 5; }\nint a = 10, b = 10;\nBump(ref a, b);\nConsole.WriteLine($\"{a} {b}\");",
+      "answer": "15 10",
+      "accepted_answers": [
+        "15 10"
+      ],
+      "explanation": "a is passed by reference (ref) and mutates to 15; b is passed by value, so the caller's b stays 10."
+    },
+    {
+      "id": "aat_out_07",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java try-finally return snippet:",
+      "code": "static int test() {\n    try { return 1; }\n    finally { return 2; }\n}\nSystem.out.println(test());",
+      "answer": "2",
+      "accepted_answers": [
+        "2"
+      ],
+      "explanation": "The finally block executes before the method exits and overrides the pending return 1 with return 2."
+    },
+    {
+      "id": "aat_out_08",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java Integer cache snippet:",
+      "code": "Integer a = 127, b = 127;\nInteger c = 128, d = 128;\nSystem.out.println((a == b) + \" \" + (c == d));",
+      "answer": "true false",
+      "accepted_answers": [
+        "true false"
+      ],
+      "explanation": "Java caches autoboxed Integer instances from -128 to 127. 127 reuses the same cached object (true), whereas 128 allocates two distinct objects (false)."
+    },
+    {
+      "id": "aat_out_09",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java field hiding vs. method overriding snippet:",
+      "code": "class A { int x = 1; int getX() { return x; } }\nclass B extends A { int x = 2; int getX() { return x; } }\nA obj = new B();\nSystem.out.println(obj.x + \" \" + obj.getX());",
+      "answer": "1 2",
+      "accepted_answers": [
+        "1 2"
+      ],
+      "explanation": "Fields in Java are resolved statically by reference type (A.x -> 1), while instance methods are resolved dynamically by runtime object type (B.getX() -> 2)."
+    },
+    {
+      "id": "aat_out_10",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java String + char arithmetic snippet:",
+      "code": "System.out.println('A' + 'B' + \"C\");",
+      "answer": "131C",
+      "accepted_answers": [
+        "131C"
+      ],
+      "explanation": "Evaluated left-to-right: 'A' (65) + 'B' (66) = 131 (int addition), then 131 + \"C\" concatenates into \"131C\"."
+    },
+    {
+      "id": "aat_out_11",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java switch fall-through snippet:",
+      "code": "int x = 2, total = 0;\nswitch (x) {\n    case 1: total += 1;\n    case 2: total += 2;\n    case 3: total += 3; break;\n    default: total += 10;\n}\nSystem.out.println(total);",
+      "answer": "5",
+      "accepted_answers": [
+        "5"
+      ],
+      "explanation": "Without a break in case 2, execution falls through into case 3 (2 + 3 = 5) and stops at break."
+    },
+    {
+      "id": "aat_out_12",
+      "category": "Java Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java ArrayList removal snippet:",
+      "code": "List<Integer> list = new ArrayList<>(List.of(10, 20, 30));\nlist.remove(1);\nSystem.out.println(list);",
+      "answer": "[10, 30]",
+      "accepted_answers": [
+        "[10, 30]"
+      ],
+      "explanation": "Passing a primitive int 1 calls remove(int index), removing index 1 (20) rather than the Integer object 1."
+    },
+    {
+      "id": "aat_out_13",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ pointer arithmetic snippet:",
+      "code": "#include <iostream>\nint main() {\n    int a[4] = {5, 10, 15, 20};\n    int* p = &a[3];\n    std::cout << *(p - 2) << \" \" << (p - a);\n}",
+      "answer": "10 3",
+      "accepted_answers": [
+        "10 3"
+      ],
+      "explanation": "p points to index 3 (20). p - 2 points to index 1 (10). Subtracting two pointers into the same array yields the element distance (3 - 0 = 3)."
+    },
+    {
+      "id": "aat_out_14",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ static local variable snippet:",
+      "code": "#include <iostream>\nint nextId() {\n    static int id = 100;\n    return id++;\n}\nint main() {\n    std::cout << nextId() << \" \" << nextId() << \" \" << nextId();\n}",
+      "answer": "100 101 102",
+      "accepted_answers": [
+        "100 101 102"
+      ],
+      "explanation": "A static local variable is initialized once and retains its value across function calls; post-increment returns the current value before adding 1."
+    },
+    {
+      "id": "aat_out_15",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ non-virtual vs. virtual method snippet:",
+      "code": "#include <iostream>\nstruct Base {\n    void f() { std::cout << \"B1 \"; }\n    virtual void g() { std::cout << \"B2\"; }\n};\nstruct Derived : Base {\n    void f() { std::cout << \"D1 \"; }\n    void g() override { std::cout << \"D2\"; }\n};\nint main() {\n    Derived d;\n    Base& b = d;\n    b.f(); b.g();\n}",
+      "answer": "B1 D2",
+      "accepted_answers": [
+        "B1 D2"
+      ],
+      "explanation": "f() is non-virtual (static dispatch via Base& -> B1), while g() is virtual (dynamic dispatch to Derived -> D2)."
+    },
+    {
+      "id": "aat_out_16",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ std::move on std::string snippet:",
+      "code": "#include <iostream>\n#include <string>\n#include <utility>\nint main() {\n    std::string a = \"Embedded\";\n    std::string b = std::move(a);\n    std::cout << b << \":\" << a.size();\n}",
+      "answer": "Embedded:0",
+      "accepted_answers": [
+        "Embedded:0"
+      ],
+      "explanation": "Moving a standard library std::string transfers its buffer to b and leaves the moved-from string a empty (size 0)."
+    },
+    {
+      "id": "aat_out_17",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ default argument static binding snippet:",
+      "code": "#include <iostream>\nstruct Base {\n    virtual int calc(int x = 10) { return x; }\n};\nstruct Sub : Base {\n    int calc(int x = 99) override { return x * 2; }\n};\nint main() {\n    Sub s;\n    Base* p = &s;\n    std::cout << p->calc();\n}",
+      "answer": "20",
+      "accepted_answers": [
+        "20"
+      ],
+      "explanation": "Virtual functions are dynamically dispatched (Sub::calc runs), but default arguments are statically bound from the pointer type (Base gives x = 10 -> 10 * 2 = 20)."
+    },
+    {
+      "id": "aat_out_18",
+      "category": "C++ Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ bitmask & ternary precedence snippet:",
+      "code": "#include <iostream>\nint main() {\n    unsigned int flags = 0x05;\n    std::cout << ((flags & 0x04) ? \"SET\" : \"CLR\") << \" \" << (flags ^ 0x05);\n}",
+      "answer": "SET 0",
+      "accepted_answers": [
+        "SET 0"
+      ],
+      "explanation": "0x05 & 0x04 is 0x04 (non-zero/truthy -> SET), and XORing any value with itself (0x05 ^ 0x05) yields 0."
+    },
+    {
+      "id": "aat_out_19",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python mutable default argument snippet:",
+      "code": "def append_item(val, bucket=[]):\n    bucket.append(val)\n    return bucket\n\nprint(append_item(1))\nprint(append_item(2))",
+      "answer": "[1]\n[1, 2]",
+      "accepted_answers": [
+        "[1]\n[1, 2]"
+      ],
+      "explanation": "Default list arguments in Python are evaluated once at function definition time and shared across subsequent calls."
+    },
+    {
+      "id": "aat_out_20",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python list slicing & aliasing snippet:",
+      "code": "a = [1, 2, 3, 4]\nb = a\nc = a[:]\nb[0] = 99\nc[1] = 88\nprint(a, c)",
+      "answer": "[99, 2, 3, 4] [1, 88, 3, 4]",
+      "accepted_answers": [
+        "[99, 2, 3, 4] [1, 88, 3, 4]"
+      ],
+      "explanation": "b = a creates an alias to the same list, while c = a[:] creates a shallow copy."
+    },
+    {
+      "id": "aat_out_21",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python negative stride slicing snippet:",
+      "code": "s = \"ABCDEF\"\nprint(s[4:1:-1])",
+      "answer": "EDC",
+      "accepted_answers": [
+        "EDC"
+      ],
+      "explanation": "Starts at index 4 ('E'), steps backward by -1, and stops before index 1 ('B'), yielding indices 4, 3, 2 -> 'EDC'."
+    },
+    {
+      "id": "aat_out_22",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python truthiness & 'or' short-circuit snippet:",
+      "code": "res = \"\" or 0 or [] or \"Ready\" or \"Done\"\nprint(res)",
+      "answer": "Ready",
+      "accepted_answers": [
+        "Ready"
+      ],
+      "explanation": "Python's 'or' operator returns the first truthy operand encountered rather than a boolean True/False."
+    },
+    {
+      "id": "aat_out_23",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python dictionary comprehension & get() snippet:",
+      "code": "d = {x: x**2 for x in range(1, 5) if x % 2 == 1}\nprint(d.get(2, -1), d.get(3, -1))",
+      "answer": "-1 9",
+      "accepted_answers": [
+        "-1 9"
+      ],
+      "explanation": "The comprehension filters odd numbers 1 and 3 -> {1: 1, 3: 9}. Key 2 is absent (returns default -1); key 3 returns 9."
+    },
+    {
+      "id": "aat_out_24",
+      "category": "Python Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Python generator exhaustion snippet:",
+      "code": "g = (x * 2 for x in [1, 2, 3])\nprint(sum(g), sum(g))",
+      "answer": "12 0",
+      "accepted_answers": [
+        "12 0"
+      ],
+      "explanation": "A generator expression is single-pass. The first sum(g) consumes all items (2+4+6=12); the second sum(g) sees an exhausted generator (0)."
+    },
+    {
+      "id": "aat_out_25",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript event-loop microtask vs. macrotask snippet:",
+      "code": "console.log(\"A\");\nsetTimeout(() => console.log(\"B\"), 0);\nPromise.resolve().then(() => console.log(\"C\"));\nconsole.log(\"D\");",
+      "answer": "A\nD\nC\nB",
+      "accepted_answers": [
+        "A\nD\nC\nB"
+      ],
+      "explanation": "Synchronous code runs first (A, D), followed by the Promise microtask queue (C), and finally the setTimeout macrotask queue (B)."
+    },
+    {
+      "id": "aat_out_26",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript type coercion snippet:",
+      "code": "console.log(\"5\" + 3, \"5\" - 3);",
+      "answer": "53 2",
+      "accepted_answers": [
+        "53 2"
+      ],
+      "explanation": "+ triggers string concatenation when either operand is a string ('53'), whereas - forces numeric coercion (5 - 3 = 2)."
+    },
+    {
+      "id": "aat_out_27",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript var vs. let loop closure snippet:",
+      "code": "const fns = [];\nfor (var i = 0; i < 3; i++) {\n  fns.push(() => i);\n}\nconsole.log(fns.map(fn => fn()).join(\",\"));",
+      "answer": "3,3,3",
+      "accepted_answers": [
+        "3,3,3"
+      ],
+      "explanation": "var is function-scoped rather than block-scoped, so all three closures reference the single i variable after it reaches 3."
+    },
+    {
+      "id": "aat_out_28",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript destructuring & default values snippet:",
+      "code": "const { a = 10, b = 20 } = { a: undefined, b: null };\nconsole.log(a, b);",
+      "answer": "10 null",
+      "accepted_answers": [
+        "10 null"
+      ],
+      "explanation": "ES6 destructuring defaults only trigger when a property is strictly undefined (a becomes 10), not when it is null (b stays null)."
+    },
+    {
+      "id": "aat_out_29",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript array.sort() default behavior snippet:",
+      "code": "const nums = [10, 2, 30, 4];\nnums.sort();\nconsole.log(nums.join(\"-\"));",
+      "answer": "10-2-30-4",
+      "accepted_answers": [
+        "10-2-30-4"
+      ],
+      "explanation": "Without a compare function, Array.prototype.sort() converts elements to UTF-16 strings and sorts lexicographically ('10' < '2' < '30' < '4')."
+    },
+    {
+      "id": "aat_out_30",
+      "category": "JavaScript Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript nullish coalescing (??) vs. logical OR (||) snippet:",
+      "code": "const count = 0;\nconsole.log((count || 5) + \" \" + (count ?? 5));",
+      "answer": "5 0",
+      "accepted_answers": [
+        "5 0"
+      ],
+      "explanation": "0 is falsy so || falls back to 5, whereas ?? only falls back on null or undefined, preserving 0."
+    }
+  ]
+}

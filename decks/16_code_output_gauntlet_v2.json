@@ -1,0 +1,223 @@
+{
+  "deck_name": "16 - Predict the Exact Output Gauntlet v2 (C++, C#, Python, Java, JS)",
+  "cards": [
+    {
+      "id": "out2_01",
+      "category": "C++ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nint main() {\n    int arr[] = {10, 20, 30, 40};\n    int* p = arr + 1;\n    std::cout << *(p + 2) << \" \" << p[-1];\n}",
+      "answer": "40 10",
+      "accepted_answers": [
+        "40 10"
+      ],
+      "explanation": "p points to arr[1] (20). *(p + 2) accesses arr[3] (40), and p[-1] accesses arr[0] (10)."
+    },
+    {
+      "id": "out2_02",
+      "category": "C++ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nint main() {\n    unsigned int a = 1;\n    int b = -2;\n    std::cout << (a + b > 0 ? \"POS\" : \"NEG\");\n}",
+      "answer": "POS",
+      "accepted_answers": [
+        "POS"
+      ],
+      "explanation": "Usual arithmetic conversions promote signed int b (-2) to unsigned int (UINT_MAX - 1), causing unsigned wraparound > 0."
+    },
+    {
+      "id": "out2_03",
+      "category": "C# Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "using System;\nstruct Point { public int X; }\nclass Program {\n    static void Main() {\n        Point p1 = new Point { X = 5 };\n        Point p2 = p1;\n        p2.X = 99;\n        Console.Write($\"{p1.X} {p2.X}\");\n    }\n}",
+      "answer": "5 99",
+      "accepted_answers": [
+        "5 99"
+      ],
+      "explanation": "struct is a value type in C#. Assigning p1 to p2 copies the struct by value, so mutating p2.X leaves p1.X unchanged."
+    },
+    {
+      "id": "out2_04",
+      "category": "C# Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "using System;\nclass Program {\n    static void Main() {\n        string a = \"hello\";\n        string b = a;\n        b += \"!\";\n        Console.Write($\"{a} {b}\");\n    }\n}",
+      "answer": "hello hello!",
+      "accepted_answers": [
+        "hello hello!"
+      ],
+      "explanation": "Strings in C# are immutable reference types. b += \"!\" allocates a new string and updates reference b while a still points to \"hello\"."
+    },
+    {
+      "id": "out2_05",
+      "category": "Python Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "def append_item(val, bucket=[]):\n    bucket.append(val)\n    return bucket\n\nprint(append_item(1), append_item(2))",
+      "answer": "[1, 2] [1, 2]",
+      "accepted_answers": [
+        "[1, 2] [1, 2]"
+      ],
+      "explanation": "Default mutable arguments in Python are evaluated once at function definition time, so both calls mutate and return the same list."
+    },
+    {
+      "id": "out2_06",
+      "category": "Python Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "nums = [10, 20, 30, 40, 50]\nprint(nums[1:4][::-1])",
+      "answer": "[40, 30, 20]",
+      "accepted_answers": [
+        "[40, 30, 20]"
+      ],
+      "explanation": "nums[1:4] produces [20, 30, 40], and [::-1] reverses that slice into [40, 30, 20]."
+    },
+    {
+      "id": "out2_07",
+      "category": "Python Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "a = [1, 2]\nb = a\na = a + [3]\nprint(b)",
+      "answer": "[1, 2]",
+      "accepted_answers": [
+        "[1, 2]"
+      ],
+      "explanation": "a = a + [3] creates a new list object and rebinds a, whereas b still references the original [1, 2] list (unlike a += [3])."
+    },
+    {
+      "id": "out2_08",
+      "category": "Java Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "public class Main {\n    public static void main(String[] args) {\n        Integer a = 127, b = 127;\n        Integer c = 128, d = 128;\n        System.out.print((a == b) + \" \" + (c == d));\n    }\n}",
+      "answer": "true false",
+      "accepted_answers": [
+        "true false"
+      ],
+      "explanation": "Java's Integer cache pools boxed values from -128 to 127 (same object reference), whereas 128 creates two distinct Integer instances."
+    },
+    {
+      "id": "out2_09",
+      "category": "Java Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "public class Main {\n    static int test() {\n        try {\n            return 1;\n        } finally {\n            return 2;\n        }\n    }\n    public static void main(String[] args) {\n        System.out.print(test());\n    }\n}",
+      "answer": "2",
+      "accepted_answers": [
+        "2"
+      ],
+      "explanation": "The finally block executes before the method returns, and a return inside finally overrides the pending return from try."
+    },
+    {
+      "id": "out2_10",
+      "category": "JavaScript Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "console.log([1, 2, 10].sort());",
+      "answer": "[ 1, 10, 2 ]",
+      "accepted_answers": [
+        "[1, 10, 2]",
+        "[ 1, 10, 2 ]",
+        "1,10,2"
+      ],
+      "explanation": "Without a compareFn, Array.prototype.sort() converts elements to UTF-16 strings and sorts lexicographically ('10' comes before '2')."
+    },
+    {
+      "id": "out2_11",
+      "category": "JavaScript Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "const obj = {\n  val: 42,\n  getVal() { return this.val; }\n};\nconst fn = obj.getVal;\nconsole.log(fn());",
+      "answer": "undefined",
+      "accepted_answers": [
+        "undefined"
+      ],
+      "explanation": "Detaching obj.getVal loses its receiver context (`this` becomes undefined in strict mode / global object without .val)."
+    },
+    {
+      "id": "out2_12",
+      "category": "JavaScript Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "console.log(0 || 'A', 0 ?? 'B');",
+      "answer": "A 0",
+      "accepted_answers": [
+        "A 0"
+      ],
+      "explanation": "Logical OR (||) treats 0 as falsy and returns 'A'; nullish coalescing (??) only falls back on null or undefined, preserving 0."
+    },
+    {
+      "id": "out2_13",
+      "category": "C++ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nint main() {\n    int x = 5;\n    int& r = x;\n    int y = 10;\n    r = y;\n    y = 20;\n    std::cout << x << \" \" << r;\n}",
+      "answer": "10 10",
+      "accepted_answers": [
+        "10 10"
+      ],
+      "explanation": "References cannot be reseated after initialization; r = y assigns the value of y (10) into x."
+    },
+    {
+      "id": "out2_14",
+      "category": "C# Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "using System;\nclass Program {\n    static void Main() {\n        int x = 1;\n        void Inc(ref int v) => v += 4;\n        Inc(ref x);\n        Console.Write(x);\n    }\n}",
+      "answer": "5",
+      "accepted_answers": [
+        "5"
+      ],
+      "explanation": "Passing x with the `ref` modifier passes a managed reference to x's storage location, updating x to 5."
+    },
+    {
+      "id": "out2_15",
+      "category": "Python Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "data = {'a': 1, 'b': 2}\nprint(data.get('c', 99), 'c' in data)",
+      "answer": "99 False",
+      "accepted_answers": [
+        "99 False"
+      ],
+      "explanation": "dict.get() returns the default fallback (99) without inserting the missing key into the dictionary."
+    },
+    {
+      "id": "out2_16",
+      "category": "C++ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "#include <iostream>\nint main() {\n    uint8_t x = 250;\n    x += 10;\n    std::cout << static_cast<int>(x);\n}",
+      "answer": "4",
+      "accepted_answers": [
+        "4"
+      ],
+      "explanation": "Unsigned 8-bit arithmetic wraps modulo 256: (250 + 10) % 256 = 260 % 256 = 4."
+    },
+    {
+      "id": "out2_17",
+      "category": "JavaScript Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "const [a, ...rest] = [10, 20, 30, 40];\nconsole.log(a, rest.length);",
+      "answer": "10 3",
+      "accepted_answers": [
+        "10 3"
+      ],
+      "explanation": "Array destructuring binds a = 10 and gathers the remaining 3 elements [20, 30, 40] into rest."
+    },
+    {
+      "id": "out2_18",
+      "category": "Java Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact output:",
+      "code": "public class Main {\n    public static void main(String[] args) {\n        String s = \"abc\";\n        s.toUpperCase();\n        System.out.print(s);\n    }\n}",
+      "answer": "abc",
+      "accepted_answers": [
+        "abc"
+      ],
+      "explanation": "Java Strings are immutable; s.toUpperCase() returns a new String that was ignored rather than reassigned to s."
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "deck_name": "39 - Applied Math for CPS (Matrices, Quaternions & Fixed-Point)",
+  "cards": [
+    {
+      "id": "math_01",
+      "category": "Linear Algebra",
+      "type": "flashcard",
+      "prompt": "For two matrices A (size 3x4) and B (size 4x2), what is the dimension of the product A * B, and is B * A defined?",
+      "code": "",
+      "answer": "3x2; B * A is undefined",
+      "accepted_answers": [
+        "3x2, undefined",
+        "3x2 and no",
+        "3x2"
+      ],
+      "explanation": "Inner dimensions must match (4 == 4), giving outer dimensions 3x2; B * A requires inner dimensions 2 == 3, which is invalid."
+    },
+    {
+      "id": "math_02",
+      "category": "3D Rotations",
+      "type": "flashcard",
+      "prompt": "What geometric property defines an orthogonal 3x3 rotation matrix R, making its inverse trivial to compute on an embedded CPU?",
+      "code": "",
+      "answer": "R^-1 = R^T (its inverse equals its transpose, and det(R) = +1)",
+      "accepted_answers": [
+        "inverse equals transpose",
+        "R inverse equals R transpose"
+      ],
+      "explanation": "Because columns of a rotation matrix are orthonormal unit vectors, inverting a rotation requires only a fast matrix transpose instead of Gaussian elimination."
+    },
+    {
+      "id": "math_03",
+      "category": "3D Rotations",
+      "type": "flashcard",
+      "prompt": "Why do aerospace and robotics attitude estimators prefer unit quaternions (q0, q1, q2, q3) over Euler angles (roll, pitch, yaw)?",
+      "code": "",
+      "answer": "Quaternions avoid gimbal lock and use fewer FLOPs without trigonometric functions",
+      "accepted_answers": [
+        "avoid gimbal lock",
+        "no gimbal lock and faster composition"
+      ],
+      "explanation": "Euler angles suffer from gimbal lock at +/-90 degrees pitch and require expensive sin/cos calls, whereas quaternion multiplication is singularity-free and purely algebraic."
+    },
+    {
+      "id": "math_04",
+      "category": "3D Rotations",
+      "type": "flashcard",
+      "prompt": "What numerical drift error occurs after thousands of quaternion integration steps on an IMU, and how do you fix it each cycle?",
+      "code": "",
+      "answer": "The quaternion norm drifts away from 1.0; fix by normalizing q = q / ||q||",
+      "accepted_answers": [
+        "norm drift; normalize the quaternion",
+        "renormalize q"
+      ],
+      "explanation": "Floating-point rounding causes ||q|| != 1, introducing scaling distortion; dividing by sqrt(w^2+x^2+y^2+z^2) restores unit length."
+    },
+    {
+      "id": "math_05",
+      "category": "Vector Math",
+      "type": "flashcard",
+      "prompt": "For two 3D vectors u and v, what does u . v = 0 tell you geometrically, and what does ||u x v|| = 0 tell you?",
+      "code": "",
+      "answer": "Dot product 0 means perpendicular (orthogonal); cross product 0 means parallel (collinear)",
+      "accepted_answers": [
+        "perpendicular and parallel",
+        "orthogonal and collinear"
+      ],
+      "explanation": "u . v = ||u|| ||v|| cos(theta) = 0 at 90 degrees; ||u x v|| = ||u|| ||v|| sin(theta) = 0 at 0 or 180 degrees."
+    },
+    {
+      "id": "math_06",
+      "category": "Fixed-Point Arithmetic",
+      "type": "flashcard",
+      "prompt": "In Q16.16 signed fixed-point format (stored in an int32_t), what integer value represents 1.5, and what is the smallest positive resolution (1 LSB)?",
+      "code": "",
+      "answer": "98304 (0x00018000); resolution is 1 / 65536 (~0.00001526)",
+      "accepted_answers": [
+        "98304 and 1/65536",
+        "0x18000 and 1/65536"
+      ],
+      "explanation": "1.5 * 2^16 = 1.5 * 65536 = 98304 (1 in upper 16 bits, 0x8000 in lower 16 bits); 1 LSB equals 2^-16."
+    },
+    {
+      "id": "math_07",
+      "category": "Fixed-Point Arithmetic",
+      "type": "flashcard",
+      "prompt": "When multiplying two Q16.16 numbers stored in int32_t variables, why must you cast to int64_t before multiplying and shifting right by 16?",
+      "code": "",
+      "answer": "To prevent 32-bit intermediate overflow before the >> 16 scaling shift",
+      "accepted_answers": [
+        "prevent intermediate 32-bit overflow",
+        "avoid overflow"
+      ],
+      "explanation": "Multiplying two 32-bit fixed-point integers produces a 64-bit Q32.32 intermediate result; shifting right by 16 brings it back to Q16.16."
+    },
+    {
+      "id": "math_08",
+      "category": "Probability & Estimation",
+      "type": "flashcard",
+      "prompt": "In a 1D Kalman Filter, what happens to the Kalman Gain K when measurement noise covariance R approaches zero (sensor is nearly noise-free)?",
+      "code": "",
+      "answer": "K approaches 1, meaning the filter trusts the new sensor measurement almost completely over the prediction",
+      "accepted_answers": [
+        "K approaches 1",
+        "K -> 1, trusts measurement"
+      ],
+      "explanation": "K = P / (P + R); as R -> 0, K -> 1, so x_new = x_pred + 1 * (z - x_pred) = z."
+    },
+    {
+      "id": "math_09",
+      "category": "Probability & Estimation",
+      "type": "flashcard",
+      "prompt": "Why does an Extended Kalman Filter (EKF) compute Jacobian matrices at every time step while a standard linear Kalman Filter does not?",
+      "code": "",
+      "answer": "To locally linearize nonlinear state-transition or measurement models around the current state estimate",
+      "accepted_answers": [
+        "linearize nonlinear models",
+        "local linearization"
+      ],
+      "explanation": "Nonlinear functions (like sin/cos of heading angle) do not preserve Gaussian distributions directly, so EKF uses first-order Taylor series Jacobians."
+    },
+    {
+      "id": "math_10",
+      "category": "Numeric Representation",
+      "type": "flashcard",
+      "prompt": "In IEEE-754 single-precision float (32-bit), how many bits are allocated to Sign, Exponent, and Mantissa (fraction)?",
+      "code": "",
+      "answer": "1 sign bit, 8 exponent bits, 23 mantissa bits",
+      "accepted_answers": [
+        "1, 8, 23",
+        "1 sign, 8 exponent, 23 mantissa"
+      ],
+      "explanation": "23 explicit mantissa bits (plus 1 implicit leading bit) give ~7 decimal digits of precision, which is why accumulators in long-running loops can lose precision."
+    },
+    {
+      "id": "math_11",
+      "category": "Fixed-Point Arithmetic",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Q16.16 fixed-point multiplication in C:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    int32_t a = 3 << 16;          // 3.0\n    int32_t b = (2 << 16) + 32768; // 2.5\n    int32_t prod = (int32_t)(((int64_t)a * b) >> 16);\n    printf(\"%d.%d\\n\", prod >> 16, ((prod & 0xFFFF) * 10) >> 16);\n    return 0;\n}",
+      "answer": "7.5",
+      "accepted_answers": [
+        "7.5"
+      ],
+      "explanation": "3.0 * 2.5 = 7.5; upper 16 bits equal 7, and lower 16 bits equal 0x8000 (0.5), printing 7.5."
+    },
+    {
+      "id": "math_12",
+      "category": "Digital Filters",
+      "type": "flashcard",
+      "prompt": "In a single-pole discrete exponential moving average filter y[n] = alpha * x[n] + (1 - alpha) * y[n-1], does a smaller alpha (e.g., 0.05 vs 0.8) produce stronger smoothing or faster step response?",
+      "code": "",
+      "answer": "Stronger smoothing (lower cutoff frequency, more phase lag)",
+      "accepted_answers": [
+        "stronger smoothing",
+        "more smoothing"
+      ],
+      "explanation": "A small alpha weights past output heavily (95%), attenuating high-frequency noise strongly at the cost of slower step response."
+    }
+  ]
+}

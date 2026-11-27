@@ -1,0 +1,382 @@
+{
+  "deck_name": "03 - CPTC AAT: OO Design, Git & Multi-Language Unit Testing",
+  "cards": [
+    {
+      "id": "aat03_01",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that a class should have only one reason to change?",
+      "code": "",
+      "answer": "Single Responsibility Principle",
+      "accepted_answers": [
+        "SRP",
+        "Single Responsibility",
+        "Single Responsibility Principle (SRP)"
+      ],
+      "explanation": "Separating responsibilities prevents changes in one concern (like persistence) from breaking another (like business rules)."
+    },
+    {
+      "id": "aat03_02",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that software entities should be open for extension, but closed for modification?",
+      "code": "",
+      "answer": "Open/Closed Principle",
+      "accepted_answers": [
+        "OCP",
+        "Open Closed Principle",
+        "Open-Closed Principle",
+        "Open/Closed Principle (OCP)"
+      ],
+      "explanation": "You add new behavior via interfaces or polymorphism rather than editing existing tested code."
+    },
+    {
+      "id": "aat03_03",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that subtypes must be substitutable for their base types without altering program correctness?",
+      "code": "",
+      "answer": "Liskov Substitution Principle",
+      "accepted_answers": [
+        "LSP",
+        "Liskov Substitution",
+        "Liskov Substitution Principle (LSP)"
+      ],
+      "explanation": "A derived class must honor the behavioral contracts and invariants expected of its base class."
+    },
+    {
+      "id": "aat03_04",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle favors many small, role-specific interfaces over one large general-purpose interface?",
+      "code": "",
+      "answer": "Interface Segregation Principle",
+      "accepted_answers": [
+        "ISP",
+        "Interface Segregation",
+        "Interface Segregation Principle (ISP)"
+      ],
+      "explanation": "Clients should never be forced to implement methods they do not use."
+    },
+    {
+      "id": "aat03_05",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which SOLID principle states that high-level modules should depend on abstractions rather than concrete low-level modules?",
+      "code": "",
+      "answer": "Dependency Inversion Principle",
+      "accepted_answers": [
+        "DIP",
+        "Dependency Inversion",
+        "Dependency Inversion Principle (DIP)"
+      ],
+      "explanation": "Dependency Injection is a common technique used to satisfy the Dependency Inversion Principle."
+    },
+    {
+      "id": "aat03_06",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "In UML class diagrams, which relationship represents strong ownership where the child cannot exist independently of the parent (filled diamond)?",
+      "code": "",
+      "answer": "Composition",
+      "accepted_answers": [
+        "composition"
+      ],
+      "explanation": "Composition implies lifecycle ownership (e.g., a Room inside a House), whereas Aggregation (hollow diamond) allows shared/independent lifecycles."
+    },
+    {
+      "id": "aat03_07",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which GoF design pattern encapsulates a family of interchangeable algorithms behind a common interface and selects one at runtime?",
+      "code": "",
+      "answer": "Strategy",
+      "accepted_answers": [
+        "Strategy pattern",
+        "Strategy Pattern"
+      ],
+      "explanation": "Strategy replaces rigid conditional logic (if/else chains) with composition over a common behavior interface."
+    },
+    {
+      "id": "aat03_08",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "Which GoF design pattern defines a one-to-many dependency so that when one object changes state, all registered dependents are notified automatically?",
+      "code": "",
+      "answer": "Observer",
+      "accepted_answers": [
+        "Observer pattern",
+        "Observer Pattern",
+        "Pub/Sub"
+      ],
+      "explanation": "Events, delegates, and reactive streams implement the Observer pattern."
+    },
+    {
+      "id": "aat03_09",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "In software architecture, should you aim for HIGH or LOW coupling, and HIGH or LOW cohesion?",
+      "code": "",
+      "answer": "Low coupling, high cohesion",
+      "accepted_answers": [
+        "low coupling and high cohesion",
+        "high cohesion, low coupling",
+        "high cohesion and low coupling"
+      ],
+      "explanation": "Low coupling minimizes inter-module dependencies; high cohesion keeps closely related logic together inside one module."
+    },
+    {
+      "id": "aat03_10",
+      "category": "Agile & Scrum",
+      "type": "flashcard",
+      "prompt": "In Scrum, which time-boxed ceremony at the end of a Sprint focuses on inspecting team processes and creating an improvement plan for the next Sprint?",
+      "code": "",
+      "answer": "Sprint Retrospective",
+      "accepted_answers": [
+        "Retrospective",
+        "Sprint Retro"
+      ],
+      "explanation": "Sprint Review inspects the product increment with stakeholders; Sprint Retrospective inspects how the team worked together."
+    },
+    {
+      "id": "aat03_11",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What modern Git command creates and checks out a new branch named feat/pid-loop in one step?",
+      "code": "",
+      "answer": "git switch -c feat/pid-loop",
+      "accepted_answers": [
+        "git checkout -b feat/pid-loop"
+      ],
+      "explanation": "git switch -c (Git 2.23+) cleanly separates branch switching/creation from file restoration."
+    },
+    {
+      "id": "aat03_12",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Git command lets you interactively stage specific hunks (chunks) of changes inside a modified file?",
+      "code": "",
+      "answer": "git add -p",
+      "accepted_answers": [
+        "git add --patch"
+      ],
+      "explanation": "Interactive patch staging keeps commits atomic and focused on a single logical change."
+    },
+    {
+      "id": "aat03_13",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Git command unstages a file named Program.cs from the index without discarding your working directory edits?",
+      "code": "",
+      "answer": "git restore --staged Program.cs",
+      "accepted_answers": [
+        "git reset HEAD Program.cs",
+        "git reset Program.cs"
+      ],
+      "explanation": "git restore --staged moves changes out of the staging area back into the unstaged working tree."
+    },
+    {
+      "id": "aat03_14",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Git command temporarily saves uncommitted tracked modifications onto a stack so you can switch branches cleanly?",
+      "code": "",
+      "answer": "git stash",
+      "accepted_answers": [
+        "git stash push"
+      ],
+      "explanation": "Use git stash pop later to reapply the saved changes and remove them from the stash list."
+    },
+    {
+      "id": "aat03_15",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Git command displays a compact ASCII branch graph across all branches with one commit per line?",
+      "code": "",
+      "answer": "git log --oneline --graph --all",
+      "accepted_answers": [
+        "git log --graph --oneline --all",
+        "git log --all --graph --oneline"
+      ],
+      "explanation": "Combining --oneline, --graph, and --all reveals branch divergence and merge topology."
+    },
+    {
+      "id": "aat03_16",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "Which Git command safely undoes an already-pushed commit by creating a brand-new commit with the inverse changes?",
+      "code": "",
+      "answer": "git revert",
+      "accepted_answers": [
+        "git revert HEAD"
+      ],
+      "explanation": "Unlike git reset --hard, git revert preserves public commit history without requiring a force push."
+    },
+    {
+      "id": "aat03_17",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Conventional Commit prefix indicates a backward-compatible new feature?",
+      "code": "",
+      "answer": "feat:",
+      "accepted_answers": [
+        "feat"
+      ],
+      "explanation": "Conventional Commits use prefixes like feat:, fix:, docs:, refactor:, and test: to automate changelogs and semantic versioning."
+    },
+    {
+      "id": "aat03_18",
+      "category": "Git Workflow",
+      "type": "flashcard",
+      "prompt": "What Git command fetches remote commits and immediately integrates them into your current local branch?",
+      "code": "",
+      "answer": "git pull",
+      "accepted_answers": [
+        "git pull origin"
+      ],
+      "explanation": "git pull executes git fetch followed by git merge (or git rebase if configured with --rebase)."
+    },
+    {
+      "id": "aat03_19",
+      "category": "Unit Testing",
+      "type": "flashcard",
+      "prompt": "What are the three phases of the standard AAA unit-testing structure?",
+      "code": "",
+      "answer": "Arrange, Act, Assert",
+      "accepted_answers": [
+        "Arrange Act Assert",
+        "Arrange, Act, and Assert"
+      ],
+      "explanation": "Arrange sets up inputs/mocks, Act invokes the unit under test, and Assert verifies the expected outcome."
+    },
+    {
+      "id": "aat03_20",
+      "category": "Unit Testing (C# xUnit)",
+      "type": "flashcard",
+      "prompt": "In C# xUnit, which attribute marks a single parameterless unit test method?",
+      "code": "",
+      "answer": "[Fact]",
+      "accepted_answers": [
+        "Fact"
+      ],
+      "explanation": "[Fact] marks a test that is always true for fixed inputs; [Theory] marks a parameterized test."
+    },
+    {
+      "id": "aat03_21",
+      "category": "Unit Testing (C# xUnit)",
+      "type": "flashcard",
+      "prompt": "In C# xUnit, which two attributes work together to run a data-driven test with inline argument sets?",
+      "code": "",
+      "answer": "[Theory] and [InlineData]",
+      "accepted_answers": [
+        "Theory and InlineData",
+        "[Theory], [InlineData]",
+        "Theory, InlineData"
+      ],
+      "explanation": "[Theory] declares a parameterized test method, while each [InlineData(...)] attribute supplies one test case."
+    },
+    {
+      "id": "aat03_22",
+      "category": "Unit Testing (Java JUnit 5)",
+      "type": "flashcard",
+      "prompt": "In Java JUnit 5, which annotation runs a setup method before each individual @Test method in a test class?",
+      "code": "",
+      "answer": "@BeforeEach",
+      "accepted_answers": [
+        "BeforeEach"
+      ],
+      "explanation": "@BeforeEach resets state per test to prevent test interdependence; @BeforeAll runs once per class."
+    },
+    {
+      "id": "aat03_23",
+      "category": "Unit Testing (C++ GoogleTest)",
+      "type": "flashcard",
+      "prompt": "In C++ GoogleTest, what is the difference between EXPECT_EQ(a, b) and ASSERT_EQ(a, b) when a check fails?",
+      "code": "",
+      "answer": "EXPECT_EQ logs a non-fatal failure and continues the test; ASSERT_EQ aborts the current test immediately",
+      "accepted_answers": [
+        "EXPECT_EQ is non-fatal and ASSERT_EQ is fatal",
+        "ASSERT_EQ aborts the test, EXPECT_EQ continues"
+      ],
+      "explanation": "Use ASSERT_* when subsequent lines in the test would crash (e.g., dereferencing a pointer after ASSERT_NE(ptr, nullptr))."
+    },
+    {
+      "id": "aat03_24",
+      "category": "Unit Testing (Python pytest)",
+      "type": "flashcard",
+      "prompt": "In Python pytest, what decorator is used to inject reusable setup dependencies into test functions by parameter name?",
+      "code": "",
+      "answer": "@pytest.fixture",
+      "accepted_answers": [
+        "pytest.fixture"
+      ],
+      "explanation": "Fixtures can yield resources and run deterministic teardown code after the test completes."
+    },
+    {
+      "id": "aat03_25",
+      "category": "Unit Testing (JavaScript Jest)",
+      "type": "flashcard",
+      "prompt": "In JavaScript Jest, which matcher checks deep value equality for objects and arrays instead of strict reference equality (toBe)?",
+      "code": "",
+      "answer": "toEqual",
+      "accepted_answers": [
+        ".toEqual()",
+        "toEqual()"
+      ],
+      "explanation": "toBe uses Object.is (reference identity for objects), whereas toEqual recursively compares object properties."
+    },
+    {
+      "id": "aat03_26",
+      "category": "Unit Testing",
+      "type": "flashcard",
+      "prompt": "What type of test double records how it was called (call counts, arguments) so a test can verify interactions?",
+      "code": "",
+      "answer": "Mock",
+      "accepted_answers": [
+        "Spy",
+        "Mock or Spy"
+      ],
+      "explanation": "Stubs return canned data; Mocks/Spies verify behavioral interactions with dependencies."
+    },
+    {
+      "id": "aat03_27",
+      "category": "OO Analysis & Design",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# Strategy-pattern snippet:",
+      "code": "using System;\ninterface IOp { int Run(int x); }\nclass DoubleOp : IOp { public int Run(int x) => x * 2; }\nclass AddTenOp : IOp { public int Run(int x) => x + 10; }\nclass Program {\n    static void Main() {\n        IOp op = new DoubleOp();\n        int v = op.Run(5);\n        op = new AddTenOp();\n        Console.WriteLine(op.Run(v));\n    }\n}",
+      "answer": "20",
+      "explanation": "DoubleOp.Run(5) returns 10, then AddTenOp.Run(10) returns 20."
+    },
+    {
+      "id": "aat03_28",
+      "category": "Unit Testing (Python pytest)",
+      "type": "code_output",
+      "prompt": "Predict the exact console output when running this Python snippet:",
+      "code": "def divide(a, b):\n    if b == 0:\n        raise ValueError(\"zero\")\n    return a // b\n\ntry:\n    print(divide(10, 2))\n    print(divide(5, 0))\nexcept ValueError as e:\n    print(f\"caught:{e}\")",
+      "answer": "5\ncaught:zero",
+      "explanation": "10 // 2 prints 5; divide(5, 0) raises ValueError('zero'), caught and formatted as 'caught:zero'."
+    },
+    {
+      "id": "aat03_29",
+      "category": "JavaScript Logic",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this JavaScript closure snippet:",
+      "code": "function makeCounter() {\n  let count = 0;\n  return () => ++count;\n}\nconst c = makeCounter();\nconsole.log(c(), c());",
+      "answer": "1 2",
+      "explanation": "The returned arrow function closes over the lexical variable count, incrementing it from 0 to 1, then 1 to 2."
+    },
+    {
+      "id": "aat03_30",
+      "category": "OO Analysis & Design",
+      "type": "flashcard",
+      "prompt": "What software principle warns against adding speculative abstraction or features before there is an actual requirement?",
+      "code": "",
+      "answer": "YAGNI",
+      "accepted_answers": [
+        "You Aren't Gonna Need It",
+        "You Arent Gonna Need It"
+      ],
+      "explanation": "YAGNI ('You Aren't Gonna Need It') prevents over-engineering and unnecessary maintenance burden."
+    }
+  ]
+}

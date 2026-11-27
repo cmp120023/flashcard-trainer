@@ -1,0 +1,202 @@
+{
+  "deck_name": "20 - ASP.NET Core Web APIs, JWT Auth & EF Core Performance",
+  "cards": [
+    {
+      "id": "webapi_01",
+      "category": "ASP.NET Core Web API",
+      "type": "flashcard",
+      "prompt": "What does the `[ApiController]` attribute automatically enable on an ASP.NET Core controller class?",
+      "code": "",
+      "answer": "Automatic HTTP 400 Bad Request responses on model validation errors, attribute routing requirement, and default parameter source binding inference",
+      "accepted_answers": [
+        "Automatic 400 validation responses and binding inference",
+        "Automatic model state 400 responses and binding inference",
+        "Automatic HTTP 400 on invalid ModelState"
+      ],
+      "explanation": "[ApiController] removes boilerplate ModelState.IsValid checks and infers [FromBody] for complex types and [FromRoute]/[FromQuery] for primitives."
+    },
+    {
+      "id": "webapi_02",
+      "category": "HTTP & REST",
+      "type": "flashcard",
+      "prompt": "What is the key semantic difference between HTTP PUT and HTTP PATCH?",
+      "code": "",
+      "answer": "PUT replaces the entire resource representation (idempotent), whereas PATCH applies a partial update to specific fields",
+      "accepted_answers": [
+        "PUT replaces the whole resource; PATCH applies a partial update",
+        "PUT is full replacement, PATCH is partial update"
+      ],
+      "explanation": "PUT sends a complete updated entity; PATCH sends only the changed fields (e.g., JSON Merge Patch or JSON Patch)."
+    },
+    {
+      "id": "webapi_03",
+      "category": "HTTP Status Codes",
+      "type": "flashcard",
+      "prompt": "What is the difference between HTTP status code 401 Unauthorized and 403 Forbidden?",
+      "code": "",
+      "answer": "401 means the client is unauthenticated (missing or invalid credentials); 403 means the client is authenticated but lacks permission for the resource",
+      "accepted_answers": [
+        "401 is unauthenticated, 403 is authenticated without permission",
+        "401 = authentication failure, 403 = authorization failure"
+      ],
+      "explanation": "401 challenges identity; 403 refuses access even though identity is known."
+    },
+    {
+      "id": "webapi_04",
+      "category": "JWT Authentication",
+      "type": "flashcard",
+      "prompt": "What are the three Base64Url-encoded sections of a standard JSON Web Token (JWT) separated by dots?",
+      "code": "",
+      "answer": "Header, Payload, Signature",
+      "accepted_answers": [
+        "Header, Payload, Signature",
+        "Header.Payload.Signature"
+      ],
+      "explanation": "Header specifies signing algorithm/type, Payload holds claims (sub, exp, role), and Signature verifies integrity."
+    },
+    {
+      "id": "webapi_05",
+      "category": "JWT Security",
+      "type": "flashcard",
+      "prompt": "Why must you never store sensitive secrets inside a JWT payload unless using JWE (encrypted tokens)?",
+      "code": "",
+      "answer": "Standard JWT payloads are only Base64Url-encoded, not encrypted, so anyone can decode and read them",
+      "accepted_answers": [
+        "JWT payloads are Base64Url-encoded, not encrypted",
+        "Payload is signed, not encrypted"
+      ],
+      "explanation": "JWS signatures prevent tampering, not inspection; any client or intermediary can Base64-decode the payload."
+    },
+    {
+      "id": "webapi_06",
+      "category": "EF Core Performance",
+      "type": "flashcard",
+      "prompt": "What is the N+1 query problem in EF Core, and how do you solve it when loading related entities?",
+      "code": "",
+      "answer": "Executing 1 query for parent rows plus N separate queries for child collections; solved using eager loading (.Include/.ThenInclude) or projection (.Select)",
+      "accepted_answers": [
+        "1 parent query + N child queries; solved with .Include() or .Select()",
+        "Use .Include() or projection .Select()"
+      ],
+      "explanation": "Lazy loading inside a loop triggers N extra database round-trips; .Include() or projecting directly to a DTO fetches data in a single query."
+    },
+    {
+      "id": "webapi_07",
+      "category": "EF Core Performance",
+      "type": "flashcard",
+      "prompt": "What is a 'Cartesian explosion' in EF Core when calling multiple `.Include()` methods on collection navigations, and which method splits them into separate queries?",
+      "code": "",
+      "answer": "Row duplication from joining multiple 1-to-many collections in one SQL query; solved with .AsSplitQuery()",
+      "accepted_answers": [
+        ".AsSplitQuery()",
+        "AsSplitQuery"
+      ],
+      "explanation": "Joining two large child collections multiplies rows (M x K); .AsSplitQuery() executes separate clean SELECTs per collection."
+    },
+    {
+      "id": "webapi_08",
+      "category": "EF Core 7/8+",
+      "type": "flashcard",
+      "prompt": "Which EF Core methods perform bulk set-based updates or deletes directly in SQL without loading entities into the ChangeTracker first?",
+      "code": "",
+      "answer": "ExecuteUpdateAsync() and ExecuteDeleteAsync()",
+      "accepted_answers": [
+        "ExecuteUpdateAsync and ExecuteDeleteAsync",
+        "ExecuteUpdate and ExecuteDelete"
+      ],
+      "explanation": "ExecuteUpdate/ExecuteDelete compile directly to SQL UPDATE/DELETE statements, bypassing entity materialization and ChangeTracker overhead."
+    },
+    {
+      "id": "webapi_09",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "What is the standard RFC 9457 / 7807 JSON error format built into ASP.NET Core for returning machine-readable HTTP API errors?",
+      "code": "",
+      "answer": "ProblemDetails",
+      "accepted_answers": [
+        "ProblemDetails",
+        "Problem Details",
+        "application/problem+json"
+      ],
+      "explanation": "ProblemDetails standardizes type, title, status, detail, and instance fields across API error responses."
+    },
+    {
+      "id": "webapi_10",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "Which interface introduced in .NET 8 provides a clean, centralized pipeline hook for catching unhandled exceptions and writing ProblemDetails responses?",
+      "code": "",
+      "answer": "IExceptionHandler",
+      "accepted_answers": [
+        "IExceptionHandler"
+      ],
+      "explanation": "Registering builder.Services.AddExceptionHandler<T>() with app.UseExceptionHandler() replaces custom try/catch middleware."
+    },
+    {
+      "id": "webapi_11",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "Why should async ASP.NET Core controller actions accept a `CancellationToken` parameter and pass it down to EF Core / HttpClient calls?",
+      "code": "",
+      "answer": "To abort in-flight database/network work immediately if the HTTP client disconnects or times out",
+      "accepted_answers": [
+        "Abort work when the client disconnects",
+        "Cancel database queries when client aborts request"
+      ],
+      "explanation": "Propagating CancellationToken frees threads and database connections when a browser or caller cancels a request."
+    },
+    {
+      "id": "webapi_12",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "Why should you inject `IHttpClientFactory` (or typed clients) instead of instantiating `new HttpClient()` per request in .NET?",
+      "code": "",
+      "answer": "Creating HttpClient per request exhausts OS sockets (TIME_WAIT), while a static HttpClient misses DNS updates; IHttpClientFactory pools and rotates handlers safely",
+      "accepted_answers": [
+        "Prevents socket exhaustion and handles DNS rotation",
+        "Avoids socket exhaustion and stale DNS"
+      ],
+      "explanation": "IHttpClientFactory manages underlying HttpMessageHandler lifetimes so TCP connections are reused without ignoring DNS TTL changes."
+    },
+    {
+      "id": "webapi_13",
+      "category": "Security",
+      "type": "flashcard",
+      "prompt": "What is CORS (Cross-Origin Resource Sharing), and is it enforced by the server or by the web browser?",
+      "code": "",
+      "answer": "A browser security mechanism controlled via server response headers (Access-Control-Allow-Origin) that restricts cross-origin JavaScript requests",
+      "accepted_answers": [
+        "Enforced by the browser using server headers",
+        "Browser security policy"
+      ],
+      "explanation": "Browsers enforce CORS to prevent malicious sites from reading responses from another origin; non-browser tools like curl ignore CORS headers."
+    },
+    {
+      "id": "webapi_14",
+      "category": "EF Core",
+      "type": "flashcard",
+      "prompt": "Why should you avoid returning EF Core entity classes directly from Web API endpoints instead of mapping to DTOs (Data Transfer Objects)?",
+      "code": "",
+      "answer": "Prevents over-posting vulnerabilities, avoids leaking sensitive columns, prevents circular reference JSON exceptions, and decouples API contracts from DB schema",
+      "accepted_answers": [
+        "Prevents over-posting, data leaks, and circular JSON references",
+        "Decouples API contract from DB schema and prevents over-posting"
+      ],
+      "explanation": "DTOs enforce strict input/output shapes so clients cannot bind hidden properties like IsAdmin or trigger lazy-loading serialization loops."
+    },
+    {
+      "id": "webapi_15",
+      "category": "ASP.NET Core",
+      "type": "flashcard",
+      "prompt": "In `Program.cs`, which method binds a strongly typed C# configuration class to a section of `appsettings.json` so it can be injected via `IOptions<T>`?",
+      "code": "",
+      "answer": "builder.Services.Configure<T>(builder.Configuration.GetSection(\"...\"))",
+      "accepted_answers": [
+        "Services.Configure<T>",
+        "builder.Services.Configure<T>",
+        "Configure<T>"
+      ],
+      "explanation": "Configure<T> registers IOptions<T>, IOptionsSnapshot<T>, and IOptionsMonitor<T> in the DI container."
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "deck_name": "Deck 35: Linux CLI, Bash Scripting & Systemd",
+  "cards": [
+    {
+      "id": "lin_sys_01",
+      "category": "Bash Scripting",
+      "type": "flashcard",
+      "prompt": "What exact combination of Bash shell options is known as 'unofficial strict mode' to immediately exit on command errors, undefined variables, and pipeline failures?",
+      "answer": "set -euo pipefail",
+      "accepted_answers": [
+        "set -euo pipefail",
+        "set -e -u -o pipefail"
+      ],
+      "explanation": "-e exits on non-zero exit status, -u treats unset variables as errors, and -o pipefail causes a pipeline to return the exit code of the first failing command rather than just the last command."
+    },
+    {
+      "id": "lin_sys_02",
+      "category": "Linux I/O Redirection",
+      "type": "flashcard",
+      "prompt": "In POSIX shells/Bash, what exact redirection syntax redirects both stdout (FD 1) and stderr (FD 2) to a file named build.log?",
+      "answer": "> build.log 2>&1",
+      "accepted_answers": [
+        "> build.log 2>&1",
+        "&> build.log",
+        "1> build.log 2>&1"
+      ],
+      "explanation": "'> build.log' points FD 1 to build.log first, and '2>&1' then duplicates FD 1's destination onto FD 2. Order matters: reversing them sends stderr to the terminal before stdout is redirected."
+    },
+    {
+      "id": "lin_sys_03",
+      "category": "Systemd Units",
+      "type": "flashcard",
+      "prompt": "In a systemd .service unit file, which [Service] directive ensures a crashed or killed daemon automatically restarts after a delay?",
+      "answer": "Restart=always",
+      "accepted_answers": [
+        "Restart=always",
+        "Restart=on-failure",
+        "Restart="
+      ],
+      "explanation": "Setting Restart=always (or Restart=on-failure) paired with RestartSec= configures systemd's service supervisor to automatically respawn critical embedded edge daemons."
+    },
+    {
+      "id": "lin_sys_04",
+      "category": "Systemd CLI",
+      "type": "flashcard",
+      "prompt": "After editing or creating a systemd .service file in /etc/systemd/system/, what systemctl command must you run before starting the service so systemd reloads unit configurations from disk?",
+      "answer": "sudo systemctl daemon-reload",
+      "accepted_answers": [
+        "sudo systemctl daemon-reload",
+        "systemctl daemon-reload"
+      ],
+      "explanation": "Systemd caches parsed unit files in memory; daemon-reload forces it to re-parse all unit files and regenerate dependency trees."
+    },
+    {
+      "id": "lin_sys_05",
+      "category": "Systemd Logging",
+      "type": "flashcard",
+      "prompt": "What journalctl command follows (tails) live log entries specifically for a systemd unit named edge-gateway.service?",
+      "answer": "journalctl -u edge-gateway.service -f",
+      "accepted_answers": [
+        "journalctl -u edge-gateway.service -f",
+        "journalctl -fu edge-gateway.service",
+        "journalctl -u edge-gateway -f",
+        "journalctl -fu edge-gateway"
+      ],
+      "explanation": "-u filters logs to the specified unit, and -f (follow) streams new journal entries in real time similar to tail -f."
+    },
+    {
+      "id": "lin_sys_06",
+      "category": "Process & Hardware Debugging",
+      "type": "flashcard",
+      "prompt": "Which Linux CLI utility attaches to a running process (or launches a binary) and prints every system call it makes along with its arguments and return values?",
+      "answer": "strace",
+      "accepted_answers": [
+        "strace"
+      ],
+      "explanation": "strace uses ptrace to intercept and log kernel syscalls (openat, ioctl, read, write, mmap), making it essential for diagnosing missing device nodes, permission errors, or failing ioctl calls."
+    },
+    {
+      "id": "lin_sys_07",
+      "category": "Linux Permissions",
+      "type": "flashcard",
+      "prompt": "What octal chmod permission mode sets rwxr-xr-x (owner: read/write/execute, group: read/execute, others: read/execute)?",
+      "answer": "755",
+      "accepted_answers": [
+        "755",
+        "0755"
+      ],
+      "explanation": "Read=4, Write=2, Execute=1. Owner = 4+2+1 = 7; Group = 4+0+1 = 5; Others = 4+0+1 = 5."
+    },
+    {
+      "id": "lin_sys_08",
+      "category": "Linux Signals",
+      "type": "flashcard",
+      "prompt": "What is the key difference between sending SIGTERM (15) and SIGKILL (9) to a Linux process?",
+      "answer": "SIGTERM can be caught or ignored for graceful cleanup; SIGKILL cannot be caught and immediately terminates the process via the kernel",
+      "accepted_answers": [
+        "SIGTERM allows graceful shutdown while SIGKILL forces immediate termination",
+        "SIGTERM can be caught/handled; SIGKILL cannot be caught"
+      ],
+      "explanation": "Well-behaved embedded daemons install a SIGTERM handler to flush logs, close file descriptors, and put hardware actuators into a safe state before exiting. SIGKILL bypasses user-space handlers completely."
+    },
+    {
+      "id": "lin_sys_09",
+      "category": "Filesystem & Devices",
+      "type": "flashcard",
+      "prompt": "Which command prints the kernel ring buffer messages, useful for verifying USB serial enumeration, Device Tree probe results, and out-of-tree kernel module printk output?",
+      "answer": "dmesg",
+      "accepted_answers": [
+        "dmesg",
+        "sudo dmesg",
+        "dmesg -w"
+      ],
+      "explanation": "dmesg reads /dev/kmsg to display kernel-space boot and driver diagnostics, including newly attached /dev/ttyUSB* or /dev/spidev* devices."
+    },
+    {
+      "id": "lin_sys_10",
+      "category": "Network & Socket Diagnostics",
+      "type": "flashcard",
+      "prompt": "Which modern Linux CLI tool (replacing netstat) displays active TCP/UDP sockets, listening ports, and owning process PIDs with flags -tulnp?",
+      "answer": "ss",
+      "accepted_answers": [
+        "ss",
+        "ss -tulnp"
+      ],
+      "explanation": "'ss -tulnp' queries kernel netlink sockets directly to list TCP (-t), UDP (-u), listening (-l), numeric ports (-n), and process names/PIDs (-p) much faster than legacy netstat."
+    },
+    {
+      "id": "lin_sys_11",
+      "category": "Text Processing & Pipelines",
+      "type": "code_output",
+      "prompt": "Predict the exact stdout of this Bash one-liner:",
+      "code": "printf \"ERR:10\\nOK:20\\nERR:35\\n\" | awk -F':' '$1 == \"ERR\" { sum += $2 } END { print sum }'",
+      "answer": "45",
+      "accepted_answers": [
+        "45"
+      ],
+      "explanation": "-F':' splits each line on ':'. Only lines where field 1 equals 'ERR' (10 and 35) are added to sum, printing 45 in the END block."
+    },
+    {
+      "id": "lin_sys_12",
+      "category": "Bash Quoting & Expansion",
+      "type": "code_output",
+      "prompt": "Predict the exact stdout of this Bash snippet:",
+      "code": "X=42\necho '$X' \"$X\"",
+      "answer": "$X 42",
+      "accepted_answers": [
+        "$X 42"
+      ],
+      "explanation": "Single quotes preserve every character literally without variable expansion ($X), whereas double quotes allow parameter expansion ($X -> 42)."
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "deck_name": "38 - Code Output Gauntlet v6 (Pointers, Bitwise, Async & Closures)",
+  "cards": [
+    {
+      "id": "g6_01",
+      "category": "C Pointers",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C 2D array pointer arithmetic snippet:",
+      "code": "#include <stdio.h>\n\nint main(void) {\n    int m[2][3] = {{10, 20, 30}, {40, 50, 60}};\n    int *p = &m[0][0];\n    printf(\"%d %d\\n\", *(p + 4), *(*(m + 1) + 2));\n    return 0;\n}",
+      "answer": "50 60",
+      "accepted_answers": [
+        "50 60"
+      ],
+      "explanation": "m is stored contiguously in row-major order: p+4 points to m[1][1] (50), and *(*(m+1)+2) is m[1][2] (60)."
+    },
+    {
+      "id": "g6_02",
+      "category": "C Bitwise",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C bitwise field extraction snippet:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    uint32_t reg = 0xABCD1234;\n    uint8_t field = (reg >> 12) & 0xFF;\n    printf(\"0x%02X\\n\", field);\n    return 0;\n}",
+      "answer": "0xD1",
+      "accepted_answers": [
+        "0xD1",
+        "0xd1"
+      ],
+      "explanation": "Shifting 0xABCD1234 right by 12 bits (3 hex digits) produces 0x000ABCD1; masking with 0xFF isolates the lowest byte 0xD1."
+    },
+    {
+      "id": "g6_03",
+      "category": "C++ References & Const",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ overload resolution snippet:",
+      "code": "#include <iostream>\n\nvoid f(int&) { std::cout << \"L\"; }\nvoid f(int&&) { std::cout << \"R\"; }\n\nint main() {\n    int x = 5;\n    f(x);\n    f(std::move(x));\n    f(10);\n}",
+      "answer": "LRR",
+      "accepted_answers": [
+        "LRR"
+      ],
+      "explanation": "x is an lvalue (calls int&), while std::move(x) and literal 10 are rvalues (call int&&)."
+    },
+    {
+      "id": "g6_04",
+      "category": "C++ RAII & Destructors",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C++ object lifetime snippet:",
+      "code": "#include <iostream>\n\nstruct T {\n    int id;\n    T(int i) : id(i) { std::cout << \"+\" << id; }\n    ~T() { std::cout << \"-\" << id; }\n};\n\nint main() {\n    T a(1);\n    {\n        T b(2);\n    }\n    T c(3);\n}",
+      "answer": "+1+2-2+3-3-1",
+      "accepted_answers": [
+        "+1+2-2+3-3-1"
+      ],
+      "explanation": "b is destroyed at the end of the inner block before c is constructed; at main exit, locals are destroyed in reverse construction order (-3 then -1)."
+    },
+    {
+      "id": "g6_05",
+      "category": "C# Structs & Interfaces",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# struct boxing mutation trap:",
+      "code": "using System;\n\ninterface ICounter { void Inc(); int Val { get; } }\nstruct Counter : ICounter {\n    public int Val { get; private set; }\n    public void Inc() => Val++;\n}\n\nclass Program {\n    static void Main() {\n        Counter c = new Counter();\n        ICounter ic = c;\n        ic.Inc();\n        Console.WriteLine($\"{c.Val}:{ic.Val}\");\n    }\n}",
+      "answer": "0:1",
+      "accepted_answers": [
+        "0:1"
+      ],
+      "explanation": "Assigning value-type struct c to interface ICounter boxes a copy onto the heap; ic.Inc() mutates the boxed copy while original c remains 0."
+    },
+    {
+      "id": "g6_06",
+      "category": "C# Pattern Matching",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this C# switch expression snippet:",
+      "code": "using System;\n\nclass Program {\n    static string Classify(object o) => o switch {\n        int n when n > 10 => \"Big\",\n        int => \"Small\",\n        string s => $\"Str({s.Length})\",\n        _ => \"Other\"\n    };\n    static void Main() {\n        Console.WriteLine($\"{Classify(15)}-{Classify(4)}-{Classify(\"Hi\")}\");\n    }\n}",
+      "answer": "Big-Small-Str(2)",
+      "accepted_answers": [
+        "Big-Small-Str(2)"
+      ],
+      "explanation": "15 matches the guarded int pattern, 4 falls through to the unguarded int pattern, and \"Hi\" matches string s with length 2."
+    },
+    {
+      "id": "g6_07",
+      "category": "Python Slicing & Mutation",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python slice assignment snippet:",
+      "code": "nums = [1, 2, 3, 4, 5]\nnums[1:4] = [20, 30]\nprint(nums)",
+      "answer": "[1, 20, 30, 5]",
+      "accepted_answers": [
+        "[1, 20, 30, 5]"
+      ],
+      "explanation": "Slice assignment replaces elements at indices 1, 2, and 3 ([2, 3, 4]) with [20, 30], shrinking the list to 4 elements."
+    },
+    {
+      "id": "g6_08",
+      "category": "Python Generators",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Python generator exhaustion snippet:",
+      "code": "g = (x * 2 for x in range(3))\nprint(sum(g), sum(g))",
+      "answer": "6 0",
+      "accepted_answers": [
+        "6 0"
+      ],
+      "explanation": "The first sum(g) consumes all items (0 + 2 + 4 = 6); the exhausted generator yields nothing on the second sum(g), returning 0."
+    },
+    {
+      "id": "g6_09",
+      "category": "Java Strings & Equality",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java String pool comparison snippet:",
+      "code": "public class Main {\n    public static void main(String[] args) {\n        String a = \"CPS\";\n        String b = \"CP\" + \"S\";\n        String c = new String(\"CPS\");\n        System.out.println((a == b) + \" \" + (a == c));\n    }\n}",
+      "answer": "true false",
+      "accepted_answers": [
+        "true false"
+      ],
+      "explanation": "Compile-time constant concatenation \"CP\" + \"S\" is interned to the same String pool reference as a, while new String() allocates a distinct heap object."
+    },
+    {
+      "id": "g6_10",
+      "category": "Java Exceptions",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this Java try-catch-finally return override snippet:",
+      "code": "public class Main {\n    static int test() {\n        try {\n            return 1;\n        } finally {\n            return 2;\n        }\n    }\n    public static void main(String[] args) {\n        System.out.println(test());\n    }\n}",
+      "answer": "2",
+      "accepted_answers": [
+        "2"
+      ],
+      "explanation": "In Java, a return statement inside a finally block overrides any pending return value from the try block."
+    },
+    {
+      "id": "g6_11",
+      "category": "JavaScript Closures & Destructuring",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript default destructuring snippet:",
+      "code": "const { a = 10, b = 20 } = { a: undefined, b: null };\nconsole.log(a, b);",
+      "answer": "10 null",
+      "accepted_answers": [
+        "10 null"
+      ],
+      "explanation": "Default destructuring values trigger only when a property is strictly undefined, so a becomes 10 while b stays null."
+    },
+    {
+      "id": "g6_12",
+      "category": "JavaScript Promises",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this JavaScript Promise microtask ordering snippet:",
+      "code": "console.log('A');\nPromise.resolve().then(() => console.log('B'));\nconsole.log('C');",
+      "answer": "A\nC\nB",
+      "accepted_answers": [
+        "A C B",
+        "ACB",
+        "A\\nC\\nB"
+      ],
+      "explanation": "Synchronous code ('A' and 'C') runs to completion before the microtask queue executes the resolved Promise callback ('B')."
+    }
+  ]
+}

@@ -1,0 +1,395 @@
+{
+  "deck_name": "02 - CPTC AAT: Java OOP, C++ & Data Structures (CPW 140/141, 228, 245)",
+  "cards": [
+    {
+      "id": "cptc02_01",
+      "category": "CPW 140/141 Java OOP",
+      "type": "flashcard",
+      "prompt": "In Java, which keyword prevents a class from being subclassed (inherited)?",
+      "code": "",
+      "answer": "final",
+      "accepted_answers": [
+        "final"
+      ],
+      "explanation": "Declaring a class as 'final' (e.g., public final class MathUtils) prohibits inheritance."
+    },
+    {
+      "id": "cptc02_02",
+      "category": "CPW 140/141 Java OOP",
+      "type": "flashcard",
+      "prompt": "In Java, what keyword is used inside a subclass constructor to explicitly invoke its parent class constructor?",
+      "code": "",
+      "answer": "super",
+      "accepted_answers": [
+        "super",
+        "super()"
+      ],
+      "explanation": "super(...) must be the very first statement in a subclass constructor."
+    },
+    {
+      "id": "cptc02_03",
+      "category": "CPW 140/141 Java OOP",
+      "type": "flashcard",
+      "prompt": "In Java, which interface must a class implement to define a natural ordering via its compareTo(T o) method?",
+      "code": "",
+      "answer": "Comparable",
+      "accepted_answers": [
+        "Comparable",
+        "Comparable<T>"
+      ],
+      "explanation": "java.lang.Comparable<T> defines int compareTo(T o) for natural sorting in Collections.sort()."
+    },
+    {
+      "id": "cptc02_04",
+      "category": "CPW 140/141 Java OOP",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java snippet:",
+      "code": "String a = new String(\"CPTC\");\nString b = new String(\"CPTC\");\nSystem.out.println((a == b) + \" \" + a.equals(b));",
+      "answer": "false true",
+      "accepted_answers": [
+        "false true"
+      ],
+      "explanation": "'==' compares object references on the heap (two distinct String instances -> false), whereas .equals() compares character sequences (true)."
+    },
+    {
+      "id": "cptc02_05",
+      "category": "CPW 140/141 Java OOP",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java polymorphism snippet:",
+      "code": "class Sensor {\n    String type() { return \"Generic\"; }\n}\nclass Lidar extends Sensor {\n    @Override String type() { return \"LiDAR\"; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Sensor s = new Lidar();\n        System.out.println(s.type());\n    }\n}",
+      "answer": "LiDAR",
+      "accepted_answers": [
+        "LiDAR"
+      ],
+      "explanation": "Instance methods in Java are virtual by default; dynamic dispatch resolves s.type() to Lidar's overridden implementation at runtime."
+    },
+    {
+      "id": "cptc02_06",
+      "category": "CPW 140/141 Java OOP",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java try-catch-finally block:",
+      "code": "public static int test() {\n    try {\n        return 10;\n    } finally {\n        System.out.print(\"F-\");\n    }\n}\npublic static void main(String[] args) {\n    System.out.println(test());\n}",
+      "answer": "F-10",
+      "accepted_answers": [
+        "F-10"
+      ],
+      "explanation": "The finally block executes before the method returns control and the value 10 to the caller."
+    },
+    {
+      "id": "cptc02_07",
+      "category": "CPW 140/141 Java OOP",
+      "type": "flashcard",
+      "prompt": "In Java Collections, which Set implementation maintains insertion order while preventing duplicates?",
+      "code": "",
+      "answer": "LinkedHashSet",
+      "accepted_answers": [
+        "LinkedHashSet",
+        "LinkedHashSet<T>"
+      ],
+      "explanation": "HashSet makes no ordering guarantees, TreeSet sorts elements, and LinkedHashSet preserves insertion order using a doubly-linked list."
+    },
+    {
+      "id": "cptc02_08",
+      "category": "CPW 140/141 Java OOP",
+      "type": "flashcard",
+      "prompt": "In Java, what is the difference between checked and unchecked exceptions regarding compiler enforcement?",
+      "code": "",
+      "answer": "Checked exceptions must be caught or declared with throws",
+      "accepted_answers": [
+        "Checked exceptions must be caught or declared with throws",
+        "Checked exceptions are checked at compile time",
+        "Checked exceptions require try-catch or throws"
+      ],
+      "explanation": "Subclasses of Exception (excluding RuntimeException) are checked at compile time; RuntimeException and Error subclasses are unchecked."
+    },
+    {
+      "id": "cptc02_09",
+      "category": "CPW 228 C++",
+      "type": "flashcard",
+      "prompt": "In C++, what is the idiom where resource acquisition (memory, file handles, mutexes) is tied to object lifetime and released in the destructor?",
+      "code": "",
+      "answer": "RAII",
+      "accepted_answers": [
+        "RAII",
+        "Resource Acquisition Is Initialization"
+      ],
+      "explanation": "RAII (Resource Acquisition Is Initialization) guarantees deterministic cleanup when stack objects go out of scope, even during exceptions."
+    },
+    {
+      "id": "cptc02_10",
+      "category": "CPW 228 C++",
+      "type": "flashcard",
+      "prompt": "In Modern C++ (<memory>), which smart pointer enforces exclusive single ownership and cannot be copied (only moved)?",
+      "code": "",
+      "answer": "std::unique_ptr",
+      "accepted_answers": [
+        "std::unique_ptr",
+        "unique_ptr"
+      ],
+      "explanation": "std::unique_ptr<T> has zero overhead over a raw pointer and deletes its managed object automatically when destroyed."
+    },
+    {
+      "id": "cptc02_11",
+      "category": "CPW 228 C++",
+      "type": "flashcard",
+      "prompt": "In C++, what keyword must precede a base class destructor when deleting derived objects through a base class pointer?",
+      "code": "",
+      "answer": "virtual",
+      "accepted_answers": [
+        "virtual"
+      ],
+      "explanation": "Without a virtual base destructor, deleting a derived object via Base* causes undefined behavior and skips the derived destructor."
+    },
+    {
+      "id": "cptc02_12",
+      "category": "CPW 228 C++",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ pointer and reference snippet:",
+      "code": "#include <iostream>\nvoid bump(int& r, int* p) {\n    r += 5;\n    *p *= 2;\n}\nint main() {\n    int x = 3, y = 4;\n    bump(x, &y);\n    std::cout << x << \" \" << y;\n}",
+      "answer": "8 8",
+      "accepted_answers": [
+        "8 8"
+      ],
+      "explanation": "r aliases x (3 + 5 = 8), and p points to y (4 * 2 = 8)."
+    },
+    {
+      "id": "cptc02_13",
+      "category": "CPW 228 C++",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ object slicing / non-virtual dispatch snippet:",
+      "code": "#include <iostream>\nstruct Base {\n    void speak() const { std::cout << \"Base\"; }\n};\nstruct Derived : Base {\n    void speak() const { std::cout << \"Derived\"; }\n};\nint main() {\n    Derived d;\n    Base* ptr = &d;\n    ptr->speak();\n}",
+      "answer": "Base",
+      "accepted_answers": [
+        "Base"
+      ],
+      "explanation": "Because speak() is NOT marked virtual in Base, C++ uses static binding based on the pointer type (Base*)."
+    },
+    {
+      "id": "cptc02_14",
+      "category": "CPW 228 C++",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ constructor/destructor order snippet:",
+      "code": "#include <iostream>\nstruct A { A() { std::cout << \"1\"; } ~A() { std::cout << \"2\"; } };\nstruct B : A { B() { std::cout << \"3\"; } ~B() { std::cout << \"4\"; } };\nint main() {\n    B obj;\n}",
+      "answer": "1342",
+      "accepted_answers": [
+        "1342"
+      ],
+      "explanation": "Construction runs base-to-derived (A then B: 1, 3); destruction runs in reverse order derived-to-base (B then A: 4, 2)."
+    },
+    {
+      "id": "cptc02_15",
+      "category": "CPW 228 C++",
+      "type": "flashcard",
+      "prompt": "In C++, what is the Rule of Three (or Rule of Five in C++11+)?",
+      "code": "",
+      "answer": "If a class defines a custom destructor, copy constructor, or copy assignment operator, it should define all three",
+      "accepted_answers": [
+        "If a class defines a custom destructor, copy constructor, or copy assignment operator, it should define all three",
+        "Destructor, copy constructor, copy assignment operator",
+        "Custom destructor, copy constructor, and copy assignment"
+      ],
+      "explanation": "Classes managing raw resources need custom copy/move semantics to avoid shallow-copy double-free bugs (Rule of Zero prefers smart pointers instead)."
+    },
+    {
+      "id": "cptc02_16",
+      "category": "CPW 228 C++",
+      "type": "flashcard",
+      "prompt": "In C++, which operator must be paired with memory allocated via 'new int[10]'?",
+      "code": "",
+      "answer": "delete[]",
+      "accepted_answers": [
+        "delete[]",
+        "delete[] ptr"
+      ],
+      "explanation": "Array allocations made with new[] must always be freed with delete[] (never plain delete) to avoid undefined behavior."
+    },
+    {
+      "id": "cptc02_17",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "What is the worst-case time complexity (Big-O) of Binary Search on a sorted array of n elements?",
+      "code": "",
+      "answer": "O(log n)",
+      "accepted_answers": [
+        "O(log n)",
+        "O(log2 n)",
+        "log n"
+      ],
+      "explanation": "Each comparison halves the remaining search interval, taking at most floor(log2(n)) + 1 steps."
+    },
+    {
+      "id": "cptc02_18",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "What is the average-case vs. worst-case lookup time complexity (Big-O) of a Hash Table?",
+      "code": "",
+      "answer": "Average: O(1), Worst: O(n)",
+      "accepted_answers": [
+        "Average: O(1), Worst: O(n)",
+        "O(1) average, O(n) worst",
+        "O(1) and O(n)"
+      ],
+      "explanation": "With a good hash function and low load factor, lookup is O(1); if all keys collide into one bucket, it degrades to O(n)."
+    },
+    {
+      "id": "cptc02_19",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "Which tree traversal order visits nodes in ascending sorted order on a valid Binary Search Tree (BST)?",
+      "code": "",
+      "answer": "In-order",
+      "accepted_answers": [
+        "In-order",
+        "Inorder",
+        "In-order traversal"
+      ],
+      "explanation": "In-order traversal visits Left Subtree -> Root -> Right Subtree, yielding keys in non-decreasing sorted order."
+    },
+    {
+      "id": "cptc02_20",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "Which linear data structure follows LIFO (Last-In, First-Out) ordering, and what are its two primary O(1) operations?",
+      "code": "",
+      "answer": "Stack (push and pop)",
+      "accepted_answers": [
+        "Stack (push and pop)",
+        "Stack",
+        "Stack: push and pop"
+      ],
+      "explanation": "A Stack supports O(1) push (insert at top) and O(1) pop (remove from top)."
+    },
+    {
+      "id": "cptc02_21",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "Which linear data structure follows FIFO (First-In, First-Out) ordering, and what are its two primary operations?",
+      "code": "",
+      "answer": "Queue (enqueue and dequeue)",
+      "accepted_answers": [
+        "Queue (enqueue and dequeue)",
+        "Queue",
+        "Queue: enqueue and dequeue"
+      ],
+      "explanation": "A Queue inserts at the rear (enqueue) and removes from the front (dequeue)."
+    },
+    {
+      "id": "cptc02_22",
+      "category": "CPW 245 Data Structures",
+      "type": "code_output",
+      "prompt": "Trace this stack/queue sequence and predict the exact output:",
+      "code": "Stack<Integer> s = new Stack<>();\nQueue<Integer> q = new LinkedList<>();\ns.push(1); s.push(2); s.push(3);\nq.add(s.pop());\nq.add(s.pop());\ns.push(4);\nSystem.out.println(q.remove() + \" \" + s.pop());",
+      "answer": "3 4",
+      "accepted_answers": [
+        "3 4"
+      ],
+      "explanation": "s pops 3 then 2 into q (front of q is 3). s then pushes 4 on top. q.remove() returns 3; s.pop() returns 4."
+    },
+    {
+      "id": "cptc02_23",
+      "category": "CPW 245 Data Structures",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this recursive function:",
+      "code": "int mystery(int n) {\n    if (n <= 1) return 1;\n    return n + mystery(n - 2);\n}\n// Print mystery(6)",
+      "answer": "13",
+      "accepted_answers": [
+        "13"
+      ],
+      "explanation": "mystery(6) = 6 + mystery(4) = 6 + 4 + mystery(2) = 6 + 4 + 2 + mystery(0) = 6 + 4 + 2 + 1 = 13."
+    },
+    {
+      "id": "cptc02_24",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "What is the time complexity of inserting at the head of a singly linked list vs. accessing the k-th element by index?",
+      "code": "",
+      "answer": "Head insert: O(1), Index access: O(n)",
+      "accepted_answers": [
+        "Head insert: O(1), Index access: O(n)",
+        "O(1) and O(n)",
+        "O(1) insert, O(n) access"
+      ],
+      "explanation": "Linked lists have non-contiguous nodes, so head pointer updates take O(1) while random index traversal requires walking k nodes in O(n)."
+    },
+    {
+      "id": "cptc02_25",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "Which data structure underlies a Priority Queue and provides O(log n) insertion and O(1) peek at the min/max element?",
+      "code": "",
+      "answer": "Binary Heap",
+      "accepted_answers": [
+        "Binary Heap",
+        "Heap",
+        "Min-Heap / Max-Heap"
+      ],
+      "explanation": "A Binary Heap is a complete binary tree stored compactly in an array satisfying the heap-order property."
+    },
+    {
+      "id": "cptc02_26",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "What is the worst-case time complexity of QuickSort vs. MergeSort?",
+      "code": "",
+      "answer": "QuickSort: O(n^2), MergeSort: O(n log n)",
+      "accepted_answers": [
+        "QuickSort: O(n^2), MergeSort: O(n log n)",
+        "O(n^2) and O(n log n)",
+        "QuickSort O(n^2), MergeSort O(n log n)"
+      ],
+      "explanation": "QuickSort degrades to O(n^2) on unbalanced pivots (e.g., already sorted input with naive pivot), whereas MergeSort guarantees O(n log n) worst-case."
+    },
+    {
+      "id": "cptc02_27",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "Which graph traversal algorithm explores neighbors level-by-level using a Queue and finds shortest paths in unweighted graphs?",
+      "code": "",
+      "answer": "Breadth-First Search (BFS)",
+      "accepted_answers": [
+        "Breadth-First Search (BFS)",
+        "BFS",
+        "Breadth-First Search"
+      ],
+      "explanation": "BFS uses a FIFO queue to visit vertices in order of distance (hop count) from the source node."
+    },
+    {
+      "id": "cptc02_28",
+      "category": "CPW 245 Data Structures",
+      "type": "flashcard",
+      "prompt": "What happens to a Binary Search Tree's search time complexity if keys are inserted in strictly ascending sorted order without self-balancing?",
+      "code": "",
+      "answer": "Degrades to O(n)",
+      "accepted_answers": [
+        "Degrades to O(n)",
+        "O(n)",
+        "It becomes a linked list with O(n) lookup"
+      ],
+      "explanation": "Without AVL or Red-Black balancing, sorted insertions produce a right-skewed degenerate tree of height n - 1."
+    },
+    {
+      "id": "cptc02_29",
+      "category": "CPW 228 C++",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++ std::vector capacity/size & reference snippet:",
+      "code": "#include <iostream>\n#include <vector>\nint main() {\n    std::vector<int> v = {10, 20, 30};\n    v.push_back(40);\n    v.pop_back();\n    std::cout << v.size() << \" \" << v.back();\n}",
+      "answer": "3 30",
+      "accepted_answers": [
+        "3 30"
+      ],
+      "explanation": "Starting with 3 elements, push_back makes size 4, pop_back removes 40 leaving size 3 and back element 30."
+    },
+    {
+      "id": "cptc02_30",
+      "category": "CPW 140/141 Java OOP",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Java pass-by-value reference snippet:",
+      "code": "static void modify(int[] arr, int val) {\n    arr[0] = 99;\n    val = 99;\n}\npublic static void main(String[] args) {\n    int[] nums = {1, 2};\n    int x = 1;\n    modify(nums, x);\n    System.out.println(nums[0] + \" \" + x);\n}",
+      "answer": "99 1",
+      "accepted_answers": [
+        "99 1"
+      ],
+      "explanation": "Java passes all arguments by value: the copy of the array reference still points to nums on the heap (mutating nums[0] to 99), while primitive x is copied (1)."
+    }
+  ]
+}

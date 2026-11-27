@@ -1,0 +1,404 @@
+{
+  "deck_name": "05 - BS-CS-CPSE Phase 1: Bare-Metal C, ARM Cortex-M & Drivers",
+  "cards": [
+    {
+      "id": "p1_01",
+      "category": "Bare-Metal C99/C11",
+      "type": "flashcard",
+      "prompt": "Why MUST memory-mapped hardware peripheral registers (and variables shared with an ISR) be declared with the `volatile` qualifier in C?",
+      "code": "",
+      "answer": "To prevent the compiler from caching the variable in a CPU register or optimizing away repeated reads/writes, forcing every access to hit the actual memory/peripheral address.",
+      "accepted_answers": [
+        "prevent compiler optimization",
+        "prevent caching in a register",
+        "force memory reads and writes",
+        "prevents compiler from optimizing away reads and writes"
+      ],
+      "explanation": "Without volatile, an optimizing compiler (-O2/-Os) assumes memory only changes if the current thread writes to it, turning polling loops like `while (UART->SR & RXNE)` into infinite loops or dead code."
+    },
+    {
+      "id": "p1_02",
+      "category": "Bare-Metal C99/C11",
+      "type": "flashcard",
+      "prompt": "In embedded C, what is the idiomatic bit-manipulation expression to SET bit `N` in a 32-bit hardware register `REG` without altering other bits?",
+      "code": "",
+      "answer": "REG |= (1U << N);",
+      "accepted_answers": [
+        "REG |= (1U << N)",
+        "REG |= (1 << N);",
+        "REG |= (1 << N)",
+        "REG |= 1U << N;",
+        "REG |= 1 << N;"
+      ],
+      "explanation": "Using unsigned `1U` avoids undefined behavior when shifting into the sign bit (bit 31) on 32-bit targets."
+    },
+    {
+      "id": "p1_03",
+      "category": "Bare-Metal C99/C11",
+      "type": "flashcard",
+      "prompt": "In embedded C, what is the idiomatic bit-manipulation expression to CLEAR bit `N` in a 32-bit hardware register `REG` without altering other bits?",
+      "code": "",
+      "answer": "REG &= ~(1U << N);",
+      "accepted_answers": [
+        "REG &= ~(1U << N)",
+        "REG &= ~(1 << N);",
+        "REG &= ~(1 << N)"
+      ],
+      "explanation": "Shifting 1U left by N creates a mask with only bit N set; bitwise NOT (~) inverts it so all bits are 1 except bit N, and &= clears bit N."
+    },
+    {
+      "id": "p1_04",
+      "category": "Bare-Metal C99/C11",
+      "type": "flashcard",
+      "prompt": "In embedded C, what expression TOGGLES bit `N` in a 32-bit register `REG`?",
+      "code": "",
+      "answer": "REG ^= (1U << N);",
+      "accepted_answers": [
+        "REG ^= (1U << N)",
+        "REG ^= (1 << N);",
+        "REG ^= (1 << N)",
+        "REG ^= 1U << N;"
+      ],
+      "explanation": "XORing with 1 flips the target bit (0->1, 1->0), while XORing with 0 leaves all other bits unchanged."
+    },
+    {
+      "id": "p1_05",
+      "category": "Bare-Metal C99/C11",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C99 fixed-width integer and bit-shift snippet:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    uint8_t reg = 0xA5;\n    reg &= ~(0x0F << 4);\n    reg |= (0x03 << 4);\n    printf(\"0x%02X\\n\", reg);\n    return 0;\n}",
+      "answer": "0x35",
+      "accepted_answers": [
+        "0x35",
+        "0X35"
+      ],
+      "explanation": "0xA5 is 1010_0101. Clearing the upper nibble leaves 0x05; ORing with 0x30 produces 0x35."
+    },
+    {
+      "id": "p1_06",
+      "category": "Bare-Metal C99/C11",
+      "type": "flashcard",
+      "prompt": "What are the three distinct meanings of the `static` keyword in C?",
+      "code": "",
+      "answer": "1) Inside a function: preserves variable value across calls (static storage duration). 2) At file scope (global variable/function): restricts linkage to internal (private to that .c translation unit). 3) C99 array parameter `int a[static 4]`: guarantees caller passes a non-null pointer to at least 4 elements.",
+      "accepted_answers": [
+        "internal linkage and persistent local lifetime",
+        "file scope internal linkage and function scope persistent storage"
+      ],
+      "explanation": "Using `static` on helper functions and module state in bare-metal drivers prevents symbol collisions across translation units."
+    },
+    {
+      "id": "p1_07",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "On ARM Cortex-M microcontrollers, what are the first two 32-bit entries at the base of the Vector Table (address 0x00000000 or 0x08000000)?",
+      "code": "",
+      "answer": "Entry 0: Initial Main Stack Pointer (MSP) value. Entry 1: Reset_Handler function address (with LSB = 1 for Thumb mode).",
+      "accepted_answers": [
+        "Initial MSP and Reset_Handler",
+        "Main Stack Pointer and Reset Handler",
+        "MSP and Reset_Handler"
+      ],
+      "explanation": "On hardware reset, Cortex-M hardware automatically loads SP (MSP) from word 0 and jumps to the PC address in word 1."
+    },
+    {
+      "id": "p1_08",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "Why do function addresses in the ARM Cortex-M vector table have their least significant bit (bit 0) set to 1?",
+      "code": "",
+      "answer": "Because ARM Cortex-M only executes Thumb/Thumb-2 instructions, and bit 0 = 1 tells the core to stay in Thumb state (bit 0 = 0 triggers a UsageFault).",
+      "accepted_answers": [
+        "Thumb mode",
+        "Thumb state",
+        "indicates Thumb instruction set"
+      ],
+      "explanation": "Instructions are still 16-bit/32-bit aligned; the hardware masks bit 0 when fetching the instruction while setting the EPSR T-bit."
+    },
+    {
+      "id": "p1_09",
+      "category": "Linker & Startup",
+      "type": "flashcard",
+      "prompt": "In bare-metal startup code (`startup.s` or `Reset_Handler`), what two memory initialization tasks must happen BEFORE calling `main()`?",
+      "code": "",
+      "answer": "1) Copy initialized global/static variables (`.data` section) from Flash (LMA) to SRAM (VMA). 2) Zero-initialize uninitialized globals/statics (`.bss` section) in SRAM.",
+      "accepted_answers": [
+        "Copy .data from Flash to RAM and zero .bss",
+        "Copy .data and zero .bss",
+        "initialize .data and zero .bss"
+      ],
+      "explanation": "If you skip copying .data or zeroing .bss, C globals start with garbage SRAM power-on values instead of their expected initializers or zero."
+    },
+    {
+      "id": "p1_10",
+      "category": "Linker & Startup",
+      "type": "flashcard",
+      "prompt": "In a GNU `ld` linker script, what is the difference between VMA (Virtual Memory Address) and LMA (Load Memory Address) for the `.data` section?",
+      "code": "",
+      "answer": "LMA is where `.data` is stored in non-volatile Flash (`AT > FLASH`), while VMA is the SRAM address (`> SRAM`) where the program accesses those variables at runtime.",
+      "accepted_answers": [
+        "LMA is Flash address and VMA is SRAM runtime address",
+        "LMA is in Flash, VMA is in RAM"
+      ],
+      "explanation": "Because SRAM loses contents on power-off, initial values live at the LMA in Flash and are copied to the VMA in SRAM during Reset_Handler."
+    },
+    {
+      "id": "p1_11",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "In an STM32 / ARM Cortex-M firmware project, what peripheral must be enabled FIRST before reading or writing any GPIO pin registers?",
+      "code": "",
+      "answer": "The GPIO port's peripheral clock in the RCC (Reset and Clock Control) register (e.g., RCC->AHB1ENR).",
+      "accepted_answers": [
+        "RCC peripheral clock",
+        "enable the GPIO clock in RCC",
+        "RCC clock"
+      ],
+      "explanation": "To save power, Cortex-M microcontrollers gate clocks to all peripherals at reset; writing to a clock-gated peripheral register is ignored or triggers a BusFault."
+    },
+    {
+      "id": "p1_12",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "What is the purpose of the ARM Cortex-M NVIC (Nested Vectored Interrupt Controller), and what does lower numerical priority mean?",
+      "code": "",
+      "answer": "NVIC manages hardware interrupt enabling, pending status, and preemption; a LOWER numerical priority value (e.g., 0) means HIGHER urgency and can preempt higher numbers.",
+      "accepted_answers": [
+        "lower number means higher priority",
+        "manages interrupts and lower number is higher priority"
+      ],
+      "explanation": "Priority 0 is the highest configurable interrupt priority on Cortex-M and will preempt an active ISR running at priority 3."
+    },
+    {
+      "id": "p1_13",
+      "category": "ARM Cortex-M Architecture",
+      "type": "flashcard",
+      "prompt": "What is the role of the ARM Cortex-M SysTick timer in bare-metal systems and RTOS kernels?",
+      "code": "",
+      "answer": "A built-in 24-bit downward-counting system timer inside the Cortex-M core used to generate periodic timebase ticks (e.g., 1 ms) for delays, timeouts, and RTOS scheduler preemption.",
+      "accepted_answers": [
+        "24-bit system timer for periodic ticks",
+        "periodic timebase tick timer"
+      ],
+      "explanation": "Because SysTick is part of the ARM core itself rather than vendor silicon, timebase code is portable across all Cortex-M MCUs."
+    },
+    {
+      "id": "p1_14",
+      "category": "Data Structures & DSP",
+      "type": "flashcard",
+      "prompt": "How can a single-producer, single-consumer (SPSC) ring buffer (circular FIFO) operate lock-free between an ISR and `main()` without disabling interrupts?",
+      "code": "",
+      "answer": "When the ISR (producer) exclusively modifies `head` and `main()` (consumer) exclusively modifies `tail` using atomic/volatile index updates and power-of-two masking (`(idx + 1) & (SIZE - 1)`).",
+      "accepted_answers": [
+        "producer only writes head and consumer only writes tail",
+        "separate head and tail ownership"
+      ],
+      "explanation": "Because each index has only one writer, there is no read-modify-write race condition on the pointers (with proper memory barriers where needed)."
+    },
+    {
+      "id": "p1_15",
+      "category": "Data Structures & DSP",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this Q16.16 fixed-point multiplication snippet:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\n#define Q16_SHIFT 16\n#define FLOAT_TO_Q16(x) ((int32_t)((x) * (1 << Q16_SHIFT)))\n\nint main(void) {\n    int32_t a = FLOAT_TO_Q16(2.5);\n    int32_t b = FLOAT_TO_Q16(3.0);\n    int32_t prod = (int32_t)(((int64_t)a * b) >> Q16_SHIFT);\n    printf(\"%d\\n\", prod >> Q16_SHIFT);\n    return 0;\n}",
+      "answer": "7",
+      "accepted_answers": [
+        "7"
+      ],
+      "explanation": "2.5 * 3.0 = 7.5 in Q16.16 (7.5 * 65536 = 491520). Right-shifting by 16 extracts the integer part: 7."
+    },
+    {
+      "id": "p1_16",
+      "category": "Data Structures & DSP",
+      "type": "flashcard",
+      "prompt": "Why do we cast fixed-point Q16.16 operands to `int64_t` BEFORE multiplying `(a * b) >> 16`?",
+      "code": "",
+      "answer": "Because multiplying two 32-bit Q16.16 values produces a 64-bit Q32.32 intermediate result that would overflow a 32-bit `int32_t` before shifting back down by 16 bits.",
+      "accepted_answers": [
+        "to prevent 32-bit integer overflow before shifting",
+        "prevent overflow"
+      ],
+      "explanation": "Even multiplying 200.0 * 200.0 in Q16.16 exceeds 2^31 - 1 before the >> 16 normalization step."
+    },
+    {
+      "id": "p1_17",
+      "category": "Data Structures & DSP",
+      "type": "flashcard",
+      "prompt": "Why is CRC-16 (Cyclic Redundancy Check) used in UART/bootloader frames instead of a simple additive sum checksum?",
+      "code": "",
+      "answer": "CRC detects burst errors, bit-order swaps, and multi-bit corruptions that cancel out in an additive checksum.",
+      "accepted_answers": [
+        "detects burst errors and bit reordering",
+        "stronger error detection against burst errors"
+      ],
+      "explanation": "In an additive checksum, incrementing one byte by +1 and decrementing another by -1 yields the exact same sum, whereas polynomial division in CRC catches it."
+    },
+    {
+      "id": "p1_18",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "How is the UART baud rate divisor (`USART_BRR`) conceptually calculated from peripheral clock frequency `f_CK` and target `Baud` (with 16x oversampling)?",
+      "code": "",
+      "answer": "USARTDIV = f_CK / (16 * Baud)",
+      "accepted_answers": [
+        "f_CK / (16 * Baud)",
+        "clock / (16 * baud)"
+      ],
+      "explanation": "UART receivers oversample each bit period 16 times to locate the center of the start bit and sample subsequent data bits reliably."
+    },
+    {
+      "id": "p1_19",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "In SPI communication, what do CPOL (Clock Polarity) and CPHA (Clock Phase) control?",
+      "code": "",
+      "answer": "CPOL sets the idle clock state (0 = low, 1 = high); CPHA sets which clock edge samples data (0 = first/leading edge, 1 = second/trailing edge).",
+      "accepted_answers": [
+        "CPOL sets idle clock level and CPHA sets sampling clock edge",
+        "clock idle state and sampling edge"
+      ],
+      "explanation": "Master and slave must use the exact same SPI Mode (0, 1, 2, or 3) or MISO/MOSI bits will be shifted by half a clock cycle."
+    },
+    {
+      "id": "p1_20",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "Why do I2C `SDA` and `SCL` lines require external pull-up resistors, and what electrical driver mode do I2C pins use?",
+      "code": "",
+      "answer": "I2C pins use Open-Drain (Open-Collector) outputs that can only pull the line LOW; external pull-up resistors pull the bus HIGH when released, preventing short-circuit bus contention.",
+      "accepted_answers": [
+        "open-drain outputs only pull low so pull-ups pull high",
+        "open-drain requires pull-up resistors"
+      ],
+      "explanation": "Open-drain wired-AND signaling also enables clock stretching and multi-controller arbitration without damaging GPIO drivers."
+    },
+    {
+      "id": "p1_21",
+      "category": "Serial Protocols",
+      "type": "flashcard",
+      "prompt": "In I2C protocol signaling, what defines a START condition and a STOP condition?",
+      "code": "",
+      "answer": "START: SDA transitions HIGH-to-LOW while SCL is HIGH. STOP: SDA transitions LOW-to-HIGH while SCL is HIGH.",
+      "accepted_answers": [
+        "START is SDA high to low while SCL high; STOP is SDA low to high while SCL high"
+      ],
+      "explanation": "During normal data transfer, SDA is only allowed to change while SCL is LOW."
+    },
+    {
+      "id": "p1_22",
+      "category": "Embedded Architecture",
+      "type": "flashcard",
+      "prompt": "How is a clean table-driven or switch-based Finite State Machine (FSM) structured in bare-metal C for protocol parsing?",
+      "code": "",
+      "answer": "Represent states as an `enum`, hold current state and context in a `struct`, and pass incoming events/bytes to a `step(fsm, event)` function that transitions state and executes actions without blocking delays.",
+      "accepted_answers": [
+        "enum states, context struct, and non-blocking step function",
+        "state enum and non-blocking transition function"
+      ],
+      "explanation": "Non-blocking FSMs allow a single-threaded bare-metal superloop to parse UART/SPI packets concurrently alongside timers and sensors."
+    },
+    {
+      "id": "p1_23",
+      "category": "Embedded Architecture",
+      "type": "flashcard",
+      "prompt": "In a Dual-Bank UART Bootloader on ARM Cortex-M, what three steps must happen right before jumping from the bootloader to the application firmware?",
+      "code": "",
+      "answer": "1) Disable interrupts (`__disable_irq()`). 2) Relocate the vector table by setting `SCB->VTOR` to the application's start address. 3) Set MSP (`__set_MSP`) from word 0 of the app vector table and branch to word 1 (`Reset_Handler`).",
+      "accepted_answers": [
+        "disable interrupts, update SCB->VTOR, set MSP and jump to app Reset_Handler",
+        "update VTOR, set MSP, jump to Reset_Handler"
+      ],
+      "explanation": "Forgetting to update `SCB->VTOR` causes any interrupt fired inside the application to jump back into the bootloader's ISR table and crash."
+    },
+    {
+      "id": "p1_24",
+      "category": "Bare-Metal C99/C11",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this struct alignment and `sizeof` snippet on a 32-bit ARM Cortex-M target:",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\ntypedef struct {\n    uint8_t a;\n    uint32_t b;\n    uint8_t c;\n} Packet;\n\nint main(void) {\n    printf(\"%zu\\n\", sizeof(Packet));\n    return 0;\n}",
+      "answer": "12",
+      "accepted_answers": [
+        "12"
+      ],
+      "explanation": "`a` (1 byte) + 3 bytes padding + `b` (4 bytes) + `c` (1 byte) + 3 bytes tail padding to align to 4-byte boundary = 12 bytes."
+    },
+    {
+      "id": "p1_25",
+      "category": "Modern C++17 Transition",
+      "type": "flashcard",
+      "prompt": "In zero-heap embedded Modern C++17, why is `constexpr` preferred over `#define` macros for hardware register addresses and constants?",
+      "code": "",
+      "answer": "`constexpr` is type-safe, respects namespaces/scopes, is evaluated completely at compile time with zero ROM/RAM overhead, and is visible in debuggers.",
+      "accepted_answers": [
+        "type-safe, scoped, and evaluated at compile time",
+        "type safety and scope with zero runtime cost"
+      ],
+      "explanation": "Unlike preprocessor `#define` text substitution, `constexpr` enforces strict types and avoids macro side-effect bugs."
+    },
+    {
+      "id": "p1_26",
+      "category": "Modern C++17 Transition",
+      "type": "flashcard",
+      "prompt": "Why should `std::array<T, N>` be preferred over raw C arrays `T arr[N]` in embedded C++17?",
+      "code": "",
+      "answer": "`std::array` has zero memory/runtime overhead over a raw array, does NOT silently decay to a pointer when passed to functions, and knows its `.size()`.",
+      "accepted_answers": [
+        "zero overhead, does not decay to pointer, and knows its size",
+        "no pointer decay and stores size with zero overhead"
+      ],
+      "explanation": "Preventing implicit pointer decay eliminates buffer-length bugs when passing fixed buffers across driver APIs."
+    },
+    {
+      "id": "p1_27",
+      "category": "Electronics Foundations",
+      "type": "flashcard",
+      "prompt": "What is the purpose of placing a 0.1 \u00b5F (100 nF) ceramic decoupling capacitor physically close to every MCU VDD/VSS power pin pair?",
+      "code": "",
+      "answer": "To provide a low-inductance local charge reservoir that supplies high-frequency switching current spikes and filters power-supply noise.",
+      "accepted_answers": [
+        "filter high-frequency noise and supply transient switching current",
+        "stabilize local voltage during fast switching transients"
+      ],
+      "explanation": "PCB traces have parasitic inductance; without local decoupling capacitors, fast CMOS gate switching causes voltage droop and brownout resets."
+    },
+    {
+      "id": "p1_28",
+      "category": "Electronics Foundations",
+      "type": "flashcard",
+      "prompt": "What is a flyback (freewheeling) diode placed across an inductive load (like a DC motor or relay coil) when driven by a MOSFET?",
+      "code": "",
+      "answer": "A reverse-biased diode across the coil that provides a safe recirculation path for inductive current when the MOSFET turns off, preventing high-voltage `V = L * (di/dt)` spikes from destroying the transistor.",
+      "accepted_answers": [
+        "clamps inductive voltage spikes when switching off",
+        "provides a recirculation path for inductive current"
+      ],
+      "explanation": "An inductor opposes sudden current drop by reversing polarity and spiking voltage; the flyback diode clamps that spike to ~0.7V above supply."
+    },
+    {
+      "id": "p1_29",
+      "category": "Electronics Foundations",
+      "type": "flashcard",
+      "prompt": "Why do mechanical pushbuttons require hardware or software debouncing before triggering edge-sensitive MCU interrupts?",
+      "code": "",
+      "answer": "Physical metal contacts bounce open and closed for 1\u201320 ms on actuation, generating dozens of false logic transitions from a single press.",
+      "accepted_answers": [
+        "mechanical contacts bounce and create multiple false transitions",
+        "prevent false multiple triggers from contact bounce"
+      ],
+      "explanation": "Filtering via an RC network or sampling/ignoring transitions for ~10-20 ms ensures one physical press registers as one event."
+    },
+    {
+      "id": "p1_30",
+      "category": "Tooling & Verification",
+      "type": "flashcard",
+      "prompt": "In your Phase 1 portfolio build, why pair an 8-channel 24 MHz USB logic analyzer with a `pytest` fault-injection suite?",
+      "code": "",
+      "answer": "The logic analyzer empirically verifies physical timing, baud rates, SPI CPOL/CPHA waveforms, and ISR latency on the wire, while `pytest` automates corrupt frames, timeouts, and bootloader rollback edge cases.",
+      "accepted_answers": [
+        "logic analyzer verifies physical timing and pytest automates fault edge cases",
+        "empirical hardware waveform proof plus automated protocol fault testing"
+      ],
+      "explanation": "Combining physical waveform captures with automated fault-injection tests provides concrete engineering proof for your LLC portfolio."
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "deck_name": "21 - Electronics, Circuit Math & Lab Instrumentation",
+  "cards": [
+    {
+      "id": "elec_01",
+      "category": "Circuit Laws",
+      "type": "flashcard",
+      "prompt": "State Ohm's Law and the formula for electrical power dissipated in a resistor.",
+      "code": "",
+      "answer": "V = I * R, and P = V * I = I^2 * R = V^2 / R",
+      "accepted_answers": [
+        "V = IR and P = VI",
+        "V = I * R, P = V * I"
+      ],
+      "explanation": "Voltage equals current times resistance; power is the product of voltage and current."
+    },
+    {
+      "id": "elec_02",
+      "category": "Circuit Analysis",
+      "type": "code_output",
+      "prompt": "A 3.3V microcontroller GPIO drives an LED (forward voltage Vf = 2.0V) through a 130-ohm series resistor. Calculate the LED current in milliamps (mA).",
+      "code": "Vcc = 3.3V\nVf  = 2.0V\nR   = 130 ohms\nI_mA = ?",
+      "answer": "10 mA",
+      "accepted_answers": [
+        "10",
+        "10 mA",
+        "10mA"
+      ],
+      "explanation": "I = (3.3V - 2.0V) / 130 ohms = 1.3V / 130 ohms = 0.01 A = 10 mA."
+    },
+    {
+      "id": "elec_03",
+      "category": "Voltage Dividers",
+      "type": "code_output",
+      "prompt": "A 5.0V sensor signal enters a voltage divider with top resistor R1 = 10k and bottom resistor R2 = 10k to ground. What is Vout?",
+      "code": "Vin = 5.0V\nR1  = 10k\nR2  = 10k\nVout = Vin * (R2 / (R1 + R2))",
+      "answer": "2.5V",
+      "accepted_answers": [
+        "2.5",
+        "2.5V",
+        "2.5 V"
+      ],
+      "explanation": "Equal resistors divide Vin exactly in half: 5.0V * (10k / 20k) = 2.5V."
+    },
+    {
+      "id": "elec_04",
+      "category": "RC Filters",
+      "type": "flashcard",
+      "prompt": "What is the time constant (tau) and -3 dB cutoff frequency formula of a first-order RC low-pass filter?",
+      "code": "",
+      "answer": "tau = R * C, and fc = 1 / (2 * pi * R * C)",
+      "accepted_answers": [
+        "tau = RC, fc = 1 / (2 * pi * R * C)",
+        "fc = 1 / (2*pi*R*C)"
+      ],
+      "explanation": "After 1 tau, a step response reaches ~63.2% of its final value; at fc, signal amplitude drops to 0.707 (-3 dB)."
+    },
+    {
+      "id": "elec_05",
+      "category": "PCB & Power Integrity",
+      "type": "flashcard",
+      "prompt": "Why are 100 nF (0.1 uF) ceramic decoupling capacitors placed as close as physically possible to every MCU VDD/VSS pin pair?",
+      "code": "",
+      "answer": "To supply high-frequency transient switching currents locally and minimize trace inductance voltage droop",
+      "accepted_answers": [
+        "Supply high-frequency switching currents and reduce inductance droop",
+        "Filter high-frequency power supply noise locally"
+      ],
+      "explanation": "Fast CMOS gate switching draws sharp current spikes; nearby ceramic caps with low ESL prevent ground bounce and brownouts."
+    },
+    {
+      "id": "elec_06",
+      "category": "Inductive Loads",
+      "type": "flashcard",
+      "prompt": "What happens if you switch off a DC motor or relay coil with a MOSFET without a flyback (freewheeling) diode across the coil?",
+      "code": "",
+      "answer": "Inductive kickback (V = L * di/dt) generates a huge reverse voltage spike that can destroy the switching transistor",
+      "accepted_answers": [
+        "Inductive voltage spike destroys the MOSFET",
+        "Inductive kickback spike"
+      ],
+      "explanation": "An inductor resists instantaneous current drop by generating a massive voltage spike until current finds a path through the flyback diode."
+    },
+    {
+      "id": "elec_07",
+      "category": "Digital Logic",
+      "type": "flashcard",
+      "prompt": "Why must an unused CMOS digital input pin on a microcontroller never be left floating (unconnected)?",
+      "code": "",
+      "answer": "Stray noise causes the pin voltage to hover near mid-rail, turning both P- and N-channel input transistors partially on (shoot-through current) and triggering spurious interrupts",
+      "accepted_answers": [
+        "Causes spurious switching and excess shoot-through current",
+        "Floating pins oscillate from noise and waste current"
+      ],
+      "explanation": "Configure unused pins as analog inputs, outputs, or enable internal pull-up/pull-down resistors."
+    },
+    {
+      "id": "elec_08",
+      "category": "Switch Debouncing",
+      "type": "flashcard",
+      "prompt": "Why do mechanical pushbuttons produce multiple false edge transitions over 5\u201320 ms when pressed, and name one hardware and one firmware fix.",
+      "code": "",
+      "answer": "Mechanical contact bounce; fixed with an RC filter + Schmitt trigger (hardware) or a 10\u201320 ms timer/state-machine debounce filter (firmware)",
+      "accepted_answers": [
+        "Contact bounce; RC + Schmitt trigger or timer debounce",
+        "Mechanical bounce; RC filter or firmware delay/timer"
+      ],
+      "explanation": "Spring contacts physically rebound multiple times on closure before settling."
+    },
+    {
+      "id": "elec_09",
+      "category": "Lab Instrumentation",
+      "type": "flashcard",
+      "prompt": "Why must you NEVER clip a standard mains-grounded oscilloscope ground lead onto a non-ground-referenced high-voltage node?",
+      "code": "",
+      "answer": "The scope's BNC shell is tied to earth ground, creating a direct short circuit through the probe ground wire",
+      "accepted_answers": [
+        "Creates a short circuit to earth ground",
+        "Probe ground clip is connected to mains earth ground"
+      ],
+      "explanation": "Use differential probes or math channel subtraction (CH1 - CH2) when measuring signals not referenced to earth ground."
+    },
+    {
+      "id": "elec_10",
+      "category": "Lab Instrumentation",
+      "type": "flashcard",
+      "prompt": "When should you use a Logic Analyzer instead of an Oscilloscope, and vice versa?",
+      "code": "",
+      "answer": "Use a Logic Analyzer for multi-channel digital protocol decoding (SPI/I2C/UART timing) and an Oscilloscope for analog signal integrity (ringing, rise time, noise, voltage levels)",
+      "accepted_answers": [
+        "Logic analyzer for multi-channel digital protocol decoding; oscilloscope for analog waveform integrity"
+      ],
+      "explanation": "Logic analyzers sample 1-bit thresholds across 8\u201316+ channels deeply; oscilloscopes digitize continuous voltage waveforms."
+    },
+    {
+      "id": "elec_11",
+      "category": "ADC & Sampling",
+      "type": "flashcard",
+      "prompt": "According to the Nyquist-Shannon sampling theorem, what is the minimum sampling frequency required to capture a signal with highest frequency f_max without aliasing?",
+      "code": "",
+      "answer": "Strictly greater than 2 * f_max",
+      "accepted_answers": [
+        "> 2 * f_max",
+        "Greater than 2 * f_max",
+        "2 * f_max",
+        "Twice the highest frequency"
+      ],
+      "explanation": "Frequencies above f_s / 2 fold back (alias) into lower frequencies unless removed by an analog anti-aliasing low-pass filter beforehand."
+    },
+    {
+      "id": "elec_12",
+      "category": "ADC Resolution",
+      "type": "code_output",
+      "prompt": "An STM32 12-bit ADC uses Vref = 3.3V. What is the voltage resolution (1 LSB step size) in millivolts (rounded to 2 decimal places)?",
+      "code": "Vref = 3.3V\nbits = 12 (4096 steps)\nLSB_mV = ?",
+      "answer": "0.81 mV",
+      "accepted_answers": [
+        "0.81",
+        "0.81 mV",
+        "0.806 mV"
+      ],
+      "explanation": "3300 mV / 4096 = 0.80566 mV \u2248 0.81 mV per ADC count."
+    },
+    {
+      "id": "elec_13",
+      "category": "Transistors",
+      "type": "flashcard",
+      "prompt": "When using an N-channel MOSFET as a low-side switch driven directly by a 3.3V GPIO pin, what parameter in the datasheet must you verify?",
+      "code": "",
+      "answer": "RDS(on) specified at VGS <= 3.3V (logic-level gate threshold)",
+      "accepted_answers": [
+        "Logic-level VGS threshold (RDS(on) at 3.3V)",
+        "VGS(th) and RDS(on) at 3.3V"
+      ],
+      "explanation": "Standard MOSFETs need 10V VGS to fully enhance; a 3.3V gate requires a logic-level MOSFET with guaranteed low RDS(on) at 2.5V\u20133.3V."
+    },
+    {
+      "id": "elec_14",
+      "category": "PWM",
+      "type": "code_output",
+      "prompt": "A 20 kHz PWM signal switches between 0V and 3.3V with a 25% duty cycle. What is the average DC output voltage?",
+      "code": "Vhigh = 3.3V\nDuty  = 25% (0.25)\nVavg  = ?",
+      "answer": "0.825V",
+      "accepted_answers": [
+        "0.825",
+        "0.825V",
+        "0.83V"
+      ],
+      "explanation": "Vavg = Vhigh * Duty = 3.3V * 0.25 = 0.825V."
+    },
+    {
+      "id": "elec_15",
+      "category": "Serial Buses",
+      "type": "flashcard",
+      "prompt": "Why does RS-485 / CAN differential signaling reject common-mode electromagnetic interference (EMI) far better than single-ended UART?",
+      "code": "",
+      "answer": "Twisted-pair wires pick up equal noise on both lines, and the differential receiver subtracts (V+ - V-), canceling common-mode noise",
+      "accepted_answers": [
+        "Differential receiver subtracts V+ and V-, canceling common-mode noise",
+        "Common-mode noise rejection on twisted pair"
+      ],
+      "explanation": "External EMI induces nearly identical voltage shifts on both closely twisted conductors, leaving the differential voltage intact."
+    }
+  ]
+}

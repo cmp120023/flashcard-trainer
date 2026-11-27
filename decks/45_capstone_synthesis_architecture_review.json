@@ -1,0 +1,107 @@
+{
+  "deck_name": "Deck 45: Capstone Synthesis & Architecture Review",
+  "cards": [
+    {
+      "id": "cap_01",
+      "category": "Portfolio Build 1",
+      "type": "flashcard",
+      "prompt": "In Portfolio Build 1 (Dual-Bank UART Bootloader), why must the bootloader verify a CRC-16/SHA-256 over the inactive bank BEFORE updating the boot-active metadata flag?",
+      "answer": "To ensure a power loss or corrupted UART transfer mid-flash never bricks the MCU, allowing automatic fallback to the known-good bank.",
+      "accepted_answers": [
+        "prevent bricking on power loss or corrupted update",
+        "atomic fallback to valid firmware"
+      ],
+      "explanation": "Writing the 'valid' flag last makes firmware updates power-fail atomic."
+    },
+    {
+      "id": "cap_02",
+      "category": "Portfolio Build 2",
+      "type": "flashcard",
+      "prompt": "In Portfolio Build 2 (RTOS-to-Linux Edge Gateway), why do we bridge a real-time RTOS microcontroller to an Embedded Linux SBC instead of running motor control directly in standard Linux user space?",
+      "answer": "The RTOS guarantees deterministic microsecond-level hard real-time ISR/control loops, while Linux handles high-level networking, storage, and UI.",
+      "accepted_answers": [
+        "rtos provides deterministic hard real-time while linux handles networking"
+      ],
+      "explanation": "Asymmetric multiprocessing (MCU + MPU) pairs hard real-time determinism with rich POSIX networking."
+    },
+    {
+      "id": "cap_03",
+      "category": "Portfolio Build 2",
+      "type": "flashcard",
+      "prompt": "Which Linux command-line benchmark proves that your `PREEMPT_RT` kernel build meets bounded worst-case scheduling latency under stress?",
+      "answer": "cyclictest",
+      "accepted_answers": [
+        "cyclictest -S -p 99",
+        "rt-tests cyclictest"
+      ],
+      "explanation": "`cyclictest` measures the delta between scheduled timer wakeups and actual thread execution in microseconds."
+    },
+    {
+      "id": "cap_04",
+      "category": "Portfolio Build 2.5",
+      "type": "flashcard",
+      "prompt": "How does Embedded Rust's Type-State pattern prevent a programmer from reading an uninitialized SPI or UART peripheral at compile time?",
+      "answer": "By encoding peripheral states (`Disabled`, `Enabled`) as zero-sized generic type parameters so `.read()` only exists on `Peripheral<Enabled>`.",
+      "accepted_answers": [
+        "encodes hardware state in generic types so invalid methods do not exist"
+      ],
+      "explanation": "Zero-sized type parameters enforce hardware state machines at compile time with zero runtime RAM or CPU overhead."
+    },
+    {
+      "id": "cap_05",
+      "category": "Portfolio Build 3",
+      "type": "flashcard",
+      "prompt": "In Portfolio Build 3 (Edge Vision Tracking Turret with a <35 ms glass-to-glass budget), list the four sequential stages that consume that latency budget.",
+      "answer": "1) Camera exposure & frame capture, 2) Preprocessing & ONNX/TensorRT inference, 3) PID/EKF control computation, 4) CAN/PWM actuator command response.",
+      "accepted_answers": [
+        "capture, inference, control math, actuator command"
+      ],
+      "explanation": "Measuring timestamps at every stage boundary lets you prove mathematically where every millisecond goes."
+    },
+    {
+      "id": "cap_06",
+      "category": "Portfolio Build 4",
+      "type": "flashcard",
+      "prompt": "In Portfolio Build 4 (Hardened Smart-Factory Cell), how do ECDSA Secure Boot, ATECC608A, and mTLS OPC UA work together as defense-in-depth?",
+      "answer": "Secure Boot verifies local firmware authenticity at power-on, ATECC608A protects private keys in tamper-resistant hardware, and mTLS authenticates both client and server over the network.",
+      "accepted_answers": [
+        "secure boot verifies firmware, atecc608a protects keys, mtls authenticates network peers"
+      ],
+      "explanation": "Combining hardware root-of-trust, key isolation, and mutual TLS protects the device at rest, at boot, and in transit."
+    },
+    {
+      "id": "cap_07",
+      "category": "Engineering Standard",
+      "type": "flashcard",
+      "prompt": "What are the five empirical engineering artifacts you should include in every LLC / capstone GitHub repository to stand out to aerospace/robotics recruiters?",
+      "answer": "1) KiCad schematics/wiring diagrams, 2) CMake + GitHub Actions CI, 3) Zero-warning static analysis (clang-tidy/cppcheck), 4) Doxygen docs, 5) Logic analyzer/timing/cyclictest proofs.",
+      "accepted_answers": [
+        "kicad schematics, cmake ci, static analysis, doxygen, timing proofs"
+      ],
+      "explanation": "Showing oscilloscope/logic-analyzer screenshots and CI badges proves your firmware works on real hardware, not just in theory."
+    },
+    {
+      "id": "cap_08",
+      "category": "Git Discipline",
+      "type": "flashcard",
+      "prompt": "Give an example of a valid Conventional Commit message for adding an I2C driver for the BME280 sensor.",
+      "answer": "feat(i2c): add bare-metal BME280 temperature and pressure driver",
+      "accepted_answers": [
+        "feat(i2c): add bme280 driver",
+        "feat: add bme280 i2c driver"
+      ],
+      "explanation": "Conventional Commits (`feat`, `fix`, `docs`, `refactor`, `test`, `ci`) keep your commit history clean and recruiter-readable."
+    },
+    {
+      "id": "cap_09",
+      "category": "System Design",
+      "type": "flashcard",
+      "prompt": "Why should hard real-time embedded firmware avoid dynamic heap allocation (`malloc` / `new`) after system initialization?",
+      "answer": "To eliminate non-deterministic allocation latency, heap fragmentation over long uptimes, and out-of-memory crashes.",
+      "accepted_answers": [
+        "eliminate heap fragmentation and non-deterministic latency"
+      ],
+      "explanation": "Pre-allocating static pools and ring buffers at startup guarantees deterministic O(1) memory behavior for years of continuous uptime."
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "deck_name": "22 - Computer Vision, OpenCV C++, ONNX & Edge AI",
+  "cards": [
+    {
+      "id": "cv_01",
+      "category": "OpenCV C++",
+      "type": "flashcard",
+      "prompt": "What is the default 3-channel color ordering used by OpenCV when loading or capturing color images with `cv::imread()`?",
+      "code": "",
+      "answer": "BGR (Blue, Green, Red)",
+      "accepted_answers": [
+        "BGR",
+        "Blue Green Red"
+      ],
+      "explanation": "OpenCV defaults to BGR channel order for historical reasons, whereas most neural networks and UI libraries expect RGB."
+    },
+    {
+      "id": "cv_02",
+      "category": "OpenCV Memory",
+      "type": "flashcard",
+      "prompt": "In C++ OpenCV, does copying a `cv::Mat` via `cv::Mat b = a;` perform a deep copy of the pixel buffer or a shallow reference-counted header copy?",
+      "code": "",
+      "answer": "Shallow copy (shares the underlying pixel matrix with reference counting); use a.clone() for a deep copy",
+      "accepted_answers": [
+        "Shallow copy (use .clone() for deep copy)",
+        "Shallow reference-counted copy"
+      ],
+      "explanation": "cv::Mat uses a lightweight header + atomic reference-counted data pointer so passing cv::Mat by value is O(1)."
+    },
+    {
+      "id": "cv_03",
+      "category": "Color Spaces",
+      "type": "flashcard",
+      "prompt": "Why is the HSV (Hue, Saturation, Value) color space preferred over RGB/BGR for color-based object segmentation under varying lighting?",
+      "code": "",
+      "answer": "HSV separates chromaticity (Hue) from brightness/illumination intensity (Value)",
+      "accepted_answers": [
+        "Separates color hue from lighting brightness",
+        "Hue is decoupled from brightness/Value"
+      ],
+      "explanation": "Shadows and glare primarily shift Value, while Hue stays relatively invariant for a given object color."
+    },
+    {
+      "id": "cv_04",
+      "category": "Morphological Ops",
+      "type": "flashcard",
+      "prompt": "What is the difference between Morphological Opening and Morphological Closing on a binary mask?",
+      "code": "",
+      "answer": "Opening (erosion followed by dilation) removes small white noise specks; Closing (dilation followed by erosion) fills small black holes inside foreground blobs",
+      "accepted_answers": [
+        "Opening = erode then dilate (removes noise); Closing = dilate then erode (fills holes)"
+      ],
+      "explanation": "Opening cleans foreground speckles; Closing bridges small gaps and holes in segmented objects."
+    },
+    {
+      "id": "cv_05",
+      "category": "Camera Geometry",
+      "type": "flashcard",
+      "prompt": "What parameters are contained inside a 3x3 pinhole camera intrinsic matrix K?",
+      "code": "",
+      "answer": "Focal lengths (fx, fy) and principal optical center coordinates (cx, cy)",
+      "accepted_answers": [
+        "Focal lengths (fx, fy) and principal point (cx, cy)",
+        "fx, fy, cx, cy"
+      ],
+      "explanation": "K = [[fx, 0, cx], [0, fy, cy], [0, 0, 1]] projects 3D camera-frame coordinates into 2D pixel coordinates."
+    },
+    {
+      "id": "cv_06",
+      "category": "Camera Calibration",
+      "type": "flashcard",
+      "prompt": "Why must you undistort camera frames (or undistort detected pixel coordinates) before computing visual servoing angles for a tracking turret?",
+      "code": "",
+      "answer": "Wide-angle lenses introduce radial and tangential distortion that bends straight lines and biases pixel-to-angle errors near frame edges",
+      "accepted_answers": [
+        "Removes radial and tangential lens distortion",
+        "Lens distortion biases pixel-to-angle mapping near edges"
+      ],
+      "explanation": "Checkerboard calibration estimates distortion coefficients (k1, k2, p1, p2, k3) so pixel offsets map accurately to physical yaw/pitch angles."
+    },
+    {
+      "id": "cv_07",
+      "category": "Edge AI Inference",
+      "type": "flashcard",
+      "prompt": "What are the main advantages of quantizing a neural network from FP32 to INT8 for deployment on Jetson TensorRT or Edge NPUs?",
+      "code": "",
+      "answer": "4x smaller model memory footprint, lower memory bandwidth, and significantly higher throughput (TOPS) with lower latency",
+      "accepted_answers": [
+        "4x smaller size, lower latency, and higher throughput",
+        "Faster inference, smaller model size, lower memory bandwidth"
+      ],
+      "explanation": "INT8 tensor cores execute far more operations per watt and cut DRAM bandwidth by 4x compared to 32-bit floats."
+    },
+    {
+      "id": "cv_08",
+      "category": "Edge AI Inference",
+      "type": "flashcard",
+      "prompt": "What is the difference between Post-Training Quantization (PTQ) and Quantization-Aware Training (QAT)?",
+      "code": "",
+      "answer": "PTQ calibrates activation ranges on a trained FP32 model using a representative dataset without retraining; QAT simulates quantization noise during training to preserve accuracy",
+      "accepted_answers": [
+        "PTQ calibrates after training without retraining; QAT simulates quantization during training"
+      ],
+      "explanation": "PTQ is fast and requires no training pipeline; QAT recovers accuracy when aggressive INT8 quantization degrades sensitive layers."
+    },
+    {
+      "id": "cv_09",
+      "category": "Object Detection",
+      "type": "flashcard",
+      "prompt": "What is the purpose of Non-Maximum Suppression (NMS) at the end of an object detector like YOLO?",
+      "code": "",
+      "answer": "It suppresses redundant overlapping bounding boxes for the same object by keeping the highest-confidence box and discarding boxes above an IoU threshold",
+      "accepted_answers": [
+        "Removes duplicate overlapping bounding boxes using IoU",
+        "Suppresses overlapping duplicate detections"
+      ],
+      "explanation": "Detectors predict multiple anchor boxes per object; NMS filters duplicates based on Intersection over Union (IoU)."
+    },
+    {
+      "id": "cv_10",
+      "category": "Tensor Layouts",
+      "type": "flashcard",
+      "prompt": "What do the tensor memory layouts `NHWC` and `NCHW` stand for?",
+      "code": "",
+      "answer": "Batch (N), Height (H), Width (W), Channels (C) vs. Batch (N), Channels (C), Height (H), Width (W)",
+      "accepted_answers": [
+        "Batch, Height, Width, Channels vs Batch, Channels, Height, Width"
+      ],
+      "explanation": "OpenCV HWC images must typically be transposed to NCHW (via cv::dnn::blobFromImage) before feeding ONNX/TensorRT models."
+    },
+    {
+      "id": "cv_11",
+      "category": "Real-Time Pipelines",
+      "type": "flashcard",
+      "prompt": "In a closed-loop vision tracking turret (<35 ms latency budget), why should camera capture run on a dedicated producer thread overwriting a single latest-frame slot rather than a deep FIFO queue?",
+      "code": "",
+      "answer": "A deep FIFO queue introduces stale frame lag (queuing latency), whereas always grabbing the freshest frame minimizes glass-to-glass control delay",
+      "accepted_answers": [
+        "Prevents stale queued frames and minimizes glass-to-glass latency",
+        "Deep queues add lag; latest-frame buffer ensures fresh detections"
+      ],
+      "explanation": "For closed-loop control, processing an old queued frame injects phase lag that destabilizes the PID tracking loop."
+    },
+    {
+      "id": "cv_12",
+      "category": "Edge Features",
+      "type": "flashcard",
+      "prompt": "How does the Canny edge detector suppress weak false edges caused by noise while preserving connected contours?",
+      "code": "",
+      "answer": "Hysteresis thresholding using two thresholds (high and low), keeping weak edges only if connected to strong edges",
+      "accepted_answers": [
+        "Hysteresis thresholding (high and low thresholds)",
+        "Double thresholding with hysteresis"
+      ],
+      "explanation": "Pixels above T_high are definite edges; pixels between T_low and T_high survive only if attached to a strong edge."
+    }
+  ]
+}

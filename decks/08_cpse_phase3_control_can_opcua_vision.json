@@ -1,0 +1,209 @@
+{
+  "deck_name": "08 - BS-CS-CPSE Phase 3: Control, Sensor Fusion, CAN, OPC UA & Edge AI",
+  "cards": [
+    {
+      "id": "cpse3_01",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "What are the 3 terms of a discrete PID controller and what error behavior does each address?",
+      "code": "",
+      "answer": "Proportional (present error), Integral (accumulated past steady-state error), Derivative (predicted future rate of error change / damping)",
+      "accepted_answers": [
+        "Proportional (present error), Integral (accumulated past steady-state error), Derivative (predicted future rate of error change / damping)",
+        "Proportional, Integral, Derivative"
+      ],
+      "explanation": "P drives response speed, I eliminates steady-state offset, and D dampens overshoot and oscillation."
+    },
+    {
+      "id": "cpse3_02",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "What PID failure mode happens when the actuator saturates (e.g., 100% PWM) while the Integral term keeps accumulating large error, causing massive overshoot?",
+      "code": "",
+      "answer": "Integral Windup",
+      "accepted_answers": [
+        "Integral Windup",
+        "Integrator Windup",
+        "windup"
+      ],
+      "explanation": "Mitigated via integrator clamping, back-calculation, or conditional integration when the actuator is saturated."
+    },
+    {
+      "id": "cpse3_03",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "Why should the Derivative (D) term in a digital PID controller usually be paired with a low-pass filter or computed on measurement (-dPV/dt)?",
+      "code": "",
+      "answer": "High-frequency sensor noise gets amplified by differentiation, and setpoint step changes cause derivative kick",
+      "accepted_answers": [
+        "High-frequency sensor noise gets amplified by differentiation, and setpoint step changes cause derivative kick",
+        "Differentiating amplifies high-frequency sensor noise",
+        "To prevent high-frequency noise amplification and derivative kick"
+      ],
+      "explanation": "Taking -d(measurement)/dt eliminates derivative kick on sudden setpoint changes, while a first-order IIR filter tames sensor noise."
+    },
+    {
+      "id": "cpse3_04",
+      "category": "Digital Signal Processing",
+      "type": "flashcard",
+      "prompt": "According to the Nyquist-Shannon Sampling Theorem, what is the minimum sampling rate fs required to capture a signal with maximum frequency fmax without aliasing?",
+      "code": "",
+      "answer": "fs > 2 * fmax",
+      "accepted_answers": [
+        "fs > 2 * fmax",
+        "2 * fmax",
+        "More than twice the highest frequency"
+      ],
+      "explanation": "In practical control systems, engineers typically sample at 10x to 20x the closed-loop bandwidth."
+    },
+    {
+      "id": "cpse3_05",
+      "category": "Sensor Fusion & 3D Math",
+      "type": "flashcard",
+      "prompt": "What are the 2 recurring steps of a Kalman Filter / Extended Kalman Filter (EKF)?",
+      "code": "",
+      "answer": "1) Predict (Time Update using motion model & process noise Q); 2) Update / Correct (Measurement Update using sensor reading & noise R)",
+      "accepted_answers": [
+        "1) Predict (Time Update using motion model & process noise Q); 2) Update / Correct (Measurement Update using sensor reading & noise R)",
+        "Predict and Update",
+        "Prediction and Correction"
+      ],
+      "explanation": "The EKF linearizes nonlinear dynamics and measurement equations around the current state estimate using Jacobian matrices."
+    },
+    {
+      "id": "cpse3_06",
+      "category": "Sensor Fusion & 3D Math",
+      "type": "flashcard",
+      "prompt": "Why do 3D robotics and IMU orientation pipelines prefer Unit Quaternions over Euler Angles (Roll, Pitch, Yaw)?",
+      "code": "",
+      "answer": "Quaternions avoid Gimbal Lock singularities and compose rotations smoothly with faster, drift-free normalization",
+      "accepted_answers": [
+        "Quaternions avoid Gimbal Lock singularities and compose rotations smoothly with faster, drift-free normalization",
+        "Avoids Gimbal Lock",
+        "No Gimbal Lock"
+      ],
+      "explanation": "Euler angles lose a degree of freedom when pitch hits +/- 90 degrees (Gimbal Lock)."
+    },
+    {
+      "id": "cpse3_07",
+      "category": "CAN Bus & Industrial Protocols",
+      "type": "flashcard",
+      "prompt": "How does CAN 2.0B resolve bus collisions when two nodes transmit simultaneously without losing any frames or throughput?",
+      "code": "",
+      "answer": "Non-destructive bitwise arbitration where dominant '0' bits overwrite recessive '1' bits (lower CAN ID wins)",
+      "accepted_answers": [
+        "Non-destructive bitwise arbitration where dominant '0' bits overwrite recessive '1' bits (lower CAN ID wins)",
+        "Non-destructive bitwise arbitration",
+        "Bitwise arbitration (lower CAN ID wins)"
+      ],
+      "explanation": "Each node monitors the bus while transmitting its 11-bit or 29-bit ID; if it sends a recessive 1 and reads a dominant 0, it immediately backs off into receive mode."
+    },
+    {
+      "id": "cpse3_08",
+      "category": "CAN Bus & Industrial Protocols",
+      "type": "flashcard",
+      "prompt": "What is the maximum data payload size in bytes of a classic CAN 2.0B frame vs. a CAN FD frame?",
+      "code": "",
+      "answer": "8 bytes (CAN 2.0B) vs. 64 bytes (CAN FD)",
+      "accepted_answers": [
+        "8 bytes (CAN 2.0B) vs. 64 bytes (CAN FD)",
+        "8 bytes vs 64 bytes",
+        "8 and 64 bytes"
+      ],
+      "explanation": "CAN FD also allows switching to a higher data-phase bit rate after the arbitration field."
+    },
+    {
+      "id": "cpse3_09",
+      "category": "CAN Bus & Industrial Protocols",
+      "type": "flashcard",
+      "prompt": "What is the standard termination resistance placed at each physical end of a CAN bus twisted pair (CAN_H / CAN_L)?",
+      "code": "",
+      "answer": "120 ohms at each end (60 ohms measured across the bus)",
+      "accepted_answers": [
+        "120 ohms at each end (60 ohms measured across the bus)",
+        "120 ohms",
+        "120 ohms at each end"
+      ],
+      "explanation": "Matches the 120-ohm characteristic impedance of the twisted-pair cable to prevent signal reflections."
+    },
+    {
+      "id": "cpse3_10",
+      "category": "Industrial Automation & OPC UA",
+      "type": "flashcard",
+      "prompt": "What are the 3 sequential stages of a deterministic PLC / IEC 61131-3 Programmable Automation Controller (PAC) scan cycle?",
+      "code": "",
+      "answer": "1) Read Physical Inputs -> 2) Execute Control Logic Program -> 3) Write Physical Outputs",
+      "accepted_answers": [
+        "1) Read Physical Inputs -> 2) Execute Control Logic Program -> 3) Write Physical Outputs",
+        "Read Inputs, Execute Logic, Write Outputs"
+      ],
+      "explanation": "Freezing an input image table at the start of the scan guarantees inputs do not change mid-rung during logic evaluation."
+    },
+    {
+      "id": "cpse3_11",
+      "category": "Industrial Automation & OPC UA",
+      "type": "flashcard",
+      "prompt": "What industrial interoperability protocol (IEC 62541, implemented in C via open62541) provides hierarchical information modeling, pub/sub, and built-in X.509 security?",
+      "code": "",
+      "answer": "OPC UA",
+      "accepted_answers": [
+        "OPC UA",
+        "OPC Unified Architecture"
+      ],
+      "explanation": "OPC UA replaces legacy Windows-only OPC Classic with a cross-platform, self-describing node graph for smart factories."
+    },
+    {
+      "id": "cpse3_12",
+      "category": "Edge Computer Vision & AI",
+      "type": "flashcard",
+      "prompt": "What does INT8 post-training quantization do to an ONNX / TensorRT neural network model for edge deployment?",
+      "code": "",
+      "answer": "Converts 32-bit floating-point weights/activations to 8-bit integers, cutting memory footprint ~4x and accelerating Tensor Core inference",
+      "accepted_answers": [
+        "Converts 32-bit floating-point weights/activations to 8-bit integers, cutting memory footprint ~4x and accelerating Tensor Core inference",
+        "Maps FP32 weights and activations to 8-bit integers for faster, smaller inference",
+        "Reduces precision from FP32 to INT8"
+      ],
+      "explanation": "Requires a representative calibration dataset to minimize accuracy drop when scaling activation ranges."
+    },
+    {
+      "id": "cpse3_13",
+      "category": "Edge Computer Vision & AI",
+      "type": "flashcard",
+      "prompt": "In a 30 FPS closed-loop vision tracking turret, what is the maximum total frame period budget in milliseconds?",
+      "code": "",
+      "answer": "33.33 ms",
+      "accepted_answers": [
+        "33.33 ms",
+        "33.3 ms",
+        "33 ms"
+      ],
+      "explanation": "1000 ms / 30 frames = 33.33 ms; keeping glass-to-glass latency under 35 ms prevents phase-lag oscillation in the gimbal."
+    },
+    {
+      "id": "cpse3_14",
+      "category": "Control Theory",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this discrete Proportional-only controller step:",
+      "code": "#include <iostream>\n#include <algorithm>\nint main() {\n    double setpoint = 100.0, measurement = 85.0, kp = 2.5;\n    double error = setpoint - measurement;\n    double out = std::clamp(kp * error, -20.0, 20.0);\n    std::cout << error << \" \" << out << \"\\n\";\n    return 0;\n}",
+      "answer": "15 20",
+      "accepted_answers": [
+        "15 20"
+      ],
+      "explanation": "error = 100 - 85 = 15; kp * error = 37.5, which clamps to the upper actuator limit of 20."
+    },
+    {
+      "id": "cpse3_15",
+      "category": "Digital Signal Processing",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this first-order Exponential Moving Average (IIR low-pass) filter:",
+      "code": "#include <iostream>\nint main() {\n    double alpha = 0.5;\n    double y = 10.0;\n    double x = 30.0;\n    y = alpha * x + (1.0 - alpha) * y;\n    std::cout << y << \"\\n\";\n    return 0;\n}",
+      "answer": "20",
+      "accepted_answers": [
+        "20",
+        "20.0"
+      ],
+      "explanation": "y[n] = 0.5 * 30 + 0.5 * 10 = 15 + 5 = 20."
+    }
+  ]
+}

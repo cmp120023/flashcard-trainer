@@ -1,0 +1,333 @@
+{
+  "deck_name": "06 - BS-CS-CPSE Phase 2: RTOS, Embedded Linux & Modern C++20",
+  "cards": [
+    {
+      "id": "cpse2_01",
+      "category": "FreeRTOS & Zephyr",
+      "type": "flashcard",
+      "prompt": "What real-time scheduling anomaly occurs when a high-priority task is blocked waiting for a mutex held by a low-priority task while a medium-priority task preempts the low-priority task?",
+      "code": "",
+      "answer": "Priority Inversion",
+      "accepted_answers": [
+        "Priority Inversion",
+        "priority inversion"
+      ],
+      "explanation": "Resolved by Priority Inheritance in RTOS mutexes (unlike binary semaphores), which temporarily boosts the low-priority mutex holder to the high-priority waiter's level."
+    },
+    {
+      "id": "cpse2_02",
+      "category": "FreeRTOS & Zephyr",
+      "type": "flashcard",
+      "prompt": "Why must FreeRTOS Interrupt Service Routines (ISRs) call xQueueSendFromISR() instead of xQueueSend()?",
+      "code": "",
+      "answer": "ISRs cannot block/sleep and require deferred context switching via pxHigherPriorityTaskWoken",
+      "accepted_answers": [
+        "ISRs cannot block/sleep and require deferred context switching via pxHigherPriorityTaskWoken",
+        "ISRs cannot block",
+        "ISRs cannot enter the Blocked state"
+      ],
+      "explanation": "Calling a blocking API inside an ISR crashes the scheduler because an ISR is not a task context and cannot yield mid-handler."
+    },
+    {
+      "id": "cpse2_03",
+      "category": "FreeRTOS & Zephyr",
+      "type": "flashcard",
+      "prompt": "In FreeRTOS, what does portYIELD_FROM_ISR(xHigherPriorityTaskWoken) accomplish at the end of an ISR?",
+      "code": "",
+      "answer": "Triggers PendSV so the newly unblocked higher-priority task runs immediately upon ISR exit",
+      "accepted_answers": [
+        "Triggers PendSV so the newly unblocked higher-priority task runs immediately upon ISR exit",
+        "Requests a context switch on ISR exit",
+        "Triggers PendSV"
+      ],
+      "explanation": "Without yielding from the ISR, the woken high-priority task would wait until the next SysTick interrupt to execute."
+    },
+    {
+      "id": "cpse2_04",
+      "category": "FreeRTOS & Zephyr",
+      "type": "flashcard",
+      "prompt": "In Zephyr RTOS, what macro statically defines and initializes a thread at compile time without dynamic heap allocation?",
+      "code": "",
+      "answer": "K_THREAD_DEFINE",
+      "accepted_answers": [
+        "K_THREAD_DEFINE",
+        "K_THREAD_DEFINE()"
+      ],
+      "explanation": "K_THREAD_DEFINE allocates the thread stack, control block, entry point, and priority statically in RAM/Flash."
+    },
+    {
+      "id": "cpse2_05",
+      "category": "FreeRTOS & Zephyr",
+      "type": "flashcard",
+      "prompt": "What are the 4 standard task states in FreeRTOS?",
+      "code": "",
+      "answer": "Running, Ready, Blocked, Suspended",
+      "accepted_answers": [
+        "Running, Ready, Blocked, Suspended",
+        "Running, Ready, Blocked, and Suspended"
+      ],
+      "explanation": "Tasks in Blocked are waiting on a timeout or synchronization primitive; tasks in Suspended are explicitly paused via vTaskSuspend()."
+    },
+    {
+      "id": "cpse2_06",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What are the 4 sequential boot stages in a typical ARM Embedded Linux boot chain?",
+      "code": "",
+      "answer": "ROM Bootloader -> SPL / First-Stage Bootloader -> U-Boot -> Linux Kernel + RootFS",
+      "accepted_answers": [
+        "ROM Bootloader -> SPL / First-Stage Bootloader -> U-Boot -> Linux Kernel + RootFS",
+        "BootROM -> SPL -> U-Boot -> Kernel",
+        "ROM -> SPL -> U-Boot -> Linux Kernel"
+      ],
+      "explanation": "BootROM initializes minimal storage/clocking to load SPL into SRAM, SPL initializes DRAM to load U-Boot, and U-Boot loads the Kernel + Device Tree Blob (.dtb)."
+    },
+    {
+      "id": "cpse2_07",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What file format (.dts) describes non-discoverable hardware peripherals, memory addresses, and IRQ lines to the Linux kernel at boot?",
+      "code": "",
+      "answer": "Device Tree Source (.dts)",
+      "accepted_answers": [
+        "Device Tree Source (.dts)",
+        "Device Tree",
+        "Device Tree Source",
+        ".dts"
+      ],
+      "explanation": "Compiled by dtc into a Device Tree Blob (.dtb) and passed to the kernel by U-Boot so one kernel binary can boot across different board layouts."
+    },
+    {
+      "id": "cpse2_08",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "In the Yocto Project, what file extension defines build instructions (SRC_URI, dependencies, do_compile, do_install) for a software package?",
+      "code": "",
+      "answer": ".bb",
+      "accepted_answers": [
+        ".bb",
+        "BitBake recipe (.bb)",
+        "recipe (.bb)"
+      ],
+      "explanation": "BitBake parses .bb recipes and .bbappend overlay files inside custom meta-layers (meta-custom) to cross-compile packages and root filesystems."
+    },
+    {
+      "id": "cpse2_09",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What Linux kernel patch/configuration converts spinlocks into sleepable mutexes and runs hardware IRQ handlers as preemptible kernel threads?",
+      "code": "",
+      "answer": "PREEMPT_RT",
+      "accepted_answers": [
+        "PREEMPT_RT",
+        "CONFIG_PREEMPT_RT"
+      ],
+      "explanation": "PREEMPT_RT bounds worst-case scheduling latency in Linux so deterministic control loops can run reliably in user space."
+    },
+    {
+      "id": "cpse2_10",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What standard Linux benchmarking tool measures worst-case wakeup latency (min/avg/max jitter in microseconds) on a PREEMPT_RT system?",
+      "code": "",
+      "answer": "cyclictest",
+      "accepted_answers": [
+        "cyclictest"
+      ],
+      "explanation": "cyclictest repeatedly sleeps on a high-resolution timer and measures the delta between scheduled wakeup time and actual thread execution."
+    },
+    {
+      "id": "cpse2_11",
+      "category": "Linux Kernel Drivers",
+      "type": "flashcard",
+      "prompt": "Why must a Linux kernel character driver use copy_to_user() and copy_from_user() instead of raw memcpy() on user-space pointers?",
+      "code": "",
+      "answer": "User pointers may be unmapped, paged out, or malicious, and dereferencing them directly in kernel mode causes a kernel oops/panic",
+      "accepted_answers": [
+        "User pointers may be unmapped, paged out, or malicious, and dereferencing them directly in kernel mode causes a kernel oops/panic",
+        "To safely validate user-space virtual addresses and handle page faults",
+        "User pointers cannot be safely dereferenced directly in kernel space"
+      ],
+      "explanation": "copy_to_user/copy_from_user verify address bounds (access_ok) and install fixup table entries to catch page faults cleanly."
+    },
+    {
+      "id": "cpse2_12",
+      "category": "Linux Kernel Drivers",
+      "type": "flashcard",
+      "prompt": "In a Linux kernel module, what struct maps system calls like .open, .read, .write, and .unlocked_ioctl to driver C functions?",
+      "code": "",
+      "answer": "struct file_operations",
+      "accepted_answers": [
+        "struct file_operations",
+        "file_operations"
+      ],
+      "explanation": "Registered with register_chrdev() or cdev_add() so /dev/<device> file operations dispatch directly to your driver callbacks."
+    },
+    {
+      "id": "cpse2_13",
+      "category": "Linux Kernel Drivers",
+      "type": "flashcard",
+      "prompt": "What kernel synchronization primitive disables preemption and busy-waits on SMP systems, meaning it must NEVER be held while sleeping?",
+      "code": "",
+      "answer": "spinlock_t",
+      "accepted_answers": [
+        "spinlock_t",
+        "spinlock"
+      ],
+      "explanation": "Sleeping while holding a spinlock deadlocks the CPU core; use struct mutex when the critical section may sleep."
+    },
+    {
+      "id": "cpse2_14",
+      "category": "Zero-Heap Modern C++20",
+      "type": "flashcard",
+      "prompt": "In C++20, what non-owning view class wraps a contiguous pointer + length (array, std::array, or raw buffer) with zero heap allocation?",
+      "code": "",
+      "answer": "std::span<T>",
+      "accepted_answers": [
+        "std::span<T>",
+        "std::span"
+      ],
+      "explanation": "std::span eliminates unsafe (T* ptr, size_t len) C pairs while adding bounds-aware iteration and subspan() slicing."
+    },
+    {
+      "id": "cpse2_15",
+      "category": "Zero-Heap Modern C++20",
+      "type": "flashcard",
+      "prompt": "What C++17 type-safe union holds one of a closed set of alternative types on the stack without dynamic allocation?",
+      "code": "",
+      "answer": "std::variant",
+      "accepted_answers": [
+        "std::variant"
+      ],
+      "explanation": "Ideal for zero-heap Finite State Machines (FSMs) where each state is a distinct struct visited via std::visit."
+    },
+    {
+      "id": "cpse2_16",
+      "category": "Zero-Heap Modern C++20",
+      "type": "flashcard",
+      "prompt": "In C++20, what keyword guarantees a function MUST be evaluated at compile time (producing a compile error if called with runtime arguments)?",
+      "code": "",
+      "answer": "consteval",
+      "accepted_answers": [
+        "consteval"
+      ],
+      "explanation": "Unlike constexpr (which can run at compile time or runtime), consteval enforces immediate compile-time execution (e.g., CRC lookup tables)."
+    },
+    {
+      "id": "cpse2_17",
+      "category": "Zero-Heap Modern C++20",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++17 placement-new / static buffer pattern:",
+      "code": "#include <iostream>\n#include <new>\nstruct Sensor {\n    int id;\n    Sensor(int i) : id(i * 10) {}\n};\nint main() {\n    alignas(Sensor) unsigned char buf[sizeof(Sensor)];\n    Sensor* s = new (buf) Sensor(4);\n    std::cout << s->id << \"\\n\";\n    s->~Sensor();\n    return 0;\n}",
+      "answer": "40",
+      "accepted_answers": [
+        "40"
+      ],
+      "explanation": "Placement new constructs Sensor(4) directly inside the stack-allocated aligned byte buffer buf with zero heap calls."
+    },
+    {
+      "id": "cpse2_18",
+      "category": "Zero-Heap Modern C++20",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++20 std::span slice:",
+      "code": "#include <iostream>\n#include <span>\n#include <array>\nint main() {\n    std::array<int, 5> a = {10, 20, 30, 40, 50};\n    std::span<int> sub = std::span(a).subspan(1, 3);\n    sub[1] += 5;\n    std::cout << a[2] << \" \" << sub.size() << \"\\n\";\n    return 0;\n}",
+      "answer": "35 3",
+      "accepted_answers": [
+        "35 3"
+      ],
+      "explanation": "subspan(1, 3) views elements {20, 30, 40}. Modifying sub[1] mutates a[2] in place from 30 to 35."
+    },
+    {
+      "id": "cpse2_19",
+      "category": "IPC & Real-Time Gateway",
+      "type": "flashcard",
+      "prompt": "What POSIX shared-memory + eventfd/futex design pattern passes high-rate sensor frames between a real-time thread and a Linux telemetry daemon with zero kernel copies?",
+      "code": "",
+      "answer": "Lock-free ring buffer in POSIX shared memory (shm_open + mmap) signaled via eventfd",
+      "accepted_answers": [
+        "Lock-free ring buffer in POSIX shared memory (shm_open + mmap) signaled via eventfd",
+        "POSIX shared memory ring buffer with eventfd",
+        "shm_open and mmap ring buffer"
+      ],
+      "explanation": "Mapping the same physical pages into two processes avoids serialize/copy overhead while eventfd integrates cleanly with epoll."
+    },
+    {
+      "id": "cpse2_20",
+      "category": "IPC & Real-Time Gateway",
+      "type": "flashcard",
+      "prompt": "What Linux system call locks a process's virtual address space into physical RAM so page faults cannot introduce latency spikes?",
+      "code": "",
+      "answer": "mlockall(MCL_CURRENT | MCL_FUTURE)",
+      "accepted_answers": [
+        "mlockall(MCL_CURRENT | MCL_FUTURE)",
+        "mlockall"
+      ],
+      "explanation": "Mandatory best practice at startup for PREEMPT_RT real-time user-space processes."
+    },
+    {
+      "id": "cpse2_21",
+      "category": "IPC & Real-Time Gateway",
+      "type": "flashcard",
+      "prompt": "What Linux scheduling policy gives a real-time thread strict fixed-priority FIFO execution without time-slicing until it blocks or yields?",
+      "code": "",
+      "answer": "SCHED_FIFO",
+      "accepted_answers": [
+        "SCHED_FIFO"
+      ],
+      "explanation": "Configured via sched_setscheduler() or pthread_attr_setschedpolicy(); SCHED_RR adds round-robin time slices among equal-priority RT threads."
+    },
+    {
+      "id": "cpse2_22",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "In U-Boot, what command loads a Linux kernel image (zImage/Image) and Device Tree Blob (.dtb) into RAM and boots the kernel?",
+      "code": "",
+      "answer": "bootz (for zImage) or booti (for ARM64 Image)",
+      "accepted_answers": [
+        "bootz",
+        "booti",
+        "bootz / booti",
+        "bootz (for zImage) or booti (for ARM64 Image)"
+      ],
+      "explanation": "Syntax: bootz <kernel_addr> <initrd_addr|-> <fdt_addr>."
+    },
+    {
+      "id": "cpse2_23",
+      "category": "Embedded Linux",
+      "type": "flashcard",
+      "prompt": "What Linux command pins a process to specific CPU cores (for example, isolating a real-time control loop onto CPU core 3)?",
+      "code": "",
+      "answer": "taskset",
+      "accepted_answers": [
+        "taskset",
+        "sched_setaffinity"
+      ],
+      "explanation": "Combined with the isolcpus kernel boot parameter, taskset prevents general OS background tasks from disturbing real-time cores."
+    },
+    {
+      "id": "cpse2_24",
+      "category": "System Profiling",
+      "type": "flashcard",
+      "prompt": "What SEGGER trace tool captures cycle-accurate RTOS task switches, ISR entries/exits, and mutex events over SWD/RTT without halting the MCU?",
+      "code": "",
+      "answer": "SEGGER SystemView",
+      "accepted_answers": [
+        "SEGGER SystemView",
+        "SystemView"
+      ],
+      "explanation": "Provides empirical timing proofs of ISR duration, task jitter, and priority inheritance behavior."
+    },
+    {
+      "id": "cpse2_25",
+      "category": "Zero-Heap Modern C++20",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C++17 std::optional check:",
+      "code": "#include <iostream>\n#include <optional>\nstd::optional<int> parse_port(int p) {\n    if (p <= 0 || p > 65535) return std::nullopt;\n    return p;\n}\nint main() {\n    auto a = parse_port(70000);\n    auto b = parse_port(8080);\n    std::cout << a.value_or(80) << \" \" << b.value_or(80) << \"\\n\";\n    return 0;\n}",
+      "answer": "80 8080",
+      "accepted_answers": [
+        "80 8080"
+      ],
+      "explanation": "70000 is out of range so parse_port returns std::nullopt, falling back to value_or(80)."
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "deck_name": "Deck 29: DSP, Control Theory & Kalman Filters",
+  "cards": [
+    {
+      "id": "dsp_ctrl_01",
+      "category": "DSP",
+      "type": "flashcard",
+      "prompt": "According to the Nyquist-Shannon sampling theorem, what is the minimum sampling frequency required to avoid aliasing for a bandlimited signal whose highest frequency component is 500 Hz?",
+      "code": "",
+      "answer": "1000 Hz",
+      "accepted_answers": [
+        "1000",
+        "1000Hz",
+        "1 kHz",
+        "1kHz",
+        ">1000 Hz",
+        "more than 1000 Hz"
+      ],
+      "explanation": "The Nyquist rate is strictly greater than twice the maximum signal frequency (fs > 2 * fmax = 2 * 500 Hz = 1000 Hz)."
+    },
+    {
+      "id": "dsp_ctrl_02",
+      "category": "DSP",
+      "type": "flashcard",
+      "prompt": "If an ADC samples a pure 900 Hz sine wave at a sampling rate of 1000 Hz without an analog anti-aliasing filter, what aliased frequency (in Hz) will appear in the digital spectrum?",
+      "code": "",
+      "answer": "100 Hz",
+      "accepted_answers": [
+        "100",
+        "100Hz"
+      ],
+      "explanation": "Aliased frequency is |fs - f_signal| = |1000 - 900| = 100 Hz."
+    },
+    {
+      "id": "dsp_ctrl_03",
+      "category": "DSP",
+      "type": "flashcard",
+      "prompt": "Where must an anti-aliasing low-pass filter be placed in a mixed-signal data acquisition pipeline?",
+      "code": "",
+      "answer": "Before the ADC",
+      "accepted_answers": [
+        "before ADC",
+        "analog domain before ADC",
+        "upstream of the ADC",
+        "prior to sampling"
+      ],
+      "explanation": "Once a signal is sampled by the ADC, high-frequency aliases fold into the baseband and cannot be separated by a digital filter."
+    },
+    {
+      "id": "dsp_ctrl_04",
+      "category": "DSP",
+      "type": "flashcard",
+      "prompt": "Between FIR and IIR digital filters, which filter architecture is guaranteed to be Bounded-Input Bounded-Output (BIBO) stable and can easily achieve exact linear phase?",
+      "code": "",
+      "answer": "FIR",
+      "accepted_answers": [
+        "FIR filter",
+        "Finite Impulse Response"
+      ],
+      "explanation": "FIR filters have no feedback poles (all poles are at the origin), guaranteeing BIBO stability and linear phase when coefficients are symmetric."
+    },
+    {
+      "id": "dsp_ctrl_05",
+      "category": "DSP",
+      "type": "flashcard",
+      "prompt": "For a discrete-time IIR filter to be BIBO stable, where must all of its poles lie in the complex z-plane?",
+      "code": "",
+      "answer": "Strictly inside the unit circle",
+      "accepted_answers": [
+        "inside the unit circle",
+        "|z| < 1",
+        "within the unit circle"
+      ],
+      "explanation": "Stability in the z-domain requires every pole magnitude |z| < 1; poles on or outside the unit circle cause sustained oscillation or unbounded growth."
+    },
+    {
+      "id": "dsp_ctrl_06",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "In a PID controller, what phenomenon occurs when the actuator saturates (e.g., 100% PWM duty cycle) while the integral term continues accumulating error, causing large overshoot?",
+      "code": "",
+      "answer": "Integral windup",
+      "accepted_answers": [
+        "integrator windup",
+        "windup"
+      ],
+      "explanation": "Integral windup happens when accumulated error drives the integrator far past actuator saturation limits; anti-windup clamping or back-calculation prevents it."
+    },
+    {
+      "id": "dsp_ctrl_07",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "How do you prevent 'derivative kick' in a discrete PID controller when the operator suddenly steps the setpoint?",
+      "code": "",
+      "answer": "Compute derivative on measurement instead of error",
+      "accepted_answers": [
+        "derivative on measurement",
+        "derivative on PV",
+        "take derivative of process variable"
+      ],
+      "explanation": "Since d(SP - PV)/dt = d(SP)/dt - d(PV)/dt, differentiating -PV avoids an infinite spike when SP steps discontinuously."
+    },
+    {
+      "id": "dsp_ctrl_08",
+      "category": "Control Theory",
+      "type": "flashcard",
+      "prompt": "Which discrete-time transformation maps the entire stable left-half s-plane into the interior of the z-plane unit circle without frequency aliasing?",
+      "code": "",
+      "answer": "Bilinear transform",
+      "accepted_answers": [
+        "Tustin transform",
+        "Tustin",
+        "Bilinear",
+        "trapezoidal rule"
+      ],
+      "explanation": "The Bilinear (Tustin) transform s = (2/T)*(z-1)/(z+1) preserves stability across the imaginary axis at the cost of nonlinear frequency warping."
+    },
+    {
+      "id": "dsp_ctrl_09",
+      "category": "Kalman Filters",
+      "type": "flashcard",
+      "prompt": "What are the two alternating stages of every discrete Kalman Filter cycle?",
+      "code": "",
+      "answer": "Predict and Update",
+      "accepted_answers": [
+        "Prediction and Update",
+        "Time Update and Measurement Update",
+        "predict, update"
+      ],
+      "explanation": "The Predict step propagates the state and covariance forward using the motion/process model; the Update step fuses sensor measurements using the Kalman Gain."
+    },
+    {
+      "id": "dsp_ctrl_10",
+      "category": "Kalman Filters",
+      "type": "flashcard",
+      "prompt": "In a Kalman Filter, if the measurement noise covariance matrix R is much larger than the predicted state covariance P, does the Kalman Gain K weight the sensor measurement heavily or trust the model prediction more?",
+      "code": "",
+      "answer": "Trust the model prediction more",
+      "accepted_answers": [
+        "model prediction",
+        "trusts the prediction",
+        "prediction",
+        "weights the prediction"
+      ],
+      "explanation": "K = P*H^T * (H*P*H^T + R)^-1; as R grows large (noisy sensor), K approaches 0, meaning the filter relies primarily on the process model prediction."
+    },
+    {
+      "id": "dsp_ctrl_11",
+      "category": "Kalman Filters",
+      "type": "flashcard",
+      "prompt": "How does an Extended Kalman Filter (EKF) handle nonlinear state transition or measurement functions?",
+      "code": "",
+      "answer": "Linearizes locally using Jacobian matrices",
+      "accepted_answers": [
+        "Jacobian",
+        "Jacobians",
+        "first-order Taylor series",
+        "linearization via Jacobians"
+      ],
+      "explanation": "An EKF computes first-order partial derivative matrices (Jacobians) around the current state estimate at every timestep to approximate local linearity."
+    },
+    {
+      "id": "dsp_ctrl_12",
+      "category": "Control Theory",
+      "type": "code_output",
+      "prompt": "Predict the exact output of this discrete first-order exponential moving average (EMA) low-pass filter step (rounded to 1 decimal place).",
+      "code": "#include <stdio.h>\nint main(void) {\n    float alpha = 0.25f;\n    float y_prev = 20.0f;\n    float x_curr = 60.0f;\n    float y_curr = alpha * x_curr + (1.0f - alpha) * y_prev;\n    printf(\"%.1f\\n\", y_curr);\n    return 0;\n}",
+      "answer": "30.0",
+      "accepted_answers": [
+        "30",
+        "30.0"
+      ],
+      "explanation": "0.25 * 60.0 + 0.75 * 20.0 = 15.0 + 15.0 = 30.0."
+    }
+  ]
+}

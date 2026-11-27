@@ -1,0 +1,311 @@
+{
+  "deck_name": "12 - SQL & LINQ Query Mastery",
+  "cards": [
+    {
+      "id": "sql_linq_01",
+      "category": "T-SQL Logical Processing Order",
+      "type": "flashcard",
+      "prompt": "In SQL logical query processing order, which clause executes immediately BEFORE the SELECT projection list (after FROM, WHERE, GROUP BY, and HAVING)?",
+      "answer": "WINDOW",
+      "accepted_answers": [
+        "WINDOW",
+        "OVER",
+        "Window functions"
+      ],
+      "explanation": "SQL logical processing order is: FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> WINDOW -> SELECT -> DISTINCT -> ORDER BY -> TOP/OFFSET-FETCH."
+    },
+    {
+      "id": "sql_linq_02",
+      "category": "T-SQL Logical Processing Order",
+      "type": "flashcard",
+      "prompt": "Why does referencing a column alias defined in SELECT inside a WHERE clause fail in SQL?",
+      "answer": "WHERE executes before SELECT",
+      "accepted_answers": [
+        "WHERE executes before SELECT",
+        "WHERE runs before SELECT",
+        "SELECT happens after WHERE"
+      ],
+      "explanation": "Because WHERE is evaluated before SELECT in logical query processing, aliases created in SELECT do not exist yet when WHERE filters rows."
+    },
+    {
+      "id": "sql_linq_03",
+      "category": "T-SQL Window Functions",
+      "type": "flashcard",
+      "prompt": "Which T-SQL ranking window function assigns consecutive integers without gaps when ties occur (e.g., 1, 2, 2, 3)?",
+      "answer": "DENSE_RANK()",
+      "accepted_answers": [
+        "DENSE_RANK()",
+        "DENSE_RANK"
+      ],
+      "explanation": "RANK() leaves gaps after ties (1, 2, 2, 4), ROW_NUMBER() assigns unique sequential numbers (1, 2, 3, 4), and DENSE_RANK() leaves no gaps (1, 2, 2, 3)."
+    },
+    {
+      "id": "sql_linq_04",
+      "category": "T-SQL Window Functions",
+      "type": "flashcard",
+      "prompt": "Which T-SQL window function accesses a column value from a previous row in the same result set without a self-join?",
+      "answer": "LAG()",
+      "accepted_answers": [
+        "LAG()",
+        "LAG"
+      ],
+      "explanation": "LAG(col, offset, default) reads a preceding row, while LEAD(col, offset, default) reads a following row."
+    },
+    {
+      "id": "sql_linq_05",
+      "category": "T-SQL Window Functions",
+      "type": "flashcard",
+      "prompt": "In a T-SQL window function with an ORDER BY clause inside OVER(...), what is the default window frame if no ROWS or RANGE clause is specified?",
+      "answer": "RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW",
+      "accepted_answers": [
+        "RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW",
+        "RANGE UNBOUNDED PRECEDING"
+      ],
+      "explanation": "When ORDER BY is present in OVER(), SQL defaults to RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, which groups peer ties together in running totals."
+    },
+    {
+      "id": "sql_linq_06",
+      "category": "T-SQL CTEs & Subqueries",
+      "type": "flashcard",
+      "prompt": "What keyword must precede a Common Table Expression (CTE) in T-SQL if it is not the first statement in a batch?",
+      "answer": ";WITH",
+      "accepted_answers": [
+        ";WITH",
+        "WITH",
+        "semicolon WITH"
+      ],
+      "explanation": "Because WITH is used in other T-SQL contexts (like table hints), the preceding statement must be terminated with a semicolon (;WITH)."
+    },
+    {
+      "id": "sql_linq_07",
+      "category": "T-SQL CTEs & Subqueries",
+      "type": "flashcard",
+      "prompt": "What are the two required parts inside a recursive CTE definition separated by UNION ALL?",
+      "answer": "Anchor member and recursive member",
+      "accepted_answers": [
+        "Anchor member and recursive member",
+        "Anchor and recursive members",
+        "Anchor query and recursive query"
+      ],
+      "explanation": "A recursive CTE starts with an anchor member (base case) combined via UNION ALL with a recursive member that references the CTE itself."
+    },
+    {
+      "id": "sql_linq_08",
+      "category": "T-SQL Set Operators",
+      "type": "flashcard",
+      "prompt": "Which SQL set operator returns distinct rows from the left query that are NOT present in the right query?",
+      "answer": "EXCEPT",
+      "accepted_answers": [
+        "EXCEPT"
+      ],
+      "explanation": "EXCEPT returns distinct rows in the first query not found in the second; INTERSECT returns rows common to both."
+    },
+    {
+      "id": "sql_linq_09",
+      "category": "T-SQL Set Operators",
+      "type": "flashcard",
+      "prompt": "What is the key performance and deduplication difference between UNION and UNION ALL?",
+      "answer": "UNION removes duplicates; UNION ALL keeps all rows",
+      "accepted_answers": [
+        "UNION removes duplicates; UNION ALL keeps all rows",
+        "UNION deduplicates and UNION ALL does not",
+        "UNION removes duplicates"
+      ],
+      "explanation": "UNION performs a distinct sort/hash to eliminate duplicate rows, whereas UNION ALL concatenates results directly without deduplication overhead."
+    },
+    {
+      "id": "sql_linq_10",
+      "category": "T-SQL Joins & NULLs",
+      "type": "flashcard",
+      "prompt": "Why can NOT IN (subquery) return zero rows if the subquery result contains even a single NULL value?",
+      "answer": "Three-valued logic evaluates comparisons with NULL to UNKNOWN",
+      "accepted_answers": [
+        "Three-valued logic evaluates comparisons with NULL to UNKNOWN",
+        "x <> NULL evaluates to UNKNOWN",
+        "NULL makes the predicate UNKNOWN"
+      ],
+      "explanation": "x NOT IN (1, NULL) expands to x <> 1 AND x <> NULL. Because x <> NULL is UNKNOWN, the entire AND condition is never TRUE. Use NOT EXISTS instead."
+    },
+    {
+      "id": "sql_linq_11",
+      "category": "T-SQL APPLY Operator",
+      "type": "flashcard",
+      "prompt": "Which T-SQL operator invokes a table-valued function or correlated subquery for each row of the outer table and keeps outer rows even when the inner expression returns no rows?",
+      "answer": "OUTER APPLY",
+      "accepted_answers": [
+        "OUTER APPLY"
+      ],
+      "explanation": "CROSS APPLY acts like an INNER JOIN (drops outer rows with empty inner results), while OUTER APPLY acts like a LEFT OUTER JOIN (preserves outer rows with NULLs)."
+    },
+    {
+      "id": "sql_linq_12",
+      "category": "T-SQL Indexing & Execution",
+      "type": "flashcard",
+      "prompt": "What term describes a WHERE predicate written so that the database engine can perform an Index Seek rather than scanning every row?",
+      "answer": "SARGable",
+      "accepted_answers": [
+        "SARGable",
+        "Search ARGument able",
+        "Sargable"
+      ],
+      "explanation": "SARGable (Search ARGument able) predicates avoid wrapping indexed columns in functions (e.g., using col >= '2027-01-01' instead of YEAR(col) = 2027)."
+    },
+    {
+      "id": "sql_linq_13",
+      "category": "C# LINQ Architecture",
+      "type": "flashcard",
+      "prompt": "What C# interface represents an in-memory sequence executed via delegates (Func<T, bool>), versus an expression tree translated by an ORM like EF Core?",
+      "answer": "IEnumerable<T>",
+      "accepted_answers": [
+        "IEnumerable<T>",
+        "IEnumerable"
+      ],
+      "explanation": "IEnumerable<T> uses compiled delegates in memory, while IQueryable<T> stores Expression<Func<...>> trees so EF Core can translate them into SQL."
+    },
+    {
+      "id": "sql_linq_14",
+      "category": "C# LINQ Execution",
+      "type": "flashcard",
+      "prompt": "What is the execution behavior of LINQ operators like Where(), Select(), and OrderBy() before a terminal operator like ToList() or Count() is called?",
+      "answer": "Deferred execution",
+      "accepted_answers": [
+        "Deferred execution",
+        "Lazy evaluation",
+        "Deferred"
+      ],
+      "explanation": "Deferred execution means the query definition is stored and only executes when enumerated (foreach) or materialized (ToList, FirstOrDefault, Count)."
+    },
+    {
+      "id": "sql_linq_15",
+      "category": "C# LINQ Operators",
+      "type": "flashcard",
+      "prompt": "What is the difference between FirstOrDefault() and SingleOrDefault() when a sequence contains TWO matching elements?",
+      "answer": "FirstOrDefault returns the first; SingleOrDefault throws InvalidOperationException",
+      "accepted_answers": [
+        "FirstOrDefault returns the first; SingleOrDefault throws InvalidOperationException",
+        "SingleOrDefault throws an exception",
+        "SingleOrDefault throws"
+      ],
+      "explanation": "FirstOrDefault returns the first match without checking for more; SingleOrDefault enforces at most one match and throws InvalidOperationException if multiple exist."
+    },
+    {
+      "id": "sql_linq_16",
+      "category": "C# LINQ Operators",
+      "type": "flashcard",
+      "prompt": "Which LINQ method projects each element into an IEnumerable<T> and flattens the resulting sequences into a single sequence?",
+      "answer": "SelectMany",
+      "accepted_answers": [
+        "SelectMany",
+        "SelectMany()"
+      ],
+      "explanation": "Select produces IEnumerable<IEnumerable<T>> for nested collections, whereas SelectMany flattens them into a single IEnumerable<T>."
+    },
+    {
+      "id": "sql_linq_17",
+      "category": "EF Core & LINQ Performance",
+      "type": "flashcard",
+      "prompt": "Which EF Core LINQ method disables change tracking for read-only queries to reduce memory and CPU overhead?",
+      "answer": "AsNoTracking()",
+      "accepted_answers": [
+        "AsNoTracking()",
+        "AsNoTracking"
+      ],
+      "explanation": "AsNoTracking() tells EF Core not to create snapshot entities in the ChangeTracker when entities are only being read and not updated."
+    },
+    {
+      "id": "sql_linq_18",
+      "category": "C# LINQ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# LINQ deferred execution snippet:",
+      "code": "var nums = new List<int> { 1, 2, 3 };\nvar query = nums.Where(n => n > 1);\nnums.Add(4);\nConsole.WriteLine(string.Join(\",\", query));",
+      "answer": "2,3,4",
+      "accepted_answers": [
+        "2,3,4"
+      ],
+      "explanation": "Because Where() uses deferred execution, the filter runs when string.Join enumerates query\u2014after 4 was added to nums."
+    },
+    {
+      "id": "sql_linq_19",
+      "category": "C# LINQ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# LINQ GroupBy and Select snippet:",
+      "code": "string[] words = { \"cat\", \"car\", \"dog\", \"door\", \"ant\" };\nvar res = words.GroupBy(w => w[0])\n               .Where(g => g.Count() > 1)\n               .Select(g => $\"{g.Key}:{g.Count()}\");\nConsole.WriteLine(string.Join(\" \", res));",
+      "answer": "c:2 d:2",
+      "accepted_answers": [
+        "c:2 d:2"
+      ],
+      "explanation": "Groups are 'c' (cat, car -> 2), 'd' (dog, door -> 2), and 'a' (ant -> 1). Where filters out 'a', producing 'c:2 d:2'."
+    },
+    {
+      "id": "sql_linq_20",
+      "category": "C# LINQ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# LINQ Skip/Take/Aggregate snippet:",
+      "code": "int[] data = { 10, 20, 30, 40, 50 };\nint total = data.Skip(1).Take(3).Aggregate(0, (acc, x) => acc + x);\nConsole.WriteLine(total);",
+      "answer": "90",
+      "accepted_answers": [
+        "90"
+      ],
+      "explanation": "Skip(1) skips 10; Take(3) takes 20, 30, and 40; Aggregate sums 0 + 20 + 30 + 40 = 90."
+    },
+    {
+      "id": "sql_linq_21",
+      "category": "C# LINQ Code Output",
+      "type": "code_output",
+      "prompt": "Predict the exact console output of this C# LINQ SelectMany and Distinct snippet:",
+      "code": "var groups = new[] { new[] { 1, 2 }, new[] { 2, 3, 1 } };\nvar flat = groups.SelectMany(x => x).Distinct().OrderByDescending(x => x);\nConsole.WriteLine(string.Join(\"-\", flat));",
+      "answer": "3-2-1",
+      "accepted_answers": [
+        "3-2-1"
+      ],
+      "explanation": "SelectMany flattens to [1, 2, 2, 3, 1], Distinct yields [1, 2, 3], and OrderByDescending sorts to [3, 2, 1]."
+    },
+    {
+      "id": "sql_linq_22",
+      "category": "T-SQL Query Output",
+      "type": "code_output",
+      "prompt": "Given table Scores(Id, Val) with rows (1, 10), (2, NULL), (3, 20), what single integer value does SELECT COUNT(Val) + COUNT(*) FROM Scores return?",
+      "code": "SELECT COUNT(Val) + COUNT(*) FROM Scores;",
+      "answer": "5",
+      "accepted_answers": [
+        "5"
+      ],
+      "explanation": "COUNT(Val) ignores NULLs and returns 2; COUNT(*) counts all rows including NULLs and returns 3. 2 + 3 = 5."
+    },
+    {
+      "id": "sql_linq_23",
+      "category": "T-SQL Query Output",
+      "type": "code_output",
+      "prompt": "Given Sales(Dept, Amt) with ('A', 50), ('A', 150), ('B', 80), what Dept(s) are returned by this query?",
+      "code": "SELECT Dept FROM Sales\nWHERE Amt > 60\nGROUP BY Dept\nHAVING SUM(Amt) > 100;",
+      "answer": "A",
+      "accepted_answers": [
+        "A"
+      ],
+      "explanation": "WHERE filters out ('A', 50). Remaining rows: ('A', 150) and ('B', 80). GROUP BY + HAVING keeps only Dept 'A' (SUM=150 > 100)."
+    },
+    {
+      "id": "sql_linq_24",
+      "category": "C# LINQ Operators",
+      "type": "flashcard",
+      "prompt": "Which LINQ set method returns elements in sequence A that do not appear in sequence B?",
+      "answer": "Except",
+      "accepted_answers": [
+        "Except",
+        "Except()"
+      ],
+      "explanation": "first.Except(second) produces the set difference of two sequences using equality comparison."
+    },
+    {
+      "id": "sql_linq_25",
+      "category": "T-SQL Transactions & Isolation",
+      "type": "flashcard",
+      "prompt": "Which T-SQL default isolation level prevents dirty reads by holding shared locks during reads, while still allowing non-repeatable reads and phantom reads?",
+      "answer": "READ COMMITTED",
+      "accepted_answers": [
+        "READ COMMITTED"
+      ],
+      "explanation": "READ COMMITTED is SQL Server's default isolation level; it prevents reading uncommitted data (dirty reads) without locking ranges against new inserts."
+    }
+  ]
+}
